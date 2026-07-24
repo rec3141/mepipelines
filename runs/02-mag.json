@@ -1,0 +1,2227 @@
+[
+  {
+    "paper": {
+      "id": "PPR1175142",
+      "doi": "10.21203/rs.3.rs-8724320/v1",
+      "title": "Shotgun metagenomic profiling of bacterial microbiomes, metagenome-assembled genomes and antimicrobial resistance in respiratory and blood samples from Gambian children with pneumonia",
+      "authors": "Khan D, Espinoza JL, Tientcheu P, Otchere ID, Mohammed NI, Worwui A, Nicol MP, Kwambana-Adams B, Antonio M, Dupont CL.",
+      "date": "2026-04-08",
+      "journal": "Research Square",
+      "is_open_access": true
+    },
+    "methods_chars": 6419,
+    "chain": {
+      "completeness": "sketch",
+      "steps": [
+        {
+          "order": 0,
+          "role": "filter_host",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Sequencing reads were mapped to the human reference sequence (T2T), and all matching reads were removed.",
+          "_matched": null
+        },
+        {
+          "order": 1,
+          "role": "qc_raw",
+          "tool_raw": "VEBA",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Quality assessment of reads and the recovery and classification of metagenomes were performed using modules in the Viral (micro) Eukaryotic Bacterial Archaeal (VEBA) open-source software suite",
+          "_matched": "veba"
+        },
+        {
+          "order": 2,
+          "role": "trim",
+          "tool_raw": "preprocess.py",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Adapter removal and quality trimming were performed using the preprocess.py module",
+          "_matched": "veba"
+        },
+        {
+          "order": 3,
+          "role": "error_correct",
+          "tool_raw": "repair.sh",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "paired trimmed reads were assessed and corrected using the repair.sh module of BBTools",
+          "_matched": "bbtools"
+        },
+        {
+          "order": 4,
+          "role": "assemble",
+          "tool_raw": "assembly.py",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Cleaned reads were input into the assembly.py module, where they were assembled using SPAdes-based assemblers.",
+          "_matched": "veba"
+        },
+        {
+          "order": 5,
+          "role": "bin",
+          "tool_raw": "MetaBAT2",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Binning was done using MetaBAT2, CONCOCT, and MaxBin2",
+          "_matched": "metabat2"
+        },
+        {
+          "order": 6,
+          "role": "bin",
+          "tool_raw": "CONCOCT",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Binning was done using MetaBAT2, CONCOCT, and MaxBin2",
+          "_matched": "concoct"
+        },
+        {
+          "order": 7,
+          "role": "bin",
+          "tool_raw": "MaxBin2",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Binning was done using MetaBAT2, CONCOCT, and MaxBin2",
+          "_matched": "maxbin2"
+        },
+        {
+          "order": 8,
+          "role": "bin_refine",
+          "tool_raw": "DAS Tool",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "followed by DAS Tool for consensus binning.",
+          "_matched": "das-tool"
+        },
+        {
+          "order": 9,
+          "role": "bin_qc",
+          "tool_raw": "CheckM",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Metagenome-assembled genomes (MAGs) were quality assessed by CheckM.",
+          "_matched": "checkm"
+        },
+        {
+          "order": 10,
+          "role": "custom",
+          "tool_raw": "SeqKit",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "The genome statistics such as N50, number of contigs and genome size were calculated using SeqKit.",
+          "_matched": "seqkit"
+        },
+        {
+          "order": 11,
+          "role": "classify_genomes",
+          "tool_raw": "GTDB-TK",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Taxonomic classification of the genomes was performed using the Genome Taxonomy Database Toolkit GTDB-TK based on sequence similarity (FASTANI) and phylogenetic placement.",
+          "_matched": "gtdbtk"
+        },
+        {
+          "order": 12,
+          "role": "cluster_otu",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "MAGs with \u226595% Average Nucleotide Identity (ANI) were clustered to form a species-level cluster (SLC).",
+          "_matched": null
+        },
+        {
+          "order": 13,
+          "role": "map_reads",
+          "tool_raw": "featureCounts",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Sequencing reads were mapped to SLCs representative genomes, and counts were generated using featureCounts as part of the coverage.py module.",
+          "_matched": "featurecounts"
+        },
+        {
+          "order": 14,
+          "role": "custom",
+          "tool_raw": "PneumoKITy",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "FASTA files from S. pneumoniae MAGs were analysed using PneumoKITy to assign in silico S. pneumoniae serotypes.",
+          "_matched": null
+        },
+        {
+          "order": 15,
+          "role": "custom",
+          "tool_raw": "hicap",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "In silico serotyping of H. influenzae MAGs was performed using hicap.",
+          "_matched": null
+        },
+        {
+          "order": 16,
+          "role": "custom",
+          "tool_raw": "PubMLST",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Multi-locus sequence types for both S. pneumoniae and H. influenzae were assigned using PubMLST.",
+          "_matched": null
+        },
+        {
+          "order": 17,
+          "role": "detect_amr",
+          "tool_raw": "CARD",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "The recovered MAGs were submitted to the Comprehensive Antimicrobial Resistance Database (CARD) to identify and annotate AMR genes.",
+          "_matched": "card"
+        },
+        {
+          "order": 18,
+          "role": "detect_amr",
+          "tool_raw": "CARD",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Only AMR gene hits classified under \u201cperfect\u201d or \u201cstrict\u201d categories and a cutoff of >90% sequence identity of the matching region were considered.",
+          "_matched": "card"
+        },
+        {
+          "order": 19,
+          "role": "differential_abundance",
+          "tool_raw": "MaAsLin3",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Differential abundance testing was performed to identify differences in microbial species between the nasopharynx of patients with severe and very severe disease using Microbiome Multivariable Associations with Linear Models (MaAsLin3)",
+          "_matched": "maaslin2"
+        },
+        {
+          "order": 20,
+          "role": "differential_abundance",
+          "tool_raw": "MaAsLin3",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "We controlled for age and applied Benjamini-Hochberg False Discovery Rate (FDR) for multiple testing correction (q value). The q value threshold for significance was set to the default <0.1 for MaAsLin3.",
+          "_matched": "maaslin2"
+        },
+        {
+          "order": 21,
+          "role": "visualize",
+          "tool_raw": "ggplot2",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "All figures were generated using ggplot2 and microViz.",
+          "_matched": "ggplot2"
+        },
+        {
+          "order": 22,
+          "role": "visualize",
+          "tool_raw": "microViz",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "All figures were generated using ggplot2 and microViz.",
+          "_matched": "microviz"
+        }
+      ],
+      "source": "methods_text"
+    },
+    "provenance": {
+      "model": "local:google/gemma-4-26b-a4b",
+      "prompt_version": "claimed_v1"
+    },
+    "stats": {
+      "completion_tokens": 1991,
+      "reasoning_tokens": 0,
+      "elapsed_s": 24.75
+    },
+    "tools_known": [
+      "VEBA",
+      "preprocess.py",
+      "repair.sh",
+      "assembly.py",
+      "MetaBAT2",
+      "CONCOCT",
+      "MaxBin2",
+      "DAS Tool",
+      "CheckM",
+      "SeqKit",
+      "GTDB-TK",
+      "featureCounts",
+      "CARD",
+      "CARD",
+      "MaAsLin3",
+      "MaAsLin3",
+      "ggplot2",
+      "microViz"
+    ],
+    "tools_unknown": [
+      "PneumoKITy",
+      "hicap",
+      "PubMLST"
+    ]
+  },
+  {
+    "paper": {
+      "id": "PPR1182308",
+      "doi": "10.21203/rs.3.rs-9289820/v1",
+      "title": "Stool-based genomic surveillance identifies post-engraftment expansion of multidrug-resistant pathogens in haematopoietic stem cell transplant patients in India",
+      "authors": "Madhav A, Jacob JJ, Selvarajan S, Kulkarni S, Das S, Murugan D, Narayanan PS, Muniyandi Y, Mohan K, George B, Veeraraghavan B, Baker S.",
+      "date": "2026-04-26",
+      "journal": "Research Square",
+      "is_open_access": true
+    },
+    "methods_chars": 229,
+    "chain": {
+      "completeness": "sketch",
+      "steps": [
+        {
+          "order": 0,
+          "role": "custom",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "We conducted prospective longitudinal surveillance of 81 HSCT recipients in India using targeted enrichment-based stool metagenomics, coupled with whole genome sequencing of bloodstream isolates and strain-level tracking.",
+          "_matched": null
+        }
+      ],
+      "source": "methods_text"
+    },
+    "provenance": {
+      "model": "local:google/gemma-4-26b-a4b",
+      "prompt_version": "claimed_v1"
+    },
+    "stats": {
+      "completion_tokens": 122,
+      "reasoning_tokens": 0,
+      "elapsed_s": 2.38
+    },
+    "tools_known": [],
+    "tools_unknown": []
+  },
+  {
+    "paper": {
+      "id": "PPR1228988",
+      "doi": "10.64898/2026.01.06.697877",
+      "title": "Novel Extended Tetraether Lipids Found in a High-CO <sub>2</sub> Geyser",
+      "authors": "Groninga J, Wittig L, Bouderka F, Bornemann TLV, Lipp JS, Schubotz F, Keden S, Probst AJ, Hinrichs K.",
+      "date": "2026-01-06",
+      "journal": "bioRxiv",
+      "is_open_access": true
+    },
+    "methods_chars": 10102,
+    "chain": {
+      "completeness": "sketch",
+      "steps": [
+        {
+          "order": 0,
+          "role": "retrieve",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Reference sequences of tetraether lipid synthesis genes (tes) were obtained from , totaling 1601 sequences.",
+          "_matched": null
+        },
+        {
+          "order": 1,
+          "role": "retrieve",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "we included the grsA and grsB sequences identified in , all other archaeal homologs of these genes reported in that same study, and additional homologous grsA sequences obtained from the InterPro database for a total of 61 sequences",
+          "_matched": null
+        },
+        {
+          "order": 2,
+          "role": "custom",
+          "tool_raw": "DIAMOND BLASTp",
+          "version": "2.1.13.167",
+          "params": "minimum 50% amino acid identity, 50% alignment coverage, and an E-value cutoff of 1e-5",
+          "database": null,
+          "evidence": "Homology searches were performed using DIAMOND BLASTp (, v2.1.13.167) with a minimum 50% amino acid identity, 50% alignment coverage, and an E-value cutoff of 1e-5.",
+          "_matched": "diamond"
+        },
+        {
+          "order": 3,
+          "role": "classify_genomes",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": "GTDB, Release R10-RS226",
+          "evidence": "The identified MAG taxonomy was assigned according to the Genome Taxonomy Database (GTDB, Release R10-RS226)",
+          "_matched": null
+        },
+        {
+          "order": 4,
+          "role": "phylogeny",
+          "tool_raw": "MAFFT",
+          "version": "7.407",
+          "params": null,
+          "database": null,
+          "evidence": "Recovered sequences were aligned alongside these references using MAFFT (, v7.407)",
+          "_matched": "mafft"
+        },
+        {
+          "order": 5,
+          "role": "phylogeny",
+          "tool_raw": "TrimAl",
+          "version": "1.5.rev0",
+          "params": null,
+          "database": null,
+          "evidence": "the resulting alignment was trimmed using TrimAl (, v1.5.rev0).",
+          "_matched": "trimal"
+        },
+        {
+          "order": 6,
+          "role": "phylogeny",
+          "tool_raw": "IQ-TREE",
+          "version": "3.0.1",
+          "params": "LG+C20+G+F model",
+          "database": null,
+          "evidence": "Maximum-likelihood phylogenetic trees were reconstructed from the trimmed alignment using IQ-TREE with the LG+C20+G+F model (, v 3.0.1)",
+          "_matched": "iqtree"
+        },
+        {
+          "order": 7,
+          "role": "visualize",
+          "tool_raw": "iTOL",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "the resulting trees were visualized and annotated using iTOL",
+          "_matched": "itol"
+        }
+      ],
+      "source": "methods_text"
+    },
+    "provenance": {
+      "model": "local:google/gemma-4-26b-a4b",
+      "prompt_version": "claimed_v1"
+    },
+    "stats": {
+      "completion_tokens": 827,
+      "reasoning_tokens": 0,
+      "elapsed_s": 10.99
+    },
+    "tools_known": [
+      "DIAMOND BLASTp",
+      "MAFFT",
+      "TrimAl",
+      "IQ-TREE",
+      "iTOL"
+    ],
+    "tools_unknown": []
+  },
+  {
+    "paper": {
+      "id": "PPR1010727",
+      "doi": "10.1101/2025.04.22.649928",
+      "title": "High-quality metagenome assembly from nanopore reads with nanoMDBG",
+      "authors": "Benoit G, James R, Raguideau S, Alabone G, Goodall T, Chikhi R, Quince C.",
+      "date": "2025-04-24",
+      "journal": "bioRxiv",
+      "is_open_access": true
+    },
+    "methods_chars": 19773,
+    "chain": {
+      "completeness": "sketch",
+      "steps": [
+        {
+          "order": 0,
+          "role": "error_correct",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Our correction strategy, therefore, proceeds as enough: For each target read, we recruit the most similar reads (up to approximately 20x coverage) using seed-and-chaining with a very-low density of minimizers. We then remove divergent reads using a higher density of minimizers.",
+          "_matched": null
+        },
+        {
+          "order": 1,
+          "role": "assemble",
+          "tool_raw": "metaMDBG",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "The corrected mReads are then assembled in minimizer-space using metaMDBG",
+          "_matched": null
+        },
+        {
+          "order": 2,
+          "role": "polish",
+          "tool_raw": "racon-like",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "The final draft assembly is polished using a racon-like [] approach.",
+          "_matched": "racon"
+        },
+        {
+          "order": 3,
+          "role": "assemble",
+          "tool_raw": "metaFlye",
+          "version": null,
+          "params": "--meta, --nano-hq (for Nanopore), --pacbio-hifi (for HiFi)",
+          "database": null,
+          "evidence": "We ran metaFlye with the options \u2018\u2013meta\u2019 and \u2018\u2013nano-hq\u2019 for Nanopore data sets and with option \u2018\u2013pacbio-hifi\u2019 for HiFi data sets.",
+          "_matched": "metaflye"
+        },
+        {
+          "order": 4,
+          "role": "assemble",
+          "tool_raw": "hifiasm-meta",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "We ran hifiasm-meta with default parameters.",
+          "_matched": "hifiasm-meta"
+        },
+        {
+          "order": 5,
+          "role": "map_reads",
+          "tool_raw": "minimap2",
+          "version": null,
+          "params": "-x map-ont (for ONT), -map-hifi (for HiFi)",
+          "database": null,
+          "evidence": "We mapped reads to contigs using \u2018minimap2\u2019 with option \u2018-x map-ont\u2019 for ONT reads and with option \u2018-map-hifi\u2019 for HiFi reads.",
+          "_matched": "minimap2"
+        },
+        {
+          "order": 6,
+          "role": "filter_features",
+          "tool_raw": null,
+          "version": null,
+          "params": "alignments shorter than 80% of its length were filtered out",
+          "database": null,
+          "evidence": "We filtered out reads in which all of the alignments were shorter than 80% of its length",
+          "_matched": null
+        },
+        {
+          "order": 7,
+          "role": "bin",
+          "tool_raw": "SemiBin2",
+          "version": "2.1.0",
+          "params": "--sequencing-type=long_read, --self-supervised, --random-seed 42",
+          "database": null,
+          "evidence": "We performed contig binning using SemiBin2 [] (v.2.1.0), using \u2018single_easy_bin\u2019 command with options \u2018\u2013sequencing-type=long_read\u2019, \u2018\u2013self-supervised\u2019 and a fixed seed (\u2013random-seed 42) for reproducibility.",
+          "_matched": "semibin2"
+        },
+        {
+          "order": 8,
+          "role": "bin_qc",
+          "tool_raw": "CheckM2",
+          "version": "1.0.1",
+          "params": null,
+          "database": null,
+          "evidence": "We used CheckM2 (v.1.0.1) to assess the quality of all MAGs.",
+          "_matched": "checkm2"
+        },
+        {
+          "order": 9,
+          "role": "predict_genes",
+          "tool_raw": "Barrnap",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "We used, Barrnap [...], and Infernal [] to predict, respectively, rRNA and tRNA genes from near-complete MAGs.",
+          "_matched": null
+        },
+        {
+          "order": 10,
+          "role": "predict_genes",
+          "tool_raw": "Infernal",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "We used, Barrnap [...], and Infernal [] to predict, respectively, rRNA and tRNA genes from near-complete MAGs.",
+          "_matched": null
+        },
+        {
+          "order": 11,
+          "role": "filter_features",
+          "tool_raw": null,
+          "version": null,
+          "params": "E-values over 0.01",
+          "database": null,
+          "evidence": "We filtered out annotations with E-values over 0.01.",
+          "_matched": null
+        },
+        {
+          "order": 12,
+          "role": "detect_mge",
+          "tool_raw": "genomad",
+          "version": "1.8.0",
+          "params": "--conservative",
+          "database": null,
+          "evidence": "We used genomad (v.1.8.0) using command \u2018end-to-end\u2019 with options \u2018\u2013conservative\u2019 to identify strongly supported plasmids and viruses in each assembly.",
+          "_matched": "genomad"
+        },
+        {
+          "order": 13,
+          "role": "bin_qc",
+          "tool_raw": "checkV",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "We used checkV [] to assess the quality of viral contigs.",
+          "_matched": "checkv"
+        },
+        {
+          "order": 14,
+          "role": "map_reads",
+          "tool_raw": "wfmash",
+          "version": null,
+          "params": "less than 99% identity were filtered out",
+          "database": null,
+          "evidence": "We used wfmash to align contigs against the reference sequences. Alignments with less than 99% identity were filtered out.",
+          "_matched": "mash"
+        },
+        {
+          "order": 15,
+          "role": "classify_genomes",
+          "tool_raw": "gtdbtk",
+          "version": "2.1.0",
+          "params": null,
+          "database": null,
+          "evidence": "The phylogenetic tree of was built using fasttree [] from the output alignment of gtdbtk version 2.1.0 []",
+          "_matched": "gtdbtk"
+        },
+        {
+          "order": 16,
+          "role": "phylogeny",
+          "tool_raw": "fasttree",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "The phylogenetic tree of was built using fasttree [] from the output alignment of gtdbtk version 2.1.0 []",
+          "_matched": "fasttree"
+        }
+      ],
+      "source": "methods_text"
+    },
+    "provenance": {
+      "model": "local:google/gemma-4-26b-a4b",
+      "prompt_version": "claimed_v1"
+    },
+    "stats": {
+      "completion_tokens": 1703,
+      "reasoning_tokens": 0,
+      "elapsed_s": 22.51
+    },
+    "tools_known": [
+      "racon-like",
+      "metaFlye",
+      "hifiasm-meta",
+      "minimap2",
+      "SemiBin2",
+      "CheckM2",
+      "genomad",
+      "checkV",
+      "wfmash",
+      "gtdbtk",
+      "fasttree"
+    ],
+    "tools_unknown": [
+      "metaMDBG",
+      "Barrnap",
+      "Infernal"
+    ]
+  },
+  {
+    "paper": {
+      "id": "PPR1156474",
+      "doi": "10.21203/rs.3.rs-8855126/v1",
+      "title": "Extensive mobilome dynamics in a widespread endosymbiont: long read metagenomics reveal dimeric plasmids and highly fragmented prophages in Wolbachia from Culex pipiens",
+      "authors": "Brunner A, Mahout M, Amoros J, Rahmoun M, Jarry M, Bordenstein SR, Bordenstein SR, Trouche B, Reveillaud J.",
+      "date": "2026-02-18",
+      "journal": "Research Square",
+      "is_open_access": true
+    },
+    "methods_chars": 15847,
+    "chain": {
+      "completeness": "sketch",
+      "steps": [
+        {
+          "order": 0,
+          "role": "basecall",
+          "tool_raw": "Guppy",
+          "version": "6.5.7",
+          "params": null,
+          "database": null,
+          "evidence": "Raw Nanopore sequencing data was first base-called using Guppy v6.5.7 (Oxford Nanopore Technologies) with the Super Accuracy (SUP) model to convert FAST5 files into FASTQ format while simultaneously trimming residual sequencing adapters.",
+          "_matched": "guppy"
+        },
+        {
+          "order": 1,
+          "role": "qc_raw",
+          "tool_raw": "NanoPlot",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "A preliminary quality control step was then performed using NanoPlot [59] to assess the distribution of read quality scores and lengths.",
+          "_matched": "nanoplot"
+        },
+        {
+          "order": 2,
+          "role": "filter_host",
+          "tool_raw": "Minimap2",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Reads mapping to the Culex pipiens molestus reference genome (NCBI: CM044968.1) and the lambda phage genome (NCBI: J02459.1) were identified using Minimap2 [] and removed with Illumina-utils [].",
+          "_matched": "minimap2"
+        },
+        {
+          "order": 3,
+          "role": "filter_host",
+          "tool_raw": "BBtools",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "we masked parts of the Culex pipiens molestus genome with over 0.85 identity to Wolbachia pipientis over 80 bp length, or with entropy lower than 0.7, using the BBtools [] suite.",
+          "_matched": "bbtools"
+        },
+        {
+          "order": 4,
+          "role": "assemble",
+          "tool_raw": "Flye",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "The resulting filtered long reads were assembled using Flye [].",
+          "_matched": "flye"
+        },
+        {
+          "order": 5,
+          "role": "annotate_function",
+          "tool_raw": "anvi'o",
+          "version": "8",
+          "params": null,
+          "database": null,
+          "evidence": "Assembled contigs were then imported into anvi\u2019o v8 [] for genome annotation and interactive visualization.",
+          "_matched": "anvio"
+        },
+        {
+          "order": 6,
+          "role": "annotate_function",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": "KOfam (KEGG Orthology) and COG (Clusters of Orthologous Groups)",
+          "evidence": "Functional annotations were performed using the KOfam (KEGG Orthology) [] and COG (Clusters of Orthologous Groups) [] databases.",
+          "_matched": null
+        },
+        {
+          "order": 7,
+          "role": "taxonomy_assign",
+          "tool_raw": "Centrifuge",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "A taxonomic classification of predicted genes was carried out with Centrifuge [], in order to verify the identity of contigs and guide genome binning.",
+          "_matched": "centrifuge"
+        },
+        {
+          "order": 8,
+          "role": "bin_refine",
+          "tool_raw": "anvi-refine",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "We manually refined the resulting Wolbachia MAG that we hereafter named wPipCelG (for Wolbachia in Culex pipiens molestus, Celestin strain, gravid ovaries), using the interactive program \u201canvi-refine\u201d",
+          "_matched": null
+        },
+        {
+          "order": 9,
+          "role": "polish",
+          "tool_raw": "Proovframe",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Lastly, we applied Proovframe [] to correct fragmented open reading frames (ORFs) resulting from long read sequencing",
+          "_matched": null
+        },
+        {
+          "order": 10,
+          "role": "pangenome",
+          "tool_raw": "anvi-pan-genome",
+          "version": null,
+          "params": "--use-ncbi-blast, -min-bit 0.5, --mcl-inflation 10",
+          "database": null,
+          "evidence": "The pangenome was constructed using the anvi-pan-genome command with the parameters --use-ncbi-blast to compute pairwise sequence similarity using BLASTp, with default sequence similarity threshold -min-bit 0.5, and with --mcl-inflation 10 to control the granularity of gene clustering.",
+          "_matched": null
+        },
+        {
+          "order": 11,
+          "role": "bin_qc",
+          "tool_raw": "pyANI",
+          "version": null,
+          "params": "ANIm symmetric method",
+          "database": null,
+          "evidence": "We also computed pairwise average nucleotide identity (ANI) and sequence coverage between wPipCelG and each reference genome using the pyANI toolkit [69] with the ANIm symmetric method [] to complement the gene-based comparison.",
+          "_matched": null
+        },
+        {
+          "order": 12,
+          "role": "map_reads",
+          "tool_raw": "Minimap2",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Filtered long reads were mapped to the representative sequences of each gene cluster (defined as the longest gene sequence within the cluster from the pangenomic analysis) for structural and replicative modules while on unique sequences for cif and Octomom genes, using Minimap2 [60], and the coverage for each gene was calculated.",
+          "_matched": "minimap2"
+        },
+        {
+          "order": 13,
+          "role": "model",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "we performed a linear regression analysis using the read coverage of wPipCelG genes as predictors and their actual copy number within the genome as the response variable.",
+          "_matched": null
+        },
+        {
+          "order": 14,
+          "role": "scaffold",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "The initial wPipCelG genome assembly performed using Flye [] produced an initial set of 24 contigs after which we conducted a manual scaffolding step.",
+          "_matched": null
+        },
+        {
+          "order": 15,
+          "role": "map_reads",
+          "tool_raw": "Minimap2",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Raw reads were aligned back to the assembled contigs using Minimap2 [] with default parameters for Oxford Nanoproll reads.",
+          "_matched": "minimap2"
+        },
+        {
+          "order": 16,
+          "role": "filter_features",
+          "tool_raw": "Samtools",
+          "version": "1.10",
+          "params": "MAPQ \u2265 2",
+          "database": null,
+          "evidence": "Read alignments were then filtered with Samtools v1.10 [], keeping only reads with a mapping quality above 2 (MAPQ \u2265 2)",
+          "_matched": "samtools"
+        },
+        {
+          "order": 17,
+          "role": "annotate_function",
+          "tool_raw": "ORI-Finder",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "In parallel, the origin of replication of the wPipCelG genome was predicted using ORI-Finder []",
+          "_matched": null
+        },
+        {
+          "order": 18,
+          "role": "phylogeny",
+          "tool_raw": "RAxML-NG",
+          "version": "1.1.0",
+          "params": "1,000 bootstrap replicates",
+          "database": null,
+          "evidence": "All phylogenetic analyses were performed with Maximum Likelihood (ML) method using RAxML-NG v1.1.0 [], and 1,000 bootstrap replicates to assess node support.",
+          "_matched": "raxml"
+        },
+        {
+          "order": 19,
+          "role": "phylogeny",
+          "tool_raw": "ModelTest-NG",
+          "version": "0.1.7",
+          "params": "AICc",
+          "database": null,
+          "evidence": "The best fit amino acid substitution models were identified using ModelTest-NG v0.1.7 [], based on the Akaike Information Criterion corrected (AICc).",
+          "_matched": null
+        }
+      ],
+      "source": "methods_text"
+    },
+    "provenance": {
+      "model": "local:google/gemma-4-26b-a4b",
+      "prompt_version": "claimed_v1"
+    },
+    "stats": {
+      "completion_tokens": 2101,
+      "reasoning_tokens": 0,
+      "elapsed_s": 27.69
+    },
+    "tools_known": [
+      "Guppy",
+      "NanoPlot",
+      "Minimap2",
+      "BBtools",
+      "Flye",
+      "anvi'o",
+      "Centrifuge",
+      "Minimap2",
+      "Minimap2",
+      "Samtools",
+      "RAxML-NG"
+    ],
+    "tools_unknown": [
+      "anvi-refine",
+      "Proovframe",
+      "anvi-pan-genome",
+      "pyANI",
+      "ORI-Finder",
+      "ModelTest-NG"
+    ]
+  },
+  {
+    "paper": {
+      "id": "PPR1012946",
+      "doi": "10.1101/2025.05.01.651599",
+      "title": "Geographic Variation and Host Genetics Shape the Human Skin Microbiome",
+      "authors": "Seong HJ, Quince C.",
+      "date": "2025-05-02",
+      "journal": "bioRxiv",
+      "is_open_access": true
+    },
+    "methods_chars": 23480,
+    "chain": {
+      "completeness": "sketch",
+      "steps": [
+        {
+          "order": 0,
+          "role": "trim",
+          "tool_raw": "FaQCs",
+          "version": "2.09",
+          "params": null,
+          "database": null,
+          "evidence": "Metagenomic sequences were trimmed using FaQCs (v.2.09) with the default option.",
+          "_matched": null
+        },
+        {
+          "order": 1,
+          "role": "filter_host",
+          "tool_raw": "NCBI BMTagger",
+          "version": null,
+          "params": null,
+          "database": "hg38",
+          "evidence": "Subsequent removal of human sequences (hg38) was performed using NCBI BMTagger",
+          "_matched": null
+        },
+        {
+          "order": 2,
+          "role": "assemble",
+          "tool_raw": "metaSPAdes",
+          "version": "3.15",
+          "params": "-k 21, 33, 55, 77, 99, 121; maximum value of the k-mer option based on the median length of each sample (k 99 or k 121)",
+          "database": null,
+          "evidence": "Quality filtered reads were assembled using metaSPAdes (v.3.15) with -k 21, 33, 55, 77, 99, 121. For best optimization, we constrained the maximum value of the k-mer option based on the median length of each sample (k 99 or k 121).",
+          "_matched": "metaspades"
+        },
+        {
+          "order": 3,
+          "role": "map_reads",
+          "tool_raw": "Bowtie2",
+          "version": "2.3.4.3",
+          "params": null,
+          "database": null,
+          "evidence": "To calculate the abundance of each assembled contig, quality-filtered reads were mapped using Bowtie2 (v2.3.4.3) with default settings",
+          "_matched": "bowtie2"
+        },
+        {
+          "order": 4,
+          "role": "custom",
+          "tool_raw": "Samtools",
+          "version": "1.8",
+          "params": null,
+          "database": null,
+          "evidence": "and the resulting alignments were sorted with Samtools (v1.8).",
+          "_matched": "samtools"
+        },
+        {
+          "order": 5,
+          "role": "bin",
+          "tool_raw": "CONCOCT",
+          "version": "1",
+          "params": null,
+          "database": null,
+          "evidence": "Genome binning was performed using three different tools\u2014CONCOCT (v1), MaxBin2 (v2.2.4), and MetaBAT2 (v2.2.15)",
+          "_matched": "concoct"
+        },
+        {
+          "order": 6,
+          "role": "bin",
+          "tool_raw": "MaxBin2",
+          "version": "2.2.4",
+          "params": null,
+          "database": null,
+          "evidence": "Genome binning was performed using three different tools\u2014CONCOCT (v1), MaxBin2 (v2.2.4), and MetaBAT2 (v2.2.15)",
+          "_matched": "maxbin2"
+        },
+        {
+          "order": 7,
+          "role": "bin",
+          "tool_raw": "MetaBAT2",
+          "version": "2.2.15",
+          "params": null,
+          "database": null,
+          "evidence": "Genome binning was performed using three different tools\u2014CONCOCO (v1), MaxBin2 (v2.2.4), and MetaBAT2 (v2.2.15)",
+          "_matched": "metabat2"
+        },
+        {
+          "order": 8,
+          "role": "bin_refine",
+          "tool_raw": "ACR",
+          "version": "0.2",
+          "params": "--target both, -j Y",
+          "database": null,
+          "evidence": "Prokaryotic and eukaryotic genome bins were further refined using ACR (v0.2) with the options --target both (for both prokaryotes and eukaryotes) and -j Y (utilizing JGI coverage files)",
+          "_matched": null
+        },
+        {
+          "order": 9,
+          "role": "bin_qc",
+          "tool_raw": "GUNC",
+          "version": "1.02",
+          "params": null,
+          "database": null,
+          "evidence": "and subsequently filtered with GUNC (v1.02, default options) to remove chimeric bins.",
+          "_matched": "gunc"
+        },
+        {
+          "order": 10,
+          "role": "detect_mge",
+          "tool_raw": "viralVerify",
+          "version": "1.1",
+          "params": null,
+          "database": null,
+          "evidence": "For virus and plasmid classification, viralVerify (v.1.1), VirSorter2 (v2.2.4), and plasmidVerify were first applied separately to individual and co-assembled contigs, considering only contigs >2 kb.",
+          "_matched": null
+        },
+        {
+          "order": 11,
+          "role": "detect_mge",
+          "tool_raw": "VirSorter2",
+          "version": "2.2.4",
+          "params": null,
+          "database": null,
+          "evidence": "For virus and plasmid classification, viralVerify (v.1.1), VirSorter2 (v2.2.4), and plasmidVerify were first applied separately to individual and co-assembled contigs, considering only contigs >2 kb.",
+          "_matched": "virsorter2"
+        },
+        {
+          "order": 12,
+          "role": "detect_mge",
+          "tool_raw": "plasmidVerify",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "For virus and plasmid classification, viralVerify (v.1.1), VirSorter2 (v2.2.4), and plasmidVerify were first applied separately to individual and co-assembled contigs, considering only contigs >2 kb.",
+          "_matched": null
+        },
+        {
+          "order": 13,
+          "role": "filter_features",
+          "tool_raw": "CD-HIT-EST",
+          "version": "4.8.1",
+          "params": "-c 0.99 -n 10",
+          "database": null,
+          "evidence": "Redundant sequences (> 99 identity) were then removed using CD-HIT-EST (v4.8.1; -c 0.99 -n 10).",
+          "_matched": "cd-hit"
+        },
+        {
+          "order": 14,
+          "role": "detect_mge",
+          "tool_raw": "geNomad",
+          "version": "1.1.0",
+          "params": null,
+          "database": null,
+          "evidence": "The resulting non-redundant viral and plasmid contigs were re-classified using geNomad (v1.1.0; default options)",
+          "_matched": "genomad"
+        },
+        {
+          "order": 15,
+          "role": "detect_mge",
+          "tool_raw": "geNomad",
+          "version": "1.1.0",
+          "params": null,
+          "database": null,
+          "evidence": "The resulting non-redundant viral and plasmid contigs were re-classified using geNomad (v1.1.0; default options) and further filtered to retain only those with scores above 0.8 for both virus and plasmid categories.",
+          "_matched": "genomad"
+        },
+        {
+          "order": 16,
+          "role": "taxonomy_assign",
+          "tool_raw": "BLASTn",
+          "version": "2.9.0+",
+          "params": "-evalue 1e-10 -perc_identity 80 -outfmt '6 std qlen slen'",
+          "database": "NCBI NT",
+          "evidence": "To correct for potential misclassification, these contigs were blasted against the NCBI NT database (BLASTn v2.9.0+; -evalue 1e-10 -perc_identity 80 -outfmt '6 std qlen slen').",
+          "_matched": "blast"
+        },
+        {
+          "order": 17,
+          "role": "bin_qc",
+          "tool_raw": "CheckV",
+          "version": "0.7.0",
+          "params": null,
+          "database": null,
+          "evidence": "For viral contigs, CheckV (v0.7.0, default options) was used to assess quality, and only contigs with medium, high, or complete quality were retained.",
+          "_matched": "checkv"
+        },
+        {
+          "order": 18,
+          "role": "dereplicate_genomes",
+          "tool_raw": "dRep",
+          "version": "3.2.0",
+          "params": "-comp 50 -cont 10 -sa 95",
+          "database": null,
+          "evidence": "For representative proMAG selection, we used dRep (v3.2.0; -comp 50 -cont 10 -sa 95) with the \u2018dereplicate\u2019 command for medium- and high-quality MAGs at \u226595% ANI.",
+          "_matched": "drep"
+        },
+        {
+          "order": 19,
+          "role": "classify_genomes",
+          "tool_raw": "GTDB-Tk",
+          "version": "2.0.0",
+          "params": "classify_wf",
+          "database": null,
+          "evidence": "Taxonomic classification was performed using GTDB-\u00a0Tk (v2.0.0) with the classify_wf module",
+          "_matched": "gtdbtk"
+        },
+        {
+          "order": 20,
+          "role": "phylogeny",
+          "tool_raw": "PhyloPhlan3",
+          "version": "3.0.64",
+          "params": "--diversity high --fast",
+          "database": null,
+          "evidence": "and a phylogenetic tree was generated using PhyloPhlan3 (v3.0.64; --diversity high --fast).",
+          "_matched": "phylophlan"
+        },
+        {
+          "order": 21,
+          "role": "predict_genes",
+          "tool_raw": "Prodigal",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Specifically, Prodigal was employed for proMAGs and pMAGs",
+          "_matched": "prodigal"
+        },
+        {
+          "order": 22,
+          "role": "predict_genes",
+          "tool_raw": "Prodigal-gv",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Prodigal-gv for vMAGs",
+          "_matched": "prodigal"
+        },
+        {
+          "order": 23,
+          "role": "predict_genes",
+          "tool_raw": "GeneMark-ES",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "and GeneMark-ES for eukMAGs.",
+          "_matched": null
+        },
+        {
+          "order": 24,
+          "role": "annotate_function",
+          "tool_raw": "EggNOG mapper",
+          "version": "2.1.12",
+          "params": null,
+          "database": null,
+          "evidence": "Predicted genes were then functionally annotated using EggNOG mapper (v2.1.12)",
+          "_matched": "eggnog-mapper"
+        },
+        {
+          "order": 25,
+          "role": "map_reads",
+          "tool_raw": "Bowtie2",
+          "version": "2.3.4.3",
+          "params": "--very-sensitive",
+          "database": null,
+          "evidence": "Metagenomic reads were aligned against the eSMGC MAG database using Bowtie2 (v2.3.4.3, --very-sensitive).",
+          "_matched": "bowtie2"
+        },
+        {
+          "order": 26,
+          "role": "filter_features",
+          "tool_raw": "pysam",
+          "version": null,
+          "params": "\u226595% nucleotide identity",
+          "database": null,
+          "evidence": "Alignments were filtered (\u226595% nucleotide identity) by using pysam to ensure species-level resolution and downstream SNV analysis.",
+          "_matched": null
+        },
+        {
+          "order": 27,
+          "role": "normalize",
+          "tool_raw": null,
+          "version": null,
+          "params": "transcripts per million (TPM)",
+          "database": null,
+          "evidence": "MAG abundances were calculated as transcripts per million (TPM), normalizing genome coverage by total sequenced bases per sample.",
+          "_matched": null
+        },
+        {
+          "order": 28,
+          "role": "diversity",
+          "tool_raw": "vegan",
+          "version": null,
+          "params": "Aitchison distances",
+          "database": null,
+          "evidence": "Beta diversity was assessed using robust Aitchison distances, computed with the vegdist function in the vegan R package.",
+          "_matched": "vegan"
+        },
+        {
+          "order": 29,
+          "role": "ordination",
+          "tool_raw": "cmdscale",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Principal coordinates analysis was performed using cmdscale to visualize community-level dissimilarities across samples.",
+          "_matched": null
+        },
+        {
+          "order": 30,
+          "role": "map_reads",
+          "tool_raw": "BWA-MEM",
+          "version": "0.7.17",
+          "params": null,
+          "database": "GRCh38.p14",
+          "evidence": "Raw sequencing reads were mapped to the human reference genome (GRCh38.p14) using BWA-MEM (v0.7.17).",
+          "_matched": "bwa-mem2"
+        }
+      ],
+      "source": "methods_text"
+    },
+    "provenance": {
+      "model": "local:google/gemma-4-26b-a4b",
+      "prompt_version": "claimed_v1"
+    },
+    "stats": {
+      "completion_tokens": 3357,
+      "reasoning_tokens": 0,
+      "elapsed_s": 41.18
+    },
+    "tools_known": [
+      "metaSPAdes",
+      "Bowtie2",
+      "Samtools",
+      "CONCOCT",
+      "MaxBin2",
+      "MetaBAT2",
+      "GUNC",
+      "VirSorter2",
+      "CD-HIT-EST",
+      "geNomad",
+      "geNomad",
+      "BLASTn",
+      "CheckV",
+      "dRep",
+      "GTDB-Tk",
+      "PhyloPhlan3",
+      "Prodigal",
+      "Prodigal-gv",
+      "EggNOG mapper",
+      "Bowtie2",
+      "vegan",
+      "BWA-MEM"
+    ],
+    "tools_unknown": [
+      "FaQCs",
+      "NCBI BMTagger",
+      "ACR",
+      "viralVerify",
+      "plasmidVerify",
+      "GeneMark-ES",
+      "pysam",
+      "cmdscale"
+    ]
+  },
+  {
+    "paper": {
+      "id": "PPR1015515",
+      "doi": "10.1101/2025.05.01.651714",
+      "title": "Chromosome-level genome assembly of the photobiont alga <i>Trebouxia</i> sp. \u2018A48\u2019 from <i>Xanthoria parietina</i> provides new insight into the lichen symbiosis",
+      "authors": "Tagirdzhanova G, Raistrick J, Talbot NJ.",
+      "date": "2025-05-07",
+      "journal": "bioRxiv",
+      "is_open_access": true
+    },
+    "methods_chars": 9402,
+    "chain": {
+      "completeness": "sketch",
+      "steps": [
+        {
+          "order": 0,
+          "role": "basecall",
+          "tool_raw": "Dorado",
+          "version": "7.4.13",
+          "params": null,
+          "database": null,
+          "evidence": "Base calling was performed with Dorado v7.4.13.",
+          "_matched": "dorado"
+        },
+        {
+          "order": 1,
+          "role": "assemble",
+          "tool_raw": "Hifiasm",
+          "version": "0.24.0",
+          "params": null,
+          "database": null,
+          "evidence": "Draft assembly was performed with Hifiasm v0.24.0 ().",
+          "_matched": "hifiasm-meta"
+        },
+        {
+          "order": 2,
+          "role": "map_reads",
+          "tool_raw": "samtools",
+          "version": "1.12",
+          "params": null,
+          "database": null,
+          "evidence": "We used samtools v1.12 (), Minimap2 v2.24-41122 (), MetaBAT v2.15 (), and blast+-2.9.0 () to examine the contigs, including their coverage, GC content, and BLAST matches to the NCBI nt database ().",
+          "_matched": "samtools"
+        },
+        {
+          "order": 3,
+          "role": "bin",
+          "tool_raw": "MetaBAT",
+          "version": "2.15",
+          "params": null,
+          "database": null,
+          "evidence": "We used samtools v1.12 (), Minimap2 v2.24-41122 (), MetaBAT v2.15 (), and blast+-2.9.0 () to examine the contigs, including their coverage, GC content, and BLAST matches to the NCBI nt database ().",
+          "_matched": "metabat2"
+        },
+        {
+          "order": 4,
+          "role": "filter_features",
+          "tool_raw": "blast+",
+          "version": "2.9.0",
+          "params": null,
+          "database": "NCBI nt",
+          "evidence": "We used samtools v1.12 (), Minimap2 v2.24-41122 (), MetaBAT v2.15 (), and blast+-2.9.0 () to examine the contigs, including their coverage, GC content, and BLAST matches to the NCBI nt database ().",
+          "_matched": "blast"
+        },
+        {
+          "order": 5,
+          "role": "bin_qc",
+          "tool_raw": "BUSCO",
+          "version": "4.0.6",
+          "params": null,
+          "database": "chlorophyta_odb10",
+          "evidence": "We confirmed the quality of the nuclear genome assembly using BUSCO v4.0.6 () with the chlorophyta_odb10 database.",
+          "_matched": "busco"
+        },
+        {
+          "order": 6,
+          "role": "map_reads",
+          "tool_raw": "Minimap2",
+          "version": "2.24-41122",
+          "params": "-x asm20",
+          "database": null,
+          "evidence": "To align the nuclear genome assembly to the genome of Trebouxia sp. SL0000003 (PRJEB86095), we used Minimap2 v2.24-41122 () with the -x asm20 flag.",
+          "_matched": "minimap2"
+        },
+        {
+          "order": 7,
+          "role": "visualize",
+          "tool_raw": "syntenyPlotteR",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "The synteny plot was generated with syntenyPlotteR ().",
+          "_matched": null
+        },
+        {
+          "order": 8,
+          "role": "subsample",
+          "tool_raw": null,
+          "version": null,
+          "params": "top 30,000 reads",
+          "database": null,
+          "evidence": "We then selected the top 30,000 reads and re-assembled them using Hifiasm v0.18.5 ().",
+          "_matched": null
+        },
+        {
+          "order": 9,
+          "role": "assemble",
+          "tool_raw": "Hifiasm",
+          "version": "0.18.5",
+          "params": null,
+          "database": null,
+          "evidence": "We then selected the top 30,000 reads and re-assembled them using Hifiasm v0.18.5 ().",
+          "_matched": "hifiasm-meta"
+        },
+        {
+          "order": 10,
+          "role": "custom",
+          "tool_raw": "RepeatModeler",
+          "version": "2.0.3",
+          "params": null,
+          "database": null,
+          "evidence": "We masked repeats using RepeatMasker v4.0.9 (https://www.repeatmasker.org/) with a custom repeat library prepared with RepeatModeler v2.0.3 () from the genomic assembly.",
+          "_matched": null
+        },
+        {
+          "order": 11,
+          "role": "trim",
+          "tool_raw": "RepeatMasker",
+          "version": "4.0.9",
+          "params": null,
+          "database": null,
+          "evidence": "We masked repeats using RepeatMasker v4.0.9 (https://www.repeatmasker.org/) with a custom repeat library prepared with RepeatModeler v2.0.3 () from the genomic assembly.",
+          "_matched": null
+        },
+        {
+          "order": 12,
+          "role": "predict_genes",
+          "tool_raw": "funannotate",
+          "version": "1.8.15",
+          "params": null,
+          "database": null,
+          "evidence": "The repeat-masked genome was then used for gene prediction using the funannotate pipeline v1.8.15 ().",
+          "_matched": null
+        },
+        {
+          "order": 13,
+          "role": "predict_genes",
+          "tool_raw": "Genemark-ES",
+          "version": "4.62",
+          "params": null,
+          "database": null,
+          "evidence": "Next, we run gene prediction using Genemark-ES v4.62 () and the funannotate \u2018predict\u2019 module, which collected predictions from Augustus v3.3.2 (), GlimmerHMM v3.0.4 (), and SNAP 2006-07-28 ().",
+          "_matched": null
+        },
+        {
+          "order": 14,
+          "role": "predict_genes",
+          "tool_raw": "Augustus",
+          "version": "3.3.2",
+          "params": null,
+          "database": null,
+          "evidence": "Next, we run gene prediction using Genemark-ES v4.62 () and the funannotate \u2018predict\u2019 module, which collected predictions from Augustus v3.3.2 (), GlimmerHMM v3.0.4 (), and SNAP 2006-07-28 ().",
+          "_matched": null
+        },
+        {
+          "order": 15,
+          "role": "predict_genes",
+          "tool_raw": "GlimmerHMM",
+          "version": "3.0.4",
+          "params": null,
+          "database": null,
+          "evidence": "Next, we run gene prediction using Genemark-ES v4.62 () and the funannotate \u2018predict\u2019 module, which collected predictions from Augustus v3.3.2 (), GlimmerHMM v3.0.4 (), and SNAP 2006-07-28 ().",
+          "_matched": null
+        },
+        {
+          "order": 16,
+          "role": "predict_genes",
+          "tool_raw": "SNAP",
+          "version": "2006-07-28",
+          "params": null,
+          "database": null,
+          "evidence": "Next, we run gene prediction using Genemark-ES v4.62 () and the fun</strong>funannotate \u2018predict\u2019 module, which collected predictions from Augustus v3.3.2 (), GlimmerHMM v3.0.4 (), and SNAP 2006-07-28 ().",
+          "_matched": null
+        },
+        {
+          "order": 17,
+          "role": "custom",
+          "tool_raw": "EVidence Modeler",
+          "version": "1.1.1",
+          "params": null,
+          "database": null,
+          "evidence": "We created consensus models with EVidence Modeler v1.1.1 () and annotated tRNA with tRNAscan-SE v2.0.9 ().",
+          "_matched": null
+        },
+        {
+          "order": 18,
+          "role": "annotate_function",
+          "tool_raw": "tRNAscan-SE",
+          "version": "2.0.9",
+          "params": null,
+          "database": null,
+          "evidence": "We created consensus models with EVidence Modeler v1.1.1 () and annotated tRNA with tRNAscan-SE v2.0.9 ().",
+          "_matched": null
+        },
+        {
+          "order": 19,
+          "role": "annotate_function",
+          "tool_raw": "InterProScan",
+          "version": "5.52-86.0",
+          "params": null,
+          "database": "PFAM v35.0, UniProtDB v2023_01, MEROPS v1.20, dbCAN v11.0, BUSCO chlorophyta_odb10",
+          "evidence": "For functional annotations, we used InterProScan v5.52-86.0 () and the funannotate \u2018annotate\u2019 module, which collected predictions from PFAM v35.0 (), UniProtDB v2023_01(), MEROPS v12.0 (), dbCAN v11.0 (), and BUSCO chlorophyta_odb10 ().",
+          "_matched": "interproscan"
+        },
+        {
+          "order": 20,
+          "role": "annotate_function",
+          "tool_raw": "KAAS",
+          "version": null,
+          "params": null,
+          "database": "KEGG",
+          "evidence": "We also annotated KEGG ontology using KAAS webserver ().",
+          "_matched": null
+        },
+        {
+          "order": 21,
+          "role": "map_reads",
+          "tool_raw": "Minimap2",
+          "version": "2.24-41122",
+          "params": null,
+          "database": null,
+          "evidence": "I aligned the long read data on the nuclear genome assembly using Minimap2 v2.24-41122 () and removed duplicated reads with Picard v2.21.2 (https://broadinstitute.github.io/picard/).",
+          "_matched": "minimap2"
+        },
+        {
+          "order": 22,
+          "role": "trim",
+          "tool_raw": "Picard",
+          "version": "2.21.2",
+          "params": null,
+          "database": null,
+          "evidence": "I aligned the long read data on the nuclear genome assembly using Minimap2 v2.24-41122 () and removed duplicated reads with Picard v2.21.2 (https://broadinstitute.github.io/picard/).",
+          "_matched": "card"
+        },
+        {
+          "order": 23,
+          "role": "call_variants",
+          "tool_raw": "VarScan",
+          "version": "2.3.9",
+          "params": "--p-value 0.1 --min-var-freq 0.005",
+          "database": null,
+          "evidence": "We called variants using VarScan v2.3.9 () with the flags --p-value 0.1 --min-var-freq 0.005.",
+          "_matched": null
+        },
+        {
+          "order": 24,
+          "role": "custom",
+          "tool_raw": "vcfR",
+          "version": "1.15.0",
+          "params": "coverage depth 200-240x",
+          "database": null,
+          "evidence": "The results were processed using vcfR library v1.15.0 (); only positions with coverage depth 200-240x were considered.",
+          "_matched": null
+        },
+        {
+          "order": 25,
+          "role": "custom",
+          "tool_raw": "WolfPSORT",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "For secretome prediction, we used WolfPSORT (), deepTMHMM (), and SignalP v5 ().",
+          "_matched": null
+        },
+        {
+          "order": 26,
+          "role": "custom",
+          "tool_raw": "deepTMHMM",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "For secretome prediction, we used WolfPSORT (), deepTMHMM (), and SignalP v5 ().",
+          "_matched": null
+        },
+        {
+          "order": 27,
+          "role": "custom",
+          "tool_raw": "SignalP",
+          "version": "5",
+          "params": null,
+          "database": null,
+          "evidence": "For secretome prediction, we used WolfPSMT (), deepTMHMM (), and SignalP v5 ().",
+          "_matched": null
+        },
+        {
+          "order": 28,
+          "role": "differential_abundance",
+          "tool_raw": "ClusterProfiler",
+          "version": "4.2.2",
+          "params": null,
+          "database": null,
+          "evidence": "We used ClusterProfiler v4.2.2 () for enrichment analysis.",
+          "_matched": null
+        },
+        {
+          "order": 29,
+          "role": "annotate_function",
+          "tool_raw": "MFannot",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "We annotated the plastid and mitochondrial genomes using MFannot () and GeSeq ().",
+          "_matched": null
+        },
+        {
+          "order": 30,
+          "role": "annotate_function",
+          "tool_raw": "GeSeq",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "We annotated the plastid and mitochondrial genomes using MFannot () and GeSeq ().",
+          "_matched": null
+        },
+        {
+          "order": 31,
+          "role": "map_reads",
+          "tool_raw": "STAR",
+          "version": "2.5.4b",
+          "params": null,
+          "database": null,
+          "evidence": "To cross-reference the annotations with the transcriptome data, we aligned RNA data onto the organelle genomes using STAR v2.5.4b ().",
+          "_matched": null
+        },
+        {
+          "order": 32,
+          "role": "visualize",
+          "tool_raw": "OGDRAW",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "The final annotations were curated manually and visualized with OGDRAW ().",
+          "_matched": null
+        },
+        {
+          "order": 33,
+          "role": "phylogeny",
+          "tool_raw": "MAFFT",
+          "version": "7.271",
+          "params": null,
+          "database": null,
+          "evidence": "We aligned the sequences using MAFFT v7.271 () and trimmed the alignment to remove positions absent in over 20% of sequences using trimAl v1.2 ().",
+          "_matched": "mafft"
+        },
+        {
+          "order": 34,
+          "role": "trim",
+          "tool_raw": "trimAl",
+          "version": "1.2",
+          "params": "remove positions absent in over 20% of sequences",
+          "database": null,
+          "evidence": "We aligned the sequences using MAFFT v7.271 () and trimmed the alignment to remove positions absent in over 20% of sequences using trimAl v1.2 ().",
+          "_matched": "trimal"
+        },
+        {
+          "order": 35,
+          "role": "phylogeny",
+          "tool_raw": "IQ-TREE",
+          "version": "2.2.2.2",
+          "params": "10,000 rapid bootstraps",
+          "database": null,
+          "evidence": "The Maximum-Likelihood phylogenetic tree was constructed with IQ-GTREE v2.2.2.2 () using 10,000 rapid bootstraps.",
+          "_matched": "iqtree"
+        },
+        {
+          "order": 36,
+          "role": "custom",
+          "tool_raw": "OrthoFinder",
+          "version": "2.5.4",
+          "params": null,
+          "database": null,
+          "evidence": "To construct a phylogenomic tree and carry out orthogroups analysis, we combined 23 reference genomes from literature (Table S1) and the predicted proteomes from our genome assembly and Trebouxia sp. SL0000003, and analyzed them with OrthoFinder v2.5.4 ().",
+          "_matched": null
+        },
+        {
+          "order": 37,
+          "role": "visualize",
+          "tool_raw": "iTOL",
+          "version": "7",
+          "params": null,
+          "database": null,
+          "evidence": "Phylogenies were visualized using iTOL v7 ().",
+          "_matched": "itol"
+        }
+      ],
+      "source": "methods_text"
+    },
+    "provenance": {
+      "model": "local:google/gemma-4-26b-a4b",
+      "prompt_version": "claimed_v1"
+    },
+    "stats": {
+      "completion_tokens": 4163,
+      "reasoning_tokens": 0,
+      "elapsed_s": 51.66
+    },
+    "tools_known": [
+      "Dorado",
+      "Hifiasm",
+      "samtools",
+      "MetaBAT",
+      "blast+",
+      "BUSCO",
+      "Minimap2",
+      "Hifiasm",
+      "InterProScan",
+      "Minimap2",
+      "Picard",
+      "MAFFT",
+      "trimAl",
+      "IQ-TREE",
+      "iTOL"
+    ],
+    "tools_unknown": [
+      "syntenyPlotteR",
+      "RepeatModeler",
+      "RepeatMasker",
+      "funannotate",
+      "Genemark-ES",
+      "Augustus",
+      "GlimmerHMM",
+      "SNAP",
+      "EVidence Modeler",
+      "tRNAscan-SE",
+      "KAAS",
+      "VarScan",
+      "vcfR",
+      "WolfPSORT",
+      "deepTMHMM",
+      "SignalP",
+      "ClusterProfiler",
+      "MFannot",
+      "GeSeq",
+      "STAR",
+      "OGDRAW",
+      "OrthoFinder"
+    ]
+  },
+  {
+    "paper": {
+      "id": "PPR1043279",
+      "doi": "10.1101/2025.06.27.660518",
+      "title": "Hybrid-metagenomics reveal off-target effects of albendazole, ivermectin-albendazole and moxidectin-albendazole on the human gut bacteria",
+      "authors": "Dommann J, Sprecher VP, Beisel C, Ballmer D, H\u00fcrlimann E, Coulibaly JT, Keiser J, Schneeberger PHH.",
+      "date": "2025-06-27",
+      "journal": "bioRxiv",
+      "is_open_access": true
+    },
+    "methods_chars": 27194,
+    "chain": {
+      "completeness": "sketch",
+      "steps": [
+        {
+          "order": 0,
+          "role": "trim",
+          "tool_raw": "Trimmomatic",
+          "version": "0.39",
+          "params": null,
+          "database": null,
+          "evidence": "We utilized Trimmomatic (v. 0.39) for adapter removal and quality filtering of the raw Illumina reads.",
+          "_matched": "trimmomatic"
+        },
+        {
+          "order": 1,
+          "role": "filter_host",
+          "tool_raw": "Kraken 2",
+          "version": "2.1.3",
+          "params": null,
+          "database": "MinusB Refseq index",
+          "evidence": "Subsequently, we removed non-bacterial reads utilizing Kraken 2 (v. 2.1.3) equipped with the \u201cMinusB\u201d Refseq index (as of Oct 9th, 2023) and keeping the unclassified reads.",
+          "_matched": "kraken2"
+        },
+        {
+          "order": 2,
+          "role": "basecall",
+          "tool_raw": "Dorado",
+          "version": "0.7.2",
+          "params": null,
+          "database": "dna_r10.4.1_e8.2_400bps_sup@v4.3.0",
+          "evidence": "Basecalling of the POD5 files obtained during Nanopore sequencing was performed using Dorado (v. 0.7.2) equipped with the model dna_r10.4.1_e8.2_400bps_sup@v4.3.0.",
+          "_matched": "dorado"
+        },
+        {
+          "order": 3,
+          "role": "filter_features",
+          "tool_raw": "Filtlong",
+          "version": "0.2.1",
+          "params": null,
+          "database": null,
+          "evidence": "We utilized Filtlong (v. 0.2.1) to filter short reads (< 300bp) and supplied the processed paired-end Illumina reads as a filtering template using the options \u201c-1\u201d and \u201c-2\u201d to retain only bacterial Nanopore reads.",
+          "_matched": "filtlong"
+        },
+        {
+          "order": 4,
+          "role": "trim",
+          "tool_raw": "Dorado",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Lastly, adapters were removed using Dorado\u2019s function \u201c-trim\u201d.",
+          "_matched": "dorado"
+        },
+        {
+          "order": 5,
+          "role": "subsample",
+          "tool_raw": "seqkit",
+          "version": "2.6.1",
+          "params": null,
+          "database": null,
+          "evidence": "To begin, we prepared the Nanopore read data by generating subsets for each sample, capping them at 1 Gb using seqkit (v. 2.6.1) with the \u201cseqkit head\u201d command.",
+          "_matched": "seqkit"
+        },
+        {
+          "order": 6,
+          "role": "custom",
+          "tool_raw": "seqkit",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "To finalize the datasets for assembly, we split each pooled dataset - both Nanopore and Illumina reads - into three separate subsets using seqkit commands (\u201cseqkit split \u2013p 3\u201d for Nanopore and \u201cseqkit split2 \u2013p 3\u201d for Illumina).",
+          "_matched": "seqkit"
+        },
+        {
+          "order": 7,
+          "role": "assemble",
+          "tool_raw": "SPAdes",
+          "version": "4.0.0",
+          "params": "--meta",
+          "database": null,
+          "evidence": "We started the assembly process by generating short-read assemblies via SPAdes (v. 4.0.0) via the command \u201cspades.py \u2013meta\u201d, generating 24 metagenomic assemblies.",
+          "_matched": "spades"
+        },
+        {
+          "order": 8,
+          "role": "assemble",
+          "tool_raw": "OPERA-MS",
+          "version": "0.9.0",
+          "params": "--contig-file",
+          "database": "GTDB database (release 89 from June 17th 2019)",
+          "evidence": "We then utilized OPERA-MS (v. 0.9.0) equipped with the GTDB database (release 89 from June 17th 2019) and using the long-read pools, as well as SPAdes short-read assemblies as input (via the flag \u201c--contig-file\u201d).",
+          "_matched": "opera-ms"
+        },
+        {
+          "order": 9,
+          "role": "bin",
+          "tool_raw": "MetaBAT2",
+          "version": "2:2.15",
+          "params": null,
+          "database": null,
+          "evidence": "Using the contigs put forth by OPERA-MS, we followed an ensemble binning approach utilizing MetaBAT2 (v. 2:2.15), MaxBin2 (v. 2.2.7) and CONCOCT (v. 1.1.0)",
+          "_matched": "metabat2"
+        },
+        {
+          "order": 10,
+          "role": "bin",
+          "tool_raw": "MaxBin2",
+          "version": "2.2.7",
+          "params": null,
+          "database": null,
+          "evidence": "Using the contigs put forth by OPERA-MS, we followed an ensemble binning approach utilizing MetaBAT2 (v. 2:2.15), MaxBin2 (v. 2.2.7) and CONCOCT (v. 1.1.0)",
+          "_matched": "maxbin2"
+        },
+        {
+          "order": 11,
+          "role": "bin",
+          "tool_raw": "CONCOCT",
+          "version": "1.1.0",
+          "params": null,
+          "database": null,
+          "evidence": "Using the contigs put forth by OPERA-MS, we followed an ensemble binning approach utilizing MetaBAT2 (v. 2:2.15), MaxBin2 (v. 2.2.7) and CONCOCT (v. 1.1.0)",
+          "_matched": "concoct"
+        },
+        {
+          "order": 12,
+          "role": "bin_refine",
+          "tool_raw": "DAS Tool",
+          "version": "1.1.7",
+          "params": null,
+          "database": null,
+          "evidence": "followed by bin refinement with DAS Tool (v. 1.1.7).",
+          "_matched": "das-tool"
+        },
+        {
+          "order": 13,
+          "role": "bin_qc",
+          "tool_raw": "CheckM2",
+          "version": "1.0.2",
+          "params": null,
+          "database": null,
+          "evidence": "These bins underwent assessment in CheckM2 (v. 1.0.2) and only bins with completeness > 95% and contamination < 5% were retained for further analyses.",
+          "_matched": "checkm2"
+        },
+        {
+          "order": 14,
+          "role": "taxonomy_assign",
+          "tool_raw": "MetaPhlAn4",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Clean, high-quality bins were taxonomically annotated with MetaPhlan4.",
+          "_matched": "metaphlan"
+        },
+        {
+          "order": 15,
+          "role": "taxonomy_assign",
+          "tool_raw": "BAT",
+          "version": "6.0.1",
+          "params": null,
+          "database": null,
+          "evidence": "To verify our annotation approach, we additionally annotated the bins using BAT (v. 6.0.1; \u201cSUPP_BAT_vs_MP4\u201d).",
+          "_matched": null
+        },
+        {
+          "order": 16,
+          "role": "phylogeny",
+          "tool_raw": "checkm",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "We constructed a phylogenetic tree representing both the BL and FU MAGs for each treatment arm using CheckM and the command \u201ccheckm tree\u201d.",
+          "_matched": "checkm"
+        },
+        {
+          "order": 17,
+          "role": "phylogeny",
+          "tool_raw": "iqtree2",
+          "version": null,
+          "params": "-m MFP -bb 1000 -alrt 1000 - nt 80",
+          "database": null,
+          "evidence": "The resulting alignment file was used as input for iqtree2, for treebuilding and bootstrapping with the command \u201ciqtree2 -m MFP -bb 1000 -alrt 1000 - nt 80\u201d.",
+          "_matched": "iqtree"
+        },
+        {
+          "order": 18,
+          "role": "profile_taxonomic",
+          "tool_raw": "MetaPhlAn",
+          "version": "4.0.6",
+          "params": null,
+          "database": "CHOCOPhlAn database (v. Oct22)",
+          "evidence": "We used the MetaPhlAn (v. 4.0.6) pipeline equipped with the CHOCOPhlAn database (v. Oct22) to compute taxonomic relative abundances for each sample, using paired-end Illumina reads as inputs.",
+          "_matched": "metaphlan"
+        },
+        {
+          "order": 19,
+          "role": "filter_features",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "For subsequent analyses, we applied a 1% prevalence filter and a 20% variance filter in R-Studio (R-base v. 4.4.1) equipped with dplyr (v. 1.1.4).",
+          "_matched": null
+        },
+        {
+          "order": 20,
+          "role": "diversity",
+          "tool_raw": "vegan",
+          "version": "2.6-6.1",
+          "params": null,
+          "database": null,
+          "evidence": "Richness, Shannon diversity indices, Berger-Parker dominance indices and Spearman correlations thereof were determined in R-Studio equipped with the following packages: car (v. 3.1-2), plyr (v. 1.8.9) and vegan (v. 2.6-6.1).",
+          "_matched": "vegan"
+        },
+        {
+          "order": 21,
+          "role": "ordination",
+          "tool_raw": "vegan",
+          "version": "2.6-6.1",
+          "params": null,
+          "database": null,
+          "evidence": "Bray-Curtis dissimilarities and non-Metric Multidimensional Scaling (NMDS) coupled to PERMANOVA and PERMDISP analyses were also facilitated by the package vegan (v. 2.6-6.1).",
+          "_matched": "vegan"
+        },
+        {
+          "order": 22,
+          "role": "differential_abundance",
+          "tool_raw": "MaAsLin3",
+          "version": "0.99.1",
+          "params": null,
+          "database": null,
+          "evidence": "For differential abundance analysis of baseline and follow-up feature abundances and prevalences, we utilized MaAsLin3 complemented with random forest analysis.",
+          "_matched": "maaslin2"
+        }
+      ],
+      "source": "methods_text"
+    },
+    "provenance": {
+      "model": "local:google/gemma-4-26b-a4b",
+      "prompt_version": "claimed_v1"
+    },
+    "stats": {
+      "completion_tokens": 2679,
+      "reasoning_tokens": 0,
+      "elapsed_s": 35.77
+    },
+    "tools_known": [
+      "Trimmomatic",
+      "Kraken 2",
+      "Dorado",
+      "Filtlong",
+      "Dorado",
+      "seqkit",
+      "seqkit",
+      "SPAdes",
+      "OPERA-MS",
+      "MetaBAT2",
+      "MaxBin2",
+      "CONCOCT",
+      "DAS Tool",
+      "CheckM2",
+      "MetaPhlAn4",
+      "checkm",
+      "iqtree2",
+      "MetaPhlAn",
+      "vegan",
+      "vegan",
+      "MaAsLin3"
+    ],
+    "tools_unknown": [
+      "BAT"
+    ]
+  },
+  {
+    "paper": {
+      "id": "PPR1144650",
+      "doi": "10.21203/rs.3.rs-8212954/v1",
+      "title": "Metabolomics and metagenomics integration deciphers gut ecosystem changes following prophylactic interventions in commercial broilers",
+      "authors": "Pangga GM, Richmond A, Hughes C, Psifidi A, Xia D, Blake D, Ijaz UZ, Gundogdu O.",
+      "date": "2026-01-19",
+      "journal": "Research Square",
+      "is_open_access": true
+    },
+    "methods_chars": 10480,
+    "chain": {
+      "completeness": "sketch",
+      "steps": [
+        {
+          "order": 0,
+          "role": "normalize",
+          "tool_raw": "MetaX",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Data was pre-processed through probabilistic quotient normalisation (PQN) normalisation using MetaX",
+          "_matched": null
+        },
+        {
+          "order": 1,
+          "role": "custom",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "quality control-based robust locally estimated scatterplot smoothing signal correction and removal of metabolites with high coefficient variation (> 30%)",
+          "_matched": null
+        },
+        {
+          "order": 2,
+          "role": "ordination",
+          "tool_raw": "vegan",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Using vegan R package, sample-wise variation between metabolite treatment groups was assessed using Principal Coordinates Analysis (PCOA) based on Euclidean distances",
+          "_matched": "vegan"
+        },
+        {
+          "order": 3,
+          "role": "ordination",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "differences in global metabolite composition were tested using permutational multivariate analysis of variance (PERMANOVA) at 999 permutations",
+          "_matched": null
+        },
+        {
+          "order": 4,
+          "role": "annotate_function",
+          "tool_raw": "MetaboAnalystR",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Using MetaboAnalystR, we applied Mummichog, GSEA (Gene Set Enrichment Analysis), as well as their combined approach.",
+          "_matched": null
+        },
+        {
+          "order": 5,
+          "role": "annotate_function",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": "Gallus gallus",
+          "evidence": "We adopted a tolerance of 5 ppm while using the Gallus gallus gene set as background (cut-off threshold set at 0.05).",
+          "_matched": null
+        },
+        {
+          "order": 6,
+          "role": "differential_abundance",
+          "tool_raw": "R",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Functional analyses were based on significant differences between the metabolite peak values of T1 and T2 that were assessed by student sample t-test and the Wilcoxon signed-rank test, for parametric and non-parametric data distributions, respectively, using base R.",
+          "_matched": null
+        },
+        {
+          "order": 7,
+          "role": "annotate_function",
+          "tool_raw": "Pathview",
+          "version": null,
+          "params": null,
+          "database": "KEGG",
+          "evidence": "KEGG pathways were further mapped using R package Pathview",
+          "_matched": null
+        },
+        {
+          "order": 8,
+          "role": "custom",
+          "tool_raw": "mixOmics",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "We further applied the sparse partial least squares discriminant analysis (sPLS-DA) algorithm on our PQN-normalised data from the mixOmics package to perform feature selection",
+          "_matched": null
+        },
+        {
+          "order": 9,
+          "role": "custom",
+          "tool_raw": "ChemRICH",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "This information was subjected to chemical class enrichment using basic ChemRICH analysis",
+          "_matched": null
+        },
+        {
+          "order": 10,
+          "role": "custom",
+          "tool_raw": "ClassyFire",
+          "version": null,
+          "params": null,
+          "database": "ChemOnt",
+          "evidence": "We also employed ChemRICH class enrichment analysis of the same features, but with classification based on the ChemOnt system via the ClassyFire program.",
+          "_matched": null
+        },
+        {
+          "order": 11,
+          "role": "correlate",
+          "tool_raw": "mixOmics",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "We applied the Data Integration Analysis for Biomarker discovery using Latent cOmponents (DIABLO) method from the mixOmics package, to determine the correlation between our metabolome and MAG datasets.",
+          "_matched": null
+        },
+        {
+          "order": 12,
+          "role": "custom",
+          "tool_raw": "mixOmics",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "A design matrix with a link set at 0.10 (based on the recommendation of the original authors of mixOmics, this value represents a reasonable trade-off between discrimination, i.e., T1 and T2, and correlations across metagenomics and metabolomic datasets) was used to discriminate features between the treatment groups.",
+          "_matched": null
+        },
+        {
+          "order": 13,
+          "role": "correlate",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "The validity of the DIABLO models was then confirmed by a permutation test, comparing CERs of the original model to those generated by randomly permuted samples (p < 0.05).",
+          "_matched": null
+        },
+        {
+          "order": 14,
+          "role": "correlate",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "From the model, moderate correlations between MAGs and metabolites of at least 0.60 were retained",
+          "_matched": null
+        },
+        {
+          "order": 15,
+          "role": "custom",
+          "tool_raw": "R",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "and thereafter subjected to pairwise comparison with Benjamini-Hochberg p-value correction (p < 0.05).",
+          "_matched": null
+        },
+        {
+          "order": 16,
+          "role": "visualize",
+          "tool_raw": "ComplexHeatMap",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Both significant and non-significant correlation counts, CV stability values, and selected metabolic module features of significant MAGs were mapped together using the ComplexHeatMap package for complete clustering analysis based on the Euclidean method.",
+          "_matched": "pheatmap"
+        },
+        {
+          "order": 17,
+          "role": "visualize",
+          "tool_raw": "igraph",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Correlations between significant MAGs and metabolites based on DIABLO, with further evidence based on sPLS-DA, were also drawn using the igraph package.",
+          "_matched": null
+        }
+      ],
+      "source": "methods_text"
+    },
+    "provenance": {
+      "model": "local:google/gemma-4-26b-a4b",
+      "prompt_version": "claimed_v1"
+    },
+    "stats": {
+      "completion_tokens": 1709,
+      "reasoning_tokens": 0,
+      "elapsed_s": 23.14
+    },
+    "tools_known": [
+      "vegan",
+      "ComplexHeatMap"
+    ],
+    "tools_unknown": [
+      "MetaX",
+      "MetaboAnalystR",
+      "R",
+      "Pathview",
+      "mixOmics",
+      "ChemRICH",
+      "ClassyFire",
+      "mixOmics",
+      "mixOmics",
+      "R",
+      "igraph"
+    ]
+  }
+]

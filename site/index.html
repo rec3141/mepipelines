@@ -211,6 +211,15 @@
   .track .meta { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
   .track .title { font-size: 13px; line-height: 1.35; font-weight: 520; }
   .track .sub { font-family: var(--mono); font-size: 11px; color: var(--text-muted); }
+  /* Links are underlined, not colour-coded: the accent budget belongs entirely to the data. */
+  .track a, td a {
+    color: inherit;
+    text-decoration: underline;
+    text-decoration-color: var(--rule-strong);
+    text-underline-offset: 2px;
+  }
+  .track a:hover, td a:hover { text-decoration-color: currentColor; }
+  .track a:focus-visible, td a:focus-visible { outline: 2px solid var(--text-primary); outline-offset: 2px; border-radius: 2px; }
   .blocks { display: flex; flex-wrap: wrap; gap: 2px; align-content: flex-start; }
   .blk {
     width: 26px; height: 26px;
@@ -435,7 +444,7 @@ const pct = x => Math.round(x * 100) + "%";
 /* ---- provenance ------------------------------------------------------- */
 const s = DATA.summary;
 document.getElementById("prov").innerHTML = [
-  ["source", "Europe PMC · bioRxiv preprints"],
+  ["source", "Europe PMC · preprint servers"],
   ["extractor", "claimed_v1 · gemma-4-26b-a4b (local)"],
   ["verified", "no — single pass, no human check"]
 ].map(([k, v]) => `<span>${esc(k)} <b>${esc(v)}</b></span>`).join("");
@@ -478,8 +487,10 @@ function renderTracks() {
   document.getElementById("tracks").innerHTML = shown.length ? shown.map(p => `
     <div class="track">
       <div class="meta">
-        <div class="title">${esc(p.title)}</div>
-        <div class="sub">${esc(p.id)} · ${esc(p.date)} · ${p.steps.length} steps</div>
+        <div class="title">${p.doi
+          ? `<a href="https://doi.org/${encodeURIComponent(p.doi)}" target="_blank" rel="noopener noreferrer">${esc(p.title)}</a>`
+          : esc(p.title)}</div>
+        <div class="sub"><a href="https://europepmc.org/article/PPR/${encodeURIComponent(p.id)}" target="_blank" rel="noopener noreferrer">${esc(p.id)}</a> · ${esc(p.date)} · ${p.steps.length} steps</div>
       </div>
       <div class="blocks">
         ${p.steps.map((st, i) => `
@@ -528,7 +539,7 @@ document.getElementById("bars").innerHTML = DATA.roles.map((r, i) => `
 document.getElementById("stepTable").innerHTML =
   `<thead><tr><th>paper</th><th>#</th><th>stage</th><th>role</th><th>tool</th><th>parameters</th></tr></thead><tbody>` +
   DATA.papers.flatMap(p => p.steps.map((st, i) =>
-    `<tr><td class="mono">${esc(p.id)}</td><td class="mono num">${i}</td><td class="mono">${esc(st.stage)}</td>` +
+    `<tr><td class="mono"><a href="https://europepmc.org/article/PPR/${encodeURIComponent(p.id)}" target="_blank" rel="noopener noreferrer">${esc(p.id)}</a></td><td class="mono num">${i}</td><td class="mono">${esc(st.stage)}</td>` +
     `<td class="mono">${esc(st.role)}</td><td class="mono">${esc(st.tool || "—")}${st.version ? " v" + esc(st.version) : ""}</td>` +
     `<td>${esc(st.params || "")}</td></tr>`)).join("") + `</tbody>`;
 
