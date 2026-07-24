@@ -45,6 +45,12 @@ STAGE_ORDER = ["reads", "amplicon", "assembly", "reference", "annotate", "ecolog
 # Roles seen fewer than this many times say more about sampling noise than about the field.
 MIN_USES_FOR_CONSENSUS = 3
 
+# Drift analysis needs enough observations PER TIME BUCKET, which is a far harder bar than the
+# consensus view — a role can be well sampled overall and still have two observations per year.
+# Below this, a "trend" is two coin flips. The explorer renders the shortfall rather than the
+# chart, so the page reports when the corpus becomes powerful enough instead of guessing.
+MIN_PER_BUCKET = 6
+
 
 def clean(s: str | None) -> str:
     """Strip inline markup and collapse whitespace. Preprint titles carry <i> tags."""
@@ -119,6 +125,41 @@ def build(records: list[dict]) -> dict:
         })
     roles.sort(key=lambda r: (-r["concentration"], -r["n"]))
 
+    # --- temporal ------------------------------------------------------------
+    # Bucket by publication year. Finer buckets are tempting and wrong at this corpus size.
+    buckets = sorted({p["date"][:4] for p in papers if p["date"]})
+    by_role_bucket: dict = collections.defaultdict(lambda: collections.defaultdict(collections.Counter))
+    version_rate = {b: {"withVersion": 0, "total": 0} for b in buckets}
+
+    for p in papers:
+        b = p["date"][:4]
+        if not b:
+            continue
+        for st in p["steps"]:
+            version_rate[b]["total"] += 1
+            if st["version"]:
+                version_rate[b]["withVersion"] += 1
+            key = st["matched"] or (st["tool"] or "").lower()
+            if key:
+                by_role_bucket[st["role"]][b][key] += 1
+
+    drift = []
+    for role, per_bucket in by_role_bucket.items():
+        if role == "custom":
+            continue
+        counts = {b: sum(per_bucket[b].values()) for b in buckets}
+        # Needs the bar cleared in at least two buckets, or there is no trend to speak of.
+        powered = [b for b in buckets if counts.get(b, 0) >= MIN_PER_BUCKET]
+        drift.append({
+            "role": role,
+            "stage": stage(role),
+            "powered": len(powered) >= 2,
+            "buckets": {b: [{"tool": t, "n": n} for t, n in per_bucket[b].most_common()] for b in buckets if per_bucket[b]},
+            "counts": counts,
+            "total": sum(counts.values()),
+        })
+    drift.sort(key=lambda d: (not d["powered"], -d["total"]))
+
     named = [s for p in papers for s in p["steps"] if s["tool"]]
     unmatched = sorted({s["tool"] for s in named if not s["matched"]}, key=str.lower)
 
@@ -127,6 +168,13 @@ def build(records: list[dict]) -> dict:
         "roles": roles,
         "stageOrder": STAGE_ORDER,
         "unmatched": unmatched,
+        "timeline": {
+            "buckets": buckets,
+            "minPerBucket": MIN_PER_BUCKET,
+            "versionRate": version_rate,
+            "drift": drift,
+            "poweredRoles": sum(1 for d in drift if d["powered"]),
+        },
         "summary": {
             "papersPlotted": len(papers),
             "papersEmpty": empty,

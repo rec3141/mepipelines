@@ -174,7 +174,20 @@ What the catalog is actually for. Outputs land in `catalog/analysis/` as committ
 - **Consensus chains** per archetype — modal role sequence and its variance
 - **Substitution classes** — which tools actually swap at a role, empirically, versus the
   `substitutable` guesses currently hard-coded in `step_roles.yaml`
-- **Step drift** — CheckM→CheckM2, OTU→ASV, SILVA→GTDB timelines
+- **Step drift** — CheckM→CheckM2, OTU→ASV, SILVA→GTDB timelines. The machinery exists now
+  (`build_site.py` emits a `timeline` block; the explorer has a "Drift over time" section), and it
+  is gated: a role must clear `MIN_PER_BUCKET` observations in two or more periods or it is listed
+  as not-yet-plottable instead of drawn. At 22 papers only `trim`, `visualize`,
+  `annotate_function` and `phylogeny` clear it — the roles where drift is least interesting.
+  Every axis worth watching (`bin_qc` 6/2, `denoise` 3/4, `taxonomy_assign` 7/5,
+  `classify_genomes`) falls short. Rough extrapolation: 3–4× the current corpus, so **80–100
+  papers**, before the interesting axes are answerable — and that assumes they stay evenly spread
+  across years rather than clustering.
+
+  A form note worth keeping: a full composition stack was the first attempt and it failed. With
+  ~7 uses spread over 7 tools every segment is one observation and the tail collapses into an
+  indistinguishable "other". The section now plots the *leading tool and its share* per period,
+  which is the narrower question small samples can actually answer.
 - **Orphan steps** — roles common in `observed`, rare in `claimed`. The reproducibility gap.
 - **Coverage map** — `(platform × strategy × environment)` cells with no vetted workflow
 - **Archetype re-derivation** — cluster real chains on role sequence and check the hand-written

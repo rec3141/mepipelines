@@ -263,6 +263,23 @@
   }
   .chip.contested { border-color: currentColor; color: var(--text-secondary); }
 
+  /* ---- drift ----------------------------------------------------------- */
+  .sub-h { margin: 14px 0 0; font-size: 15px; font-weight: 620; letter-spacing: -.005em; }
+  .drift-role { padding: 12px 0; border-top: 1px solid var(--rule); }
+  .drift-role:first-child { border-top: 0; padding-top: 2px; }
+  .drift-name { font-family: var(--mono); font-size: 12.5px; margin-bottom: 7px; }
+  .drift-name b { font-weight: 650; }
+  .drift-bucket { display: grid; grid-template-columns: 46px 1fr; gap: 10px; align-items: center; margin-top: 5px; }
+  .drift-year { font-family: var(--mono); font-size: 11px; color: var(--text-muted); text-align: right; font-variant-numeric: tabular-nums; }
+  /* 2px surface gap between stacked segments, per the mark spec. */
+  .stack { display: flex; gap: 2px; height: 17px; }
+  .seg { border-radius: 2px; display: grid; place-items: center; overflow: hidden;
+         font-family: var(--mono); font-size: 9px; font-weight: 650; white-space: nowrap; }
+  .drift-legend { display: flex; flex-wrap: wrap; gap: 4px 12px; margin-top: 7px; }
+  .drift-legend span { font-family: var(--mono); font-size: 10.5px; color: var(--text-secondary);
+    display: inline-flex; align-items: center; gap: 5px; }
+  .underpowered { font-family: var(--mono); font-size: 12px; color: var(--text-muted); }
+
   /* ---- tooltip --------------------------------------------------------- */
   #tip {
     position: fixed;
@@ -388,6 +405,26 @@
       <summary>Show tool counts per role as a table</summary>
       <div style="overflow-x:auto"><table id="roleTable"></table></div>
     </details>
+  </section>
+
+  <section>
+    <h2>Drift over time</h2>
+    <p class="lede">
+      Are people switching packages, and are they keeping versions current? Both need enough
+      observations <em>per time period</em>, which is a much harder bar than the totals above —
+      a role can be well sampled overall and still have two uses per year. Roles below the
+      threshold are listed rather than plotted.
+    </p>
+    <div class="panel" id="drift"></div>
+    <p class="lede" id="driftGap"></p>
+
+    <h3 class="sub-h">Version reporting</h3>
+    <p class="lede">
+      The share of steps where the paper states a version at all — a reproducibility signal
+      independent of which tool was chosen, and measured per step rather than per paper, so it has
+      more to work with.
+    </p>
+    <div class="panel" id="verRate"></div>
   </section>
 
   <section>
@@ -549,6 +586,69 @@ document.getElementById("roleTable").innerHTML =
     `<tr><td class="mono">${esc(r.role)}</td><td class="mono num">${r.n}</td><td class="mono num">${pct(r.concentration)}</td>` +
     `<td class="mono">${r.tools.map(t => `${esc(t.tool)}&nbsp;(${t.n})`).join(", ")}</td>` +
     `<td class="mono">${r.substitutable ? "swappable" : "contested"}</td></tr>`).join("") + `</tbody>`;
+
+/* ---- drift over time --------------------------------------------------- */
+const TL = DATA.timeline;
+const powered = TL.drift.filter(d => d.powered);
+const weak = TL.drift.filter(d => !d.powered && d.total >= 4);
+
+// A full composition stack was the first attempt and it failed on this data: with ~7 uses spread
+// over 7 tools, every segment is a single observation and the tail collapses into one
+// indistinguishable "other". At this sample size the answerable question is narrower — did the
+// LEADING tool change, and how dominant was it — so that is what gets plotted. The full
+// breakdown stays available in the table below.
+function leader(items) {
+  const total = items.reduce((a, x) => a + x.n, 0);
+  const top = items[0];
+  return { tool: top.tool, n: top.n, total, share: top.n / total, distinct: items.length };
+}
+
+document.getElementById("drift").innerHTML = powered.length ? powered.map(d => {
+  const rows = TL.buckets.filter(b => (d.buckets[b] || []).length);
+  const leads = rows.map(b => ({ b, ...leader(d.buckets[b]) }));
+  const changed = new Set(leads.map(l => l.tool)).size > 1;
+  return `<div class="drift-role">
+    <div class="drift-name">
+      <b>${esc(d.role)}</b>
+      <span style="color:var(--text-muted)">${d.total} uses</span>
+      <span class="chip ${changed ? "contested" : ""}">${changed ? "leader changed" : "same leader"}</span>
+    </div>
+    ${leads.map(l => `
+      <div class="drift-bucket">
+        <div class="drift-year">${esc(l.b)}</div>
+        <div class="bar-lane" style="gap:10px">
+          <div class="bar-track" style="flex:1">
+            <div class="bar-fill" style="width:${(l.share * 100).toFixed(1)}%;background:${stageColor(d.stage)}"></div>
+          </div>
+          <span class="bar-note">${esc(l.tool)} ${l.n}/${l.total} · ${l.distinct} tool${l.distinct === 1 ? "" : "s"} seen</span>
+        </div>
+      </div>`).join("")}
+  </div>`;
+}).join("") : `<div class="empty">No role yet has ${TL.minPerBucket}+ observations in two or more periods.</div>`;
+
+document.getElementById("driftGap").innerHTML = weak.length
+  ? `Not yet plottable — fewer than ${TL.minPerBucket} observations in at least two periods: `
+    + weak.map(d => `<span class="mono">${esc(d.role)}</span> (${TL.buckets.map(b => d.counts[b] || 0).join("/")})`).join(", ")
+    + `. Those include the axes that would actually be interesting — whether bin QC moved to
+       CheckM2, whether taxonomy moved to GTDB — so the useful drift questions are precisely the
+       ones this corpus cannot answer yet. A "leader changed" flag above is not evidence of a
+       switch at these counts; it is what a handful of one-off tool choices looks like.`
+  : "";
+
+/* ---- version reporting ------------------------------------------------- */
+document.getElementById("verRate").innerHTML = TL.buckets.map(b => {
+  const v = TL.versionRate[b];
+  const rate = v.total ? v.withVersion / v.total : 0;
+  return `<div class="bar-row" style="cursor:default">
+    <div class="bar-label">${esc(b)}</div>
+    <div class="bar-track"><div class="bar-fill" style="width:${(rate * 100).toFixed(1)}%;background:var(--series-1)"></div></div>
+    <div class="bar-lane"><span class="bar-note">${pct(rate)} of ${v.total} steps state a version</span></div>
+  </div>`;
+}).join("") + `<p class="underpowered" style="margin:12px 4px 0">
+  Read this as a measurement, not a finding: which papers happen to fall in each year changes the
+  mix of roles, and an assembly-heavy paper reports versions far more often than a
+  statistics-heavy one. With ${DATA.papers.length} papers the composition effect is larger than any
+  trend.</p>`;
 
 /* ---- ontology gaps ---------------------------------------------------- */
 document.getElementById("gapLede").textContent =
