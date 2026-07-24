@@ -17,8 +17,16 @@ This way it opens correctly from disk *and* from Pages.
 
 ## Publishing
 
-GitHub Pages → Settings → Pages → deploy from branch, `main` / `/site`. Everything is relative,
-so it also works from a `gh-pages` branch or any static host.
+**Settings → Pages → Source → "GitHub Actions".** That's the only setup step;
+`.github/workflows/pages.yml` then publishes `site/` on every push that touches it, and can be
+re-run by hand from the Actions tab.
+
+Branch-based deploys are *not* an option here: GitHub only offers `/ (root)` or `/docs` as source
+folders, never an arbitrary directory. The alternatives were moving the explorer into `docs/`
+(which holds developer prose — a different audience and a different thing) or into the repo root.
+Uploading `site/` as a Pages artifact keeps the separation.
+
+Everything is relative, so the same directory also works on any static host, or from `file://`.
 
 ## Design constraints worth preserving
 

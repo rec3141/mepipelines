@@ -1,0 +1,50 @@
+# Publishes site/ to GitHub Pages.
+#
+# Branch-based Pages deploys can only serve / (root) or /docs — arbitrary folders like site/
+# are not offered. Rather than move the explorer into docs/ (which holds developer prose, a
+# different thing) or dump it in the repo root, this uploads site/ as a Pages artifact.
+#
+# One-time setup: Settings → Pages → Source → "GitHub Actions".
+
+name: Deploy explorer to Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'site/**'
+      - '.github/workflows/pages.yml'
+  workflow_dispatch:      # lets you republish without a commit
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Never cancel a running deploy — a half-published site is worse than a slightly stale one.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      # The explorer is one HTML file plus generated data — nothing to build, nothing to install.
+      - name: Check the payload is present
+        run: |
+          test -f site/index.html || { echo "site/index.html missing"; exit 1; }
+          test -f site/data.js   || { echo "site/data.js missing — run scripts/build_site.py"; exit 1; }
+          echo "site/ contents:"; ls -la site/
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+      - id: deployment
+        uses: actions/deploy-pages@v4

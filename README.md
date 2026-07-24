@@ -48,7 +48,7 @@ scripts/
   validate.py                  # schema + ontology + graph + soundness checks
   try_biorxiv.py               # end-to-end: real preprints -> chains, + ontology coverage
   build_site.py                # compile extractions -> site/data.js
-site/                          # static chain explorer (GitHub Pages); index.html + generated data
+site/                          # static chain explorer, published to GitHub Pages by CI
 docs/
   design.md                    # why it's built this way
   roadmap.md                   # phased plan
