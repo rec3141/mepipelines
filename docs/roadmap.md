@@ -63,7 +63,7 @@ Populates `provenance.code`, `runnability`, and most of `vetting.scorecard` with
 
 ---
 
-## Phase 3 — Dual extraction · *later*
+## Phase 3 — Dual extraction · **in progress** (text side)
 
 The core of the project. Two independent extractors that must not see each other's output — the
 whole value of `divergence` depends on them being blind to one another.
@@ -85,6 +85,40 @@ references them and stale judgments must be identifiable.
 **Exit check:** hand-verify ~20 records end to end. Report extractor precision/recall against that
 hand-labeled set, and keep the set as a regression fixture. This is the phase where being wrong is
 cheapest to discover and most expensive to miss.
+
+### Where it stands
+
+`extract/from_text.py` works. `extract/fixtures/claimed.yaml` holds 5 of the ~20 fixtures, run by
+`extract/test_claimed.py --repeat N`. Fixtures are written for this repo rather than copied from
+papers — license-clean, and it lets us plant specific traps.
+
+Lessons worth keeping, all of them learned the expensive way:
+
+- **The ontology is the prompt.** `roles_block()` renders `step_roles.yaml` straight into the
+  system prompt, so a vague role description *is* an extractor bug. Sharpening
+  `taxonomy_assign` vs `classify_genomes` fixed GTDB-Tk misassignment across both MAG fixtures;
+  passing `typical_tools` through — which we had curated and were simply not sending — stopped
+  Filtlong landing in `custom`.
+- **JSON Schema `description` fields don't reach the model on LM Studio.** The schema constrains
+  structure only. Guidance belongs in the prompt file.
+- **Check the assertion before blaming the model.** Several early "failures" demanded behaviour the
+  prompt correctly forbids — inferring a database name from a release the text states bare — and
+  one passed spuriously by substring-matching a single digit.
+- **Single runs prove nothing.** Failures here are probabilistic; `--repeat` is the unit of
+  evidence, and a fix confirmed once is not confirmed.
+
+**Known defect — intermittent runaway generation.** On the longest fixture
+(`mag_shortread_multibinner`, ~11 steps) gemma-4 occasionally blows the 32,000-token ceiling and
+returns unparseable output: roughly 1 run in 3, with ~8k reasoning tokens and the remaining ~24k
+producing under 600 characters of content. The same fixture succeeds cleanly the other two runs,
+so this is degenerate generation rather than a chain genuinely too long to encode. `test_claimed.py`
+records it as a per-fixture error and continues, so a batch survives it, but it is unresolved.
+Worth trying before committing to any model: a retry-on-truncation, a lower `max_tokens` with
+chunked Methods input, and the same fixture on a non-reasoning model — 78-83% of gemma's output
+tokens go to reasoning, which is both the cost driver and the likely source of this failure.
+
+Still open: the `observed` extractor (`from_code.py`) is unwritten, the fixture set needs
+roughly quadrupling, and model choice stays deferred until the labeled set can decide it.
 
 ---
 

@@ -14,6 +14,7 @@ drift apart.
 from __future__ import annotations
 
 import json
+import os
 import re
 import sys
 from pathlib import Path
@@ -29,6 +30,9 @@ PROMPTS = Path(__file__).resolve().parent / "prompts"
 
 PROMPT_VERSION = "claimed_v1"
 
+# Override with MEP_EXTRACTION_MAX_TOKENS when running a model with a tighter context.
+EXTRACTION_MAX_TOKENS = int(os.getenv("MEP_EXTRACTION_MAX_TOKENS", "32000"))
+
 
 def load_roles() -> list[dict]:
     doc = yaml.safe_load((ONTOLOGY / "step_roles.yaml").read_text())
@@ -36,11 +40,21 @@ def load_roles() -> list[dict]:
 
 
 def roles_block(roles: list[dict]) -> str:
-    """Compact role reference for the prompt — id, stage, and one-line description."""
+    """Compact role reference for the prompt — id, stage, description, and example tools.
+
+    `typical_tools` is the single strongest disambiguation signal we have and it is already
+    curated in the ontology, so it belongs in the prompt. Omitting it sent Filtlong to `custom`
+    on every run even though `trim` lists filtlong explicitly. The examples are illustrative, not
+    exhaustive — the prompt says so — but they anchor the common cases hard.
+    """
     lines = []
     for r in roles:
         desc = " ".join(r["description"].split())
-        lines.append(f"- `{r['id']}` ({r['stage']}): {desc}")
+        line = f"- `{r['id']}` ({r['stage']}): {desc}"
+        tools = r.get("typical_tools") or []
+        if tools:
+            line += f"  [e.g. {', '.join(tools[:10])}]"
+        lines.append(line)
     return "\n".join(lines)
 
 
@@ -63,8 +77,16 @@ def build_schema(roles: list[dict]) -> dict:
                 "type": "string",
                 "enum": ["complete", "partial", "sketch"],
                 "description": (
-                    "complete = the full chain is described; partial = some steps stated, "
-                    "others clearly missing; sketch = tools named but order uncertain"
+                    "How fully the TEXT describes its own chain — not how confident you are, "
+                    "and not whether the chain is scientifically complete. "
+                    "complete = the text walks through the analysis start to finish in a clear "
+                    "order, even if you think steps are scientifically missing; "
+                    "partial = the text describes some stages but visibly skips others, e.g. it "
+                    "jumps from raw reads to a final statistic; "
+                    "sketch = tools are named without a usable order, as in a single sentence "
+                    "listing software with no sequence. "
+                    "A long, well-ordered narrative is `complete` — do not downgrade it to "
+                    "`sketch` merely because it is long or because versions are absent."
                 ),
             },
             "steps": {
@@ -93,8 +115,17 @@ def build_schema(roles: list[dict]) -> dict:
                         "params": {
                             "type": ["string", "null"],
                             "description": (
-                                "Result-changing non-default parameters as stated, free text. "
-                                "Null if none are given."
+                                "Any stated setting that would change the result, copied as free "
+                                "text. Capture these whenever the text gives them: truncation or "
+                                "trimming lengths (e.g. 'truncated to 240 bp forward, 200 bp "
+                                "reverse'), rarefaction or subsampling depth (e.g. 'rarefied to "
+                                "8,000 reads per sample'), minimum contig or read length, "
+                                "clustering or similarity identity, quality thresholds, "
+                                "completeness/contamination cutoffs, FDR or significance levels, "
+                                "permutation counts, and mode flags such as --meta. "
+                                "Do NOT capture thread counts, memory, or values the text calls "
+                                "default. Null only when the text gives no such setting for this "
+                                "step."
                             ),
                         },
                         "database": {
@@ -180,7 +211,11 @@ def extract(methods: str, client: LLMClient | None = None) -> dict:
         schema=build_schema(roles),
         schema_name="claimed_chain",
         prompt_version=PROMPT_VERSION,
-        max_tokens=8192,
+        # Generous on purpose. On a reasoning model this budget covers thinking AND output, and
+        # gemma-4 spent 8189 tokens reasoning about a 10-step MAG chain before writing anything —
+        # at an 8192 ceiling it returned zero content. Long chains are exactly the records worth
+        # extracting, so the budget has to clear the worst case, not the median.
+        max_tokens=EXTRACTION_MAX_TOKENS,
     )
 
     chain = normalize_steps(result.parsed)
@@ -190,6 +225,7 @@ def extract(methods: str, client: LLMClient | None = None) -> dict:
         "provenance": result.provenance(),
         "stats": {
             "completion_tokens": result.completion_tokens,
+            "reasoning_tokens": result.reasoning_tokens,
             "elapsed_s": result.elapsed_s,
         },
     }

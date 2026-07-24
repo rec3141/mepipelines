@@ -31,13 +31,27 @@ Rules:
    the order clear, give your best reading and set `completeness` to `sketch`.
 5. Every step needs `evidence.quote` — a short verbatim span from the input that states this step.
    If you cannot quote it, you may not report it.
-6. `params` captures only choices that would change results — truncation lengths, minimum contig
-   length, clustering identity, similarity thresholds, `--meta` style mode flags. Not defaults, not
-   thread counts, not memory.
+6. `params` captures every stated setting that would change the result. This field is easy to
+   under-fill; if the text gives a number for a step, it almost certainly belongs here. Capture:
+   - truncation and trimming lengths — "truncated to 240 bp (forward) and 200 bp (reverse)"
+   - rarefaction or subsampling depth — "rarefied to 8,000 sequences per sample"
+   - minimum contig or read length — "contigs shorter than 1,500 bp were discarded"
+   - clustering or similarity identity — "clustered at 97% identity"
+   - quality thresholds — "minimum quality Q20"
+   - completeness/contamination cutoffs — ">50% complete, <10% contamination"
+   - significance and FDR levels, permutation counts — "FDR 0.05", "999 permutations"
+   - mode flags — `--meta`, `--presets meta-large`
+   Do NOT capture thread counts, memory, runtime, or anything the text calls default. Use null
+   only when the text states no such setting for that step.
 7. `version` and `database` only when explicitly stated. Leave absent otherwise; do not guess a
    release.
 
 ## Roles
+
+Each entry is `role_id (stage): description [e.g. example tools]`. The example tools are
+illustrative, not exhaustive — a tool absent from every list still belongs to whichever role
+matches what it DOES. Reach for `custom` only when no role fits; a tool that filters, trims,
+assembles, bins, or classifies has a role, even if it is not named below.
 
 {roles}
 

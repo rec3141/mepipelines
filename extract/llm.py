@@ -79,6 +79,15 @@ def strip_think(text: str) -> str:
     return _THINK_OPEN.sub("", _THINK_CLOSED.sub("", text)).strip()
 
 
+class TruncatedResponse(RuntimeError):
+    """The model hit the token ceiling before finishing.
+
+    Raised in preference to letting an empty or half-written response reach the JSON parser, where
+    it surfaces as an inscrutable "could not parse JSON from response: ''". Reasoning models are
+    the usual cause: they can spend the entire budget thinking and emit zero content tokens.
+    """
+
+
 @dataclass
 class Completion:
     """A model response plus everything needed to attribute and reproduce it."""
@@ -89,6 +98,8 @@ class Completion:
     prompt_version: str
     prompt_tokens: int = 0
     completion_tokens: int = 0
+    reasoning_tokens: int = 0    # thinking tokens, when the backend reports them separately
+    finish_reason: str = ""
     elapsed_s: float = 0.0
     parsed: Any = None           # populated when a schema was supplied
     raw_text: str = ""           # pre-<think>-stripping, for debugging
@@ -222,10 +233,12 @@ class LLMClient:
         response = self._call_with_retry(**kwargs)
         elapsed = time.monotonic() - started
 
-        raw = response.choices[0].message.content or ""
+        choice = response.choices[0]
+        raw = choice.message.content or ""
         text = strip_think(raw)
 
         usage = getattr(response, "usage", None)
+        details = getattr(usage, "completion_tokens_details", None)
         result = Completion(
             text=text,
             raw_text=raw,
@@ -234,12 +247,46 @@ class LLMClient:
             prompt_version=prompt_version,
             prompt_tokens=getattr(usage, "prompt_tokens", 0) or 0,
             completion_tokens=getattr(usage, "completion_tokens", 0) or 0,
+            reasoning_tokens=getattr(details, "reasoning_tokens", 0) or 0,
+            finish_reason=choice.finish_reason or "",
             elapsed_s=round(elapsed, 2),
         )
 
+        # `finish_reason == "length"` alone does NOT mean the payload is unusable. A model can
+        # emit a complete, valid JSON object and then keep generating until it hits the cap — the
+        # object is fine and rejecting it would throw away good work. So: try to parse, and treat
+        # the truncation as fatal only when there is nothing usable to parse.
+        hit_ceiling = result.finish_reason == "length"
+
         if schema is not None:
-            result.parsed = self._parse_json(text)
+            try:
+                result.parsed = self._parse_json(text)
+            except ValueError as exc:
+                if hit_ceiling:
+                    raise self._truncation_error(result, max_tokens) from exc
+                raise
+            if hit_ceiling:
+                print(
+                    f"  [llm] note: hit the {max_tokens}-token ceiling but the JSON parsed "
+                    f"cleanly ({result.reasoning_tokens} reasoning tokens). Output is usable; "
+                    f"raise max_tokens if this recurs.",
+                    file=sys.stderr,
+                )
+        elif hit_ceiling and not text.strip():
+            raise self._truncation_error(result, max_tokens)
+
         return result
+
+    @staticmethod
+    def _truncation_error(result: Completion, max_tokens: int) -> TruncatedResponse:
+        thinking = (
+            f", {result.reasoning_tokens} of them on reasoning" if result.reasoning_tokens else ""
+        )
+        return TruncatedResponse(
+            f"hit the {max_tokens}-token ceiling{thinking} and returned "
+            f"{len(result.text)} chars of unparseable content. Raise max_tokens — on a reasoning "
+            f"model the budget covers thinking *and* output, so it must exceed both."
+        )
 
     @staticmethod
     def _parse_json(text: str) -> Any:

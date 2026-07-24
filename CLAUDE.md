@@ -84,6 +84,25 @@ meaningful trailing digits, and mangling one fails alias matching silently.
 **Extraction runs at `temperature=0`.** Reproducibility matters more than variety here; there is no
 task in this repo where output variation is desirable.
 
+**Put instructions in the system prompt, not in JSON Schema `description` fields.** Measured on
+LM Studio: the schema is used to constrain *structure* (a grammar), and its `description` strings
+do not reliably reach the model. Moving the `params` guidance from the schema description into
+`claimed_v1.md` took that assertion from failing 3/3 runs to failing 1/3. Use schema descriptions
+as documentation for humans reading the code; put anything the model must act on in the prompt.
+
+**`finish_reason == "length"` does not mean the output is unusable.** A model can emit a complete,
+valid JSON object and then keep generating until it hits the cap. `llm.py` therefore parses first
+and raises `TruncatedResponse` only when nothing parseable came back — rejecting on the finish
+reason alone throws away good extractions. Note also that the token budget on a reasoning model
+covers thinking *and* output: gemma-4 spends ~75-85% of its tokens reasoning, so a ceiling sized
+for the expected JSON will return zero content.
+
+**Judge extractor changes on repeats, not a single run.** `test_claimed.py --repeat N` exists
+because these failures are probabilistic. A fix verified on one run is not verified. Equally, when
+a fixture fails, check whether the *assertion* is wrong before changing the prompt — several early
+"failures" were the fixture demanding behaviour the prompt correctly forbids (inferring a database
+name the text never states), and one assertion passed spuriously by matching a bare digit.
+
 **`claimed` and `observed` extractors must stay blind to each other.** The entire value of
 `divergence` depends on the two chains being derived independently. Do not add a code path that
 feeds one extractor's output into the other, even as a hint.

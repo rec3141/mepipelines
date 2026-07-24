@@ -1,0 +1,138 @@
+# Hand-labeled fixtures for the `claimed` extractor.
+#
+# This is the seed of the ~20-record hand-verified set that Phase 3's exit criterion requires.
+# Each fixture is a realistic Methods paragraph plus assertions about what MUST and MUST NOT be
+# extracted from it. The Methods texts are written for this repo, not copied from papers — that
+# keeps them license-clean and lets us plant specific traps.
+#
+# The traps matter more than the happy paths. An extractor that reproduces a well-written chain is
+# table stakes; the failure modes that would poison the catalog are:
+#   - inserting steps the text never mentions (standard practice bleeding in)
+#   - over-claiming completeness on a vague paragraph
+#   - flattening an opaque suite call into an invented step list
+#   - losing the ORDER of steps whose position is the scientific question
+#
+# Assertion keys (all optional):
+#   roles_present      every role listed must appear
+#   roles_absent       none of these may appear  <- the hallucination traps
+#   tools_present      case-insensitive substring match against any step's tool_raw
+#   tools_absent       must not appear in any tool_raw
+#   min_steps/max_steps
+#   completeness       exact match on the chain's self-assessment
+#   completeness_in    any one of these (use when more than one reading is defensible)
+#   text_anywhere      substring that must appear in some params or database field
+#   role_order         [a, b] asserts every occurrence of a precedes every occurrence of b
+
+- id: amplicon_asv_clean
+  note: >
+    Baseline. Well-written amplicon Methods. Traps: no host filtering and no chimera removal are
+    described, so an extractor importing standard practice gets caught.
+  methods: |
+    Sequence data processing. Raw paired-end reads were demultiplexed and primers targeting the V4
+    region were removed with cutadapt v3.4. Reads were then quality filtered and truncated to 240 bp
+    (forward) and 200 bp (reverse) using DADA2 v1.20, which was also used to infer amplicon sequence
+    variants. Taxonomy was assigned to representative sequences using the DADA2 naive Bayesian
+    classifier against the SILVA 138.1 SSU reference database. The resulting feature table was
+    rarefied to 8,000 sequences per sample prior to calculation of Shannon diversity and
+    Bray-Curtis dissimilarity in the vegan R package. Differences in community composition among
+    treatments were tested by PERMANOVA using adonis2 with 999 permutations.
+  expect:
+    roles_present: [remove_primers, denoise, taxonomy_assign, normalize, diversity, ordination]
+    roles_absent: [filter_host, chimera_removal, assemble, bin]
+    tools_present: [cutadapt, DADA2, vegan]
+    completeness_in: [complete, partial]
+    # Full tokens, not bare digits: "8" alone passes spuriously against "SILVA 138.1" and hid a
+    # real params regression for several runs. Assertions must not be satisfiable by accident.
+    text_anywhere: ["SILVA", "240", "8,000"]
+    role_order: [remove_primers, denoise]
+
+- id: mag_shortread_multibinner
+  note: >
+    The most compositionally complex archetype. Three binners run in parallel then get consolidated —
+    tests that parallel alternatives at one role are all captured, and that bin_refine and bin_qc are
+    distinguished from each other. Trap: no dereplication across samples is described.
+  methods: |
+    Bioinformatic analysis. Adapters and low-quality bases were removed from raw reads using fastp
+    v0.23.2 with a minimum quality threshold of Q20. Host-derived sequences were removed by mapping
+    against the GRCh38 human reference with Bowtie2 v2.4.5 and retaining unmapped read pairs.
+    Quality-controlled reads were assembled per sample with MEGAHIT v1.2.9 using the
+    --presets meta-large option, and contigs shorter than 1,500 bp were discarded. Reads were mapped
+    back to the assemblies with Bowtie2 to generate coverage profiles. Contigs were binned
+    independently using MetaBAT2 v2.15, MaxBin2 v2.2.7 and CONCOCT v1.1.0, and the three bin sets
+    were consolidated with DAS_Tool v1.1.4. Bin completeness and contamination were estimated with
+    CheckM2 v1.0.1, retaining bins with >50% completeness and <10% contamination as
+    metagenome-assembled genomes. Taxonomy was assigned to each MAG using GTDB-Tk v2.1.1 against
+    release R207, and protein-coding genes were predicted and annotated with Prokka v1.14.6.
+  expect:
+    roles_present: [trim, filter_host, assemble, map_reads, bin, bin_refine, bin_qc, classify_genomes]
+    # "genes were predicted and annotated with Prokka" — one clause, two defensible roles.
+    roles_any_of:
+      - [predict_genes, annotate_function]
+    roles_absent: [denoise, cluster_otu, remove_primers]
+    tools_present: [fastp, Bowtie2, MEGAHIT, MetaBAT2, MaxBin2, CONCOCT, DAS_Tool, CheckM2, GTDB-Tk, Prokka]
+    min_steps: 9
+    completeness_in: [complete, partial]
+    # "R207", not "GTDB": the text names the release without naming the database, and prompt rule 7
+    # forbids inferring one. Asserting "GTDB" here would penalise correct behaviour — and this is
+    # exactly the real-world shape that produces a `db_unspecified` divergence downstream.
+    text_anywhere: ["R207", "1,500", "50"]
+    role_order: [assemble, bin]
+
+- id: vague_opaque_suite
+  note: >
+    THE KEY ANTI-HALLUCINATION TEST, and the QIIME2-opacity question from docs/roadmap.md made
+    concrete. The paragraph is real-world vague: one opaque suite call, "default parameters", no
+    versions. A well-behaved extractor reports the two or three things actually stated and marks
+    the chain sketch/partial. A badly-behaved one expands the suite into the canonical QIIME2
+    pipeline it knows by heart — denoise, chimera removal, alignment, tree-building — none of which
+    this text supports.
+  methods: |
+    Sequence data were processed in QIIME2 using default parameters. Taxonomy was assigned using
+    the SILVA database. Downstream statistical analyses were performed in R.
+  expect:
+    roles_absent: [denoise, chimera_removal, remove_primers, phylogeny, cluster_otu, filter_host, assemble]
+    tools_present: [QIIME2]
+    max_steps: 4
+    completeness_in: [sketch, partial]
+
+- id: longread_polish_before_bin
+  note: >
+    Long-read MAG recovery. The scientific point is ORDER — this paper polishes before binning, and
+    the field disagrees about whether that is right (see step_roles.yaml `polish`). An extractor
+    that captures the steps but scrambles their order destroys exactly the signal we are surveying.
+    Also tests the basecall role, which only long-read chains have.
+  methods: |
+    Nanopore sequencing and assembly. Raw signal data were basecalled with Dorado v0.5.0 using the
+    super-accuracy model. Reads shorter than 1 kb or with mean quality below Q10 were discarded
+    using Filtlong. The filtered reads were assembled with metaFlye v2.9 using the --meta flag.
+    The resulting assembly was polished with two rounds of Medaka v1.8.0. Reads were then aligned
+    to the polished assembly with minimap2 v2.24, and contigs were binned with MetaBAT2 v2.15
+    using the resulting coverage information. Bin quality was assessed with CheckM2, and taxonomic
+    assignment was performed with GTDB-Tk.
+  expect:
+    roles_present: [basecall, trim, assemble, polish, map_reads, bin, bin_qc, classify_genomes]
+    roles_absent: [denoise, bin_refine, annotate_function]
+    tools_present: [Dorado, Filtlong, metaFlye, Medaka, minimap2, MetaBAT2, CheckM2, GTDB-Tk]
+    completeness_in: [complete, partial]
+    role_order: [polish, bin]
+    text_anywhere: ["meta"]
+
+- id: soundness_rarefy_before_da
+  note: >
+    Plants a real methodological problem: rarefying before ANCOM-BC, which step_roles.yaml flags as
+    a soundness concern. The extractor's job is NOT to judge it — that is the adjudicator's job in
+    Phase 4. Its job is to record the order faithfully so the adjudicator can see it. Also omits
+    any denoising or clustering step, which is a genuine gap worth recording rather than repairing.
+  methods: |
+    Amplicon reads were merged with VSEARCH and quality filtered. Feature tables were rarefied to
+    an even depth of 5,000 reads per sample. Differentially abundant taxa between the control and
+    treatment groups were then identified using ANCOM-BC with a false discovery rate of 0.05.
+    Co-occurrence networks were inferred with SpiecEasi.
+  expect:
+    roles_present: [merge_reads, normalize, differential_abundance, correlate]
+    roles_absent: [denoise, cluster_otu, assemble, taxonomy_assign]
+    tools_present: [VSEARCH, ANCOM-BC, SpiecEasi]
+    completeness_in: [partial, sketch, complete]
+    role_order: [normalize, differential_abundance]
+    # Full tokens — a bare "5" would pass against almost anything.
+    text_anywhere: ["5,000"]

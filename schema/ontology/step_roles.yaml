@@ -227,14 +227,22 @@ roles:
     stage: reference
     order_hint: 105
     substitutable: true
-    description: Assign taxonomy to amplicon features or sequences against a marker-gene database.
+    description: >
+      Assign taxonomy to MARKER-GENE features — ASVs, OTUs, or amplicon sequences — against a
+      marker-gene reference such as SILVA, UNITE, or PR2. The input is short amplicon sequences,
+      never assembled genomes. If the thing being classified is a genome, a MAG, or a bin, the
+      role is `classify_genomes`, not this one.
     typical_tools: [qiime2, dada2, mothur, sintax, blast, vsearch, idtaxa]
 
   - id: classify_genomes
     stage: reference
     order_hint: 110
     substitutable: true
-    description: Place assembled genomes/MAGs in a genome taxonomy.
+    description: >
+      Place assembled GENOMES — MAGs, bins, or isolate genomes — in a genome taxonomy, typically
+      with GTDB-Tk against GTDB. Use this whenever the input is a genome or bin rather than an
+      amplicon feature, even though the paper will usually describe it with words like "taxonomy
+      was assigned". GTDB-Tk is always this role, never `taxonomy_assign`.
     typical_tools: [gtdbtk, phylophlan, checkm, kraken2]
 
   # --- annotate ------------------------------------------------------------
