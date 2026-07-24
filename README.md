@@ -47,6 +47,8 @@ extract/
 scripts/
   validate.py                  # schema + ontology + graph + soundness checks
   try_biorxiv.py               # end-to-end: real preprints -> chains, + ontology coverage
+  build_site.py                # compile extractions -> site/data.js
+site/                          # static chain explorer (GitHub Pages); index.html + generated data
 docs/
   design.md                    # why it's built this way
   roadmap.md                   # phased plan
@@ -59,6 +61,9 @@ docs/
 python3 -m venv .venv && ./.venv/bin/pip install -r requirements.txt
 ./.venv/bin/python scripts/validate.py            # validate the catalog
 ./.venv/bin/python scripts/validate.py --strict   # warnings are errors (CI mode)
+
+./.venv/bin/python scripts/build_site.py --from runs.json   # rebuild the explorer's data
+python3 -m http.server -d site 8000                         # preview it
 ```
 
 ## Reading order

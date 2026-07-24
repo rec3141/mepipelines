@@ -188,6 +188,9 @@ What the catalog is actually for. Outputs land in `catalog/analysis/` as committ
 
 - `catalog/build.py` — compile YAML records into a single `catalog.json` plus a SQLite file
   (generated, `.gitignore`d; the YAML is the source of truth)
+- `scripts/build_site.py --catalog` — the explorer in `site/` currently builds from raw extraction
+  output; pointing it at vetted catalog records instead is a one-function change, deliberately
+  left erroring loudly rather than silently emitting an empty site
 - `match/rank.py` — `match(dataset_metadata) -> ranked candidates`, the function `_auto_pipeline()
   in omc becomes
 - A written handoff for omc — see `docs/omc-integration.md`
