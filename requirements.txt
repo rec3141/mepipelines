@@ -5,3 +5,6 @@ jsonschema>=4.20
 
 # LLM extraction (Phase 3) — OpenAI-compatible client, covers LM Studio and OpenRouter alike.
 openai>=1.60
+
+# Ingest (Phase 1) — Europe PMC REST client.
+httpx>=0.27

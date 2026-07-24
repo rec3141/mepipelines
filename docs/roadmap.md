@@ -21,7 +21,31 @@ The vocabulary has to exist before anything can be extracted into it.
 
 ---
 
-## Phase 1 — Ingest lanes · **next**
+## Phase 1 — Ingest lanes · **in progress** (Europe PMC lane working)
+
+`ingest/europepmc.py` fetches real bioRxiv preprints end to end, and `scripts/try_biorxiv.py`
+runs them straight into the `claimed` extractor. Measured on 20 amplicon preprints:
+
+- **9/20 produced a chain.** All 11 losses were upstream full-text availability, not parsing.
+- **0 failures extracting Methods** from XML we did get — the JATS section walk held on every paper.
+- **88% of named tools matched `tools.yaml`**, up from 62% on the first run; the gap closed by
+  adding the tools real papers actually cite rather than the ones we guessed.
+
+Two API facts that cost real time, now recorded in the module docstring:
+
+- The full-text endpoint is `/{id}/fullTextXML` with **no source prefix**. The plausible-looking
+  `/PPR/{id}/fullTextXML` returns 404 with an empty body — indistinguishable from "no full text".
+- **Nothing in the search metadata predicts whether full text exists.** `OPEN_ACCESS:Y AND
+  IN_EPMC:Y` still yields only 28–40% retrievable (11/40 and 16/40 on two queries), and two records
+  identical across `inEPMC`, `isOpenAccess`, `hasTextMinedTerms`, `hasPDF` and `fullTextIdList` can
+  differ on it. The only test is the fetch, so over-request ~3× and treat 404 as an ordinary outcome.
+
+That availability ceiling is the main open risk to catalog size, and it is worth resolving before
+scaling ingest: bioRxiv's own TDM/S3 full-text corpus would sidestep Europe PMC's subset entirely.
+
+---
+
+## Phase 1 (original plan)
 
 Get candidate papers and workflows into a staging area. No extraction yet — this phase only
 answers "what is there".
