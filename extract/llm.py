@@ -67,16 +67,33 @@ HOSTED_MODEL_REFERENCE = {
 MAX_RETRIES = 4
 RETRY_BASE_DELAY = 3.0
 
-# Reasoning models emit <think> blocks. Strip closed blocks first, then any unclosed remainder
-# left by a truncated response.
-_THINK_CLOSED = re.compile(r"<think>.*?</think>\s*", re.DOTALL)
-_THINK_OPEN = re.compile(r"<think>.*", re.DOTALL)
+# Reasoning delimiters differ by model family and are NOT all <think>:
+#   <think> … </think>                     DeepSeek-R1, QwQ, most Qwen reasoning builds
+#   <|channel>thought … <channel|>         Gemma 4 (see its LM Studio model.yaml
+#                                          `llm.prediction.reasoning.parsing` start/end strings)
+# LM Studio normally strips these server-side, but only when its reasoning-parsing config matches
+# the model; another backend, a raw GGUF, or a mismatched template will leak them into `content`.
+# A stripper that only knows <think> silently passes a wall of Gemma reasoning to json.loads().
+_THINK_PAIRS = [
+    (re.compile(r"<think>.*?</think>\s*", re.DOTALL), re.compile(r"<think>.*", re.DOTALL)),
+    (
+        re.compile(r"<\|channel>thought.*?<channel\|>\s*", re.DOTALL),
+        re.compile(r"<\|channel>thought.*", re.DOTALL),
+    ),
+]
 
 
 def strip_think(text: str) -> str:
+    """Remove reasoning blocks in any known delimiter style.
+
+    Closed blocks go first, then any unclosed remainder left by a response that was cut off
+    mid-thought.
+    """
     if not text:
         return ""
-    return _THINK_OPEN.sub("", _THINK_CLOSED.sub("", text)).strip()
+    for closed, unclosed in _THINK_PAIRS:
+        text = unclosed.sub("", closed.sub("", text))
+    return text.strip()
 
 
 class TruncatedResponse(RuntimeError):

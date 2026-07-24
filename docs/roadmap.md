@@ -107,15 +107,16 @@ Lessons worth keeping, all of them learned the expensive way:
 - **Single runs prove nothing.** Failures here are probabilistic; `--repeat` is the unit of
   evidence, and a fix confirmed once is not confirmed.
 
-**Known defect — intermittent runaway generation.** On the longest fixture
-(`mag_shortread_multibinner`, ~11 steps) gemma-4 occasionally blows the 32,000-token ceiling and
-returns unparseable output: roughly 1 run in 3, with ~8k reasoning tokens and the remaining ~24k
-producing under 600 characters of content. The same fixture succeeds cleanly the other two runs,
-so this is degenerate generation rather than a chain genuinely too long to encode. `test_claimed.py`
-records it as a per-fixture error and continues, so a batch survives it, but it is unresolved.
-Worth trying before committing to any model: a retry-on-truncation, a lower `max_tokens` with
-chunked Methods input, and the same fixture on a non-reasoning model — 78-83% of gemma's output
-tokens go to reasoning, which is both the cost driver and the likely source of this failure.
+**Resolved — the intermittent runaway was a configuration bug, not the model.** Gemma 4 through an
+OpenAI-compatible endpoint lets the thinking channel consume the entire token budget and omits
+content; raising the ceiling does not help. Disabling thinking in LM Studio's `model.yaml` removed
+it outright and cut the suite from 774 s to ~130 s. Full diagnosis, the LM Studio and ollama fixes,
+and the measured before/after are in [`docs/local-models.md`](local-models.md) — including the
+delimiter detail that Gemma 4 uses `<|channel>thought … <channel|>` rather than `<think>`.
+
+The residual tradeoff is `params` recall: thinking off loses one or two numeric parameters on
+`amplicon_asv_clean` that thinking on captured reliably. Roles, tools, and ordering are unaffected.
+Use thinking off for development; decide the production setting with the labeled set.
 
 Still open: the `observed` extractor (`from_code.py`) is unwritten, the fixture set needs
 roughly quadrupling, and model choice stays deferred until the labeled set can decide it.

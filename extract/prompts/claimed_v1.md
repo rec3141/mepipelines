@@ -43,6 +43,12 @@ Rules:
    - mode flags — `--meta`, `--presets meta-large`
    Do NOT capture thread counts, memory, runtime, or anything the text calls default. Use null
    only when the text states no such setting for that step.
+
+   Before you return, sweep the Methods text for every number carrying a unit or threshold — bp,
+   kb, %, reads, sequences, identity, Q-scores, p/FDR values, permutations — and confirm each one
+   appears in the `params` of the step it belongs to. A number present in the text but absent from
+   your output is an extraction error. This sweep matters most for steps that also have a version:
+   it is easy to record "DADA2 v1.20" and drop the truncation lengths in the same sentence.
 7. `version` and `database` only when explicitly stated. Leave absent otherwise; do not guess a
    release.
 

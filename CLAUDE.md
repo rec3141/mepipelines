@@ -90,6 +90,13 @@ do not reliably reach the model. Moving the `params` guidance from the schema de
 `claimed_v1.md` took that assertion from failing 3/3 runs to failing 1/3. Use schema descriptions
 as documentation for humans reading the code; put anything the model must act on in the prompt.
 
+**Local-model setup is documented in [`docs/local-models.md`](docs/local-models.md).** Read it
+before debugging an extraction failure that looks like model incapability — empty responses,
+budget exhaustion, or reasoning text leaking into JSON are usually backend configuration, and the
+fixes live outside this repo where nothing will remind you of them. Reasoning delimiters differ by
+model family (`<think>` vs Gemma 4's `<|channel>thought … <channel|>`); `strip_think()` handles
+both and anything added later must too.
+
 **`finish_reason == "length"` does not mean the output is unusable.** A model can emit a complete,
 valid JSON object and then keep generating until it hits the cap. `llm.py` therefore parses first
 and raises `TruncatedResponse` only when nothing parseable came back — rejecting on the finish
