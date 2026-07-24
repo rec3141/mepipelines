@@ -32,6 +32,10 @@ python3 -m venv .venv && ./.venv/bin/pip install -r requirements.txt
 ./.venv/bin/python scripts/validate.py            # validate catalog
 ./.venv/bin/python scripts/validate.py --strict   # warnings are errors (CI)
 ./.venv/bin/python scripts/validate.py catalog/workflows/foo.yaml   # one record
+
+./.venv/bin/python extract/test_split_version.py  # unit tests, no model needed
+./.venv/bin/python extract/llm.py --check         # probe the LLM endpoint
+./.venv/bin/python extract/from_text.py --demo    # claimed-extraction fixture + checks
 ```
 
 Always run `validate.py` after touching the schema, any ontology, or any catalog record. The
@@ -59,6 +63,26 @@ a repo-relative path with line range for code. The validator warns on observed s
 **LLM output is a re-derivable artifact, never ground truth.** Anything a model produces is stored
 with the model ID and prompt version that produced it (`vetting.adjudication`). `human_review`
 always wins. Prompts live versioned in `extract/prompts/`.
+
+**Provenance rides on every completion.** `extract/llm.py` returns a `Completion` carrying
+provider, exact model ID, and prompt version, with `.provenance()` producing the dict that goes
+straight into `vetting.adjudication`. A call path that drops it is a bug — an LLM judgment whose
+model is unknown cannot be compared or re-derived, which is the whole point of storing it.
+
+**Provider is env-selected, not hardcoded.** `MEP_PROVIDER=local` (LM Studio) or `openrouter`;
+both speak the OpenAI-compatible protocol, so one client covers both. With `local` and no
+`MEP_MODEL`, the client uses whatever LM Studio has loaded. Copy `.env.example` to `.env`.
+
+**Fix model non-compliance deterministically where the format allows it.** When a model reliably
+ignores a formatting instruction on a tightly-patterned field, add a post-processing backstop
+rather than escalating prompt pressure — see `split_version()` in `extract/from_text.py`, which
+pulls version suffixes out of `tool_raw`. Keep the prompt instruction too; it is the first line of
+defence, the code is the guarantee. **Any such backstop needs a unit test covering the names it
+could corrupt** — `DADA2`, `MetaBAT2`, `CheckM2`, `SemiBin2`, `bwa-mem2` and friends carry
+meaningful trailing digits, and mangling one fails alias matching silently.
+
+**Extraction runs at `temperature=0`.** Reproducibility matters more than variety here; there is no
+task in this repo where output variation is desirable.
 
 **`claimed` and `observed` extractors must stay blind to each other.** The entire value of
 `divergence` depends on the two chains being derived independently. Do not add a code path that

@@ -12,3 +12,4 @@ extract/.cache/
 # Compiled outputs. catalog/workflows/*.yaml is the source of truth.
 catalog/catalog.json
 catalog/catalog.sqlite
+.env

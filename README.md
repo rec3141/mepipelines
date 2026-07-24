@@ -20,8 +20,9 @@ That diff is the interesting part. The gap between stated and actual method is, 
 
 ## Status
 
-Phase 0 complete: schema, ontologies, validator, one worked exemplar. No survey data yet.
-See [`docs/roadmap.md`](docs/roadmap.md).
+Phase 0 complete: schema, ontologies, validator, one worked exemplar.
+Phase 3 started: the `claimed` extractor runs against a local model and passes its fixture checks.
+No survey data yet — ingest (Phase 1) is next. See [`docs/roadmap.md`](docs/roadmap.md).
 
 ## Layout
 
@@ -36,7 +37,11 @@ catalog/
   workflows/                   # one YAML per surveyed workflow — the source of truth
   analysis/                    # (Phase 5) consensus chains, drift, coverage map
 ingest/                        # (Phase 1) arXiv, bioRxiv, Europe PMC, registries
-extract/                       # (Phase 3) Methods text -> claimed; repo code -> observed
+extract/
+  llm.py                       # LM Studio + OpenRouter behind one interface; carries provenance
+  from_text.py                 # Methods text -> claimed chain (working)
+  prompts/                     # versioned prompts, referenced by adjudication records
+  test_split_version.py        # unit tests, no model needed
 scripts/
   validate.py                  # schema + ontology + graph + soundness checks
 docs/
