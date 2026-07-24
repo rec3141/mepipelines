@@ -1,0 +1,398 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/rec3141/mepipelines/schema/workflow.schema.json",
+  "title": "Workflow Record",
+  "description": "One surveyed microbial ecology analysis composition. The record is a chain of steps captured twice — as claimed by the paper's Methods, and as observed in the attached code — plus the divergence between them, an applicability block for matching against new datasets, and a two-stage vetting result.",
+  "type": "object",
+  "required": ["id", "name", "archetype", "provenance", "claimed", "applicability", "vetting", "record_meta"],
+  "additionalProperties": false,
+
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "description": "Stable slug, also the catalog filename. Convention: firstauthor-year-keyword, or org-name for registry workflows (e.g. 'nf-core-mag')."
+    },
+    "name": { "type": "string", "description": "Human-readable name of the workflow as the authors call it." },
+    "aliases": { "type": "array", "items": { "type": "string" }, "default": [] },
+    "summary": { "type": "string", "description": "One or two sentences: what this composition does, for what data." },
+
+    "archetype": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/archetypeId" },
+      "description": "One or more archetypes from schema/ontology/archetypes.yaml. Multiple when a paper runs e.g. amplicon and metagenome arms."
+    },
+
+    "provenance": {
+      "type": "object",
+      "description": "Where this record came from. At least one of `sources` or `code` must be non-empty.",
+      "additionalProperties": false,
+      "properties": {
+        "sources": {
+          "type": "array",
+          "description": "Literature records. A single work appearing as preprint and journal article gets one entry per venue.",
+          "items": {
+            "type": "object",
+            "required": ["kind", "id"],
+            "additionalProperties": false,
+            "properties": {
+              "kind": { "enum": ["arxiv", "biorxiv", "medrxiv", "pubmed", "europepmc", "doi", "registry", "url"] },
+              "id": { "type": "string", "description": "arXiv ID, bioRxiv DOI, PMID, PMCID, DOI, or registry slug." },
+              "title": { "type": "string" },
+              "authors": { "type": "array", "items": { "type": "string" } },
+              "venue": { "type": "string" },
+              "date": { "type": "string", "format": "date" },
+              "url": { "type": "string", "format": "uri" },
+              "license": { "type": "string", "description": "Article license, e.g. cc-by. Governs whether we may cache full text." },
+              "fulltext_available": { "type": "boolean", "description": "Whether Methods text was retrievable. False means `claimed` was extracted from abstract only." }
+            }
+          },
+          "default": []
+        },
+        "code": {
+          "type": "array",
+          "description": "Attached implementations. Empty array is meaningful — it is the primary reproducibility signal.",
+          "items": {
+            "type": "object",
+            "required": ["url"],
+            "additionalProperties": false,
+            "properties": {
+              "url": { "type": "string", "format": "uri" },
+              "host": { "enum": ["github", "gitlab", "bitbucket", "zenodo", "figshare", "workflowhub", "nf-core", "galaxy", "dryad", "other"] },
+              "resolves": { "type": "boolean", "description": "Did the URL actually return a repository at ingest time." },
+              "commit": { "type": "string", "description": "SHA or tag pinned at extraction time. Everything in `observed` refers to this snapshot." },
+              "release": { "type": "string" },
+              "license": { "type": "string" },
+              "engine": { "$ref": "#/$defs/engine" },
+              "entrypoints": { "type": "array", "items": { "type": "string" }, "description": "Repo-relative paths that define the chain (main.nf, Snakefile, *.cwl, run.sh, analysis.Rmd)." },
+              "last_commit_date": { "type": "string", "format": "date" },
+              "stars": { "type": "integer" }
+            }
+          },
+          "default": []
+        },
+        "related": {
+          "type": "array",
+          "description": "Links to other catalog records.",
+          "items": {
+            "type": "object",
+            "required": ["relation", "workflow_id"],
+            "additionalProperties": false,
+            "properties": {
+              "relation": { "enum": ["forks", "supersedes", "superseded_by", "variant_of", "benchmarks", "benchmarked_by", "cites"] },
+              "workflow_id": { "type": "string" },
+              "note": { "type": "string" }
+            }
+          },
+          "default": []
+        }
+      }
+    },
+
+    "claimed": {
+      "$ref": "#/$defs/chain",
+      "description": "The composition as described in the paper's Methods section. Extracted from text; every step should carry evidence pointing at the sentence it came from."
+    },
+    "observed": {
+      "oneOf": [{ "$ref": "#/$defs/chain" }, { "type": "null" }],
+      "description": "The composition as it exists in code, read from the pinned commit. Null when no code is attached — not an empty chain, which would mean 'code exists and does nothing'.",
+      "default": null
+    },
+
+    "divergence": {
+      "type": "array",
+      "description": "Diff between claimed and observed. Empty array only means agreement if `observed` is non-null; when observed is null this must be empty and carries no information.",
+      "items": {
+        "type": "object",
+        "required": ["type", "description"],
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+            "enum": [
+              "undisclosed_step",
+              "missing_step",
+              "version_mismatch",
+              "param_mismatch",
+              "tool_substitution",
+              "order_mismatch",
+              "db_unspecified",
+              "db_version_mismatch"
+            ]
+          },
+          "severity": { "enum": ["cosmetic", "minor", "material"], "default": "minor", "description": "material = would plausibly change results." },
+          "role": { "$ref": "#/$defs/roleId", "description": "Which step role the divergence sits at, when it maps to one." },
+          "description": { "type": "string" },
+          "claimed_value": { "type": "string" },
+          "observed_value": { "type": "string" },
+          "evidence": { "type": "array", "items": { "$ref": "#/$defs/evidence" }, "default": [] }
+        }
+      },
+      "default": []
+    },
+
+    "applicability": {
+      "type": "object",
+      "description": "What data this workflow is valid for. The matching surface. Keys mirror SRA/ENA vocabulary so dataset metadata joins directly; an omitted or empty array means 'unconstrained on this axis', which matches everything.",
+      "additionalProperties": false,
+      "properties": {
+        "platform": { "type": "array", "items": { "$ref": "#/$defs/platform" }, "default": [] },
+        "library_strategy": { "type": "array", "items": { "$ref": "#/$defs/libraryStrategy" }, "default": [] },
+        "library_source": { "type": "array", "items": { "$ref": "#/$defs/librarySource" }, "default": [] },
+        "library_layout": { "type": "array", "items": { "enum": ["PAIRED", "SINGLE"] }, "default": [] },
+        "marker_gene": { "type": "array", "items": { "$ref": "#/$defs/markerGene" }, "default": [], "description": "Amplicon workflows only." },
+        "amplicon_region": { "type": "array", "items": { "type": "string" }, "default": [], "description": "Free text region labels, e.g. 'V3-V4', 'V4', 'ITS2', 'full-length'." },
+        "read_length_min": { "type": "integer" },
+        "read_length_max": { "type": "integer" },
+        "depth_min_reads": { "type": "integer", "description": "Per-sample floor below which the authors' chain is not expected to work." },
+        "environment": { "type": "array", "items": { "$ref": "#/$defs/environment" }, "default": [], "description": "Sample environments demonstrated in the source. Advisory for ranking, not a hard filter — a soil chain usually runs fine on sediment." },
+        "host_associated": { "type": "boolean" },
+        "requires_host_reference": { "type": "boolean", "default": false },
+        "requires_multiple_samples": { "type": "boolean", "default": false, "description": "True for chains with co-assembly, differential abundance, or cross-sample binning steps." },
+        "min_samples": { "type": "integer" },
+        "requires_replication": { "type": "boolean", "default": false, "description": "True when downstream statistics assume biological replicates." },
+        "reference_databases": {
+          "type": "array",
+          "description": "External DBs the chain cannot run without. Size drives whether an agent can realistically stage this.",
+          "items": {
+            "type": "object",
+            "required": ["name"],
+            "additionalProperties": false,
+            "properties": {
+              "name": { "type": "string", "description": "e.g. SILVA, GTDB, UNITE, CheckM2, Kraken2 standard, KEGG, Pfam." },
+              "version": { "type": "string", "description": "Null/absent here is what raises a db_unspecified divergence." },
+              "role": { "$ref": "#/$defs/roleId" },
+              "approx_size_gb": { "type": "number" },
+              "licensed": { "type": "boolean", "default": false, "description": "True for DBs needing a paid or registered license (e.g. KEGG)." }
+            }
+          },
+          "default": []
+        },
+        "excluded": { "type": "array", "items": { "type": "string" }, "default": [], "description": "Explicit anti-matches the authors or adjudicator called out, e.g. 'not valid for single-end amplicon data'." }
+      }
+    },
+
+    "outputs": {
+      "type": "array",
+      "description": "Terminal artifacts the chain produces. Lets an agent match on desired result, not just input data.",
+      "items": { "$ref": "#/$defs/outputArtifact" },
+      "default": []
+    },
+
+    "runnability": {
+      "type": "object",
+      "description": "Can an agent actually execute this. Objective, recomputed on re-ingest.",
+      "additionalProperties": false,
+      "properties": {
+        "engine": { "$ref": "#/$defs/engine" },
+        "engine_version": { "type": "string" },
+        "containerized": { "type": "boolean", "default": false },
+        "container_kind": { "type": "array", "items": { "enum": ["docker", "singularity", "apptainer", "podman", "biocontainers"] }, "default": [] },
+        "env_spec": { "type": "array", "items": { "enum": ["conda", "mamba", "renv", "requirements.txt", "pyproject", "lockfile", "dockerfile", "none"] }, "default": [] },
+        "versions_pinned": { "enum": ["all", "partial", "none", "unknown"], "default": "unknown" },
+        "has_test_data": { "type": "boolean", "default": false },
+        "has_ci": { "type": "boolean", "default": false },
+        "install_docs": { "enum": ["good", "minimal", "none"], "default": "none" },
+        "resource_profile": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "peak_ram_gb": { "type": "number" },
+            "cpu_hours_per_sample": { "type": "number" },
+            "disk_gb_per_sample": { "type": "number" },
+            "gpu_required": { "type": "boolean", "default": false },
+            "source": { "enum": ["reported", "config_declared", "estimated"], "description": "Where the numbers came from. 'estimated' means the adjudicator guessed and they are soft." }
+          }
+        },
+        "hpc_ready": { "type": "boolean", "description": "Chain declares an executor/profile suitable for SLURM-style batch submission." }
+      }
+    },
+
+    "vetting": {
+      "type": "object",
+      "required": ["tier"],
+      "additionalProperties": false,
+      "properties": {
+        "tier": {
+          "enum": ["reference", "usable", "documented", "paper_only", "rejected"],
+          "description": "reference = runnable, pinned, tested, judged sound. usable = runnable with work. documented = chain is legible but code isn't runnable. paper_only = no code. rejected = failed adjudication or superseded by a strictly better record."
+        },
+        "scorecard": {
+          "type": "object",
+          "description": "Stage 1: objective signals, stored verbatim so weighting can change without re-ingest. Do not store a single composite score here — compute it at query time.",
+          "additionalProperties": false,
+          "properties": {
+            "code_resolves": { "type": "boolean" },
+            "has_license": { "type": "boolean" },
+            "has_env_spec": { "type": "boolean" },
+            "has_container": { "type": "boolean" },
+            "uses_workflow_engine": { "type": "boolean" },
+            "versions_pinned": { "enum": ["all", "partial", "none", "unknown"] },
+            "has_tagged_release": { "type": "boolean" },
+            "has_ci": { "type": "boolean" },
+            "has_test_data": { "type": "boolean" },
+            "db_versions_recorded": { "type": "boolean" },
+            "months_since_last_commit": { "type": "integer" },
+            "citation_count": { "type": "integer" },
+            "citation_count_source": { "type": "string" },
+            "fulltext_methods_available": { "type": "boolean" }
+          }
+        },
+        "adjudication": {
+          "type": "object",
+          "description": "Stage 2: LLM judgment. A re-derivable artifact, never ground truth — always overridden by human_review.",
+          "additionalProperties": false,
+          "required": ["model", "prompt_version", "date"],
+          "properties": {
+            "model": { "type": "string", "description": "Exact model ID that produced this judgment." },
+            "prompt_version": { "type": "string", "description": "Version of the adjudication prompt in extract/prompts/." },
+            "date": { "type": "string", "format": "date" },
+            "confidence": { "enum": ["high", "medium", "low"] },
+            "chain_matches_claims": { "type": "boolean", "description": "Does the composition do what the abstract/title says it does." },
+            "soundness_notes": { "type": "array", "items": { "type": "string" }, "default": [], "description": "Methodological concerns, e.g. 'rarefies before ANCOM-BC', 'no negative controls in a low-biomass system'." },
+            "caveats": { "type": "array", "items": { "type": "string" }, "default": [], "description": "Practical warnings for anyone reusing this chain." },
+            "strengths": { "type": "array", "items": { "type": "string" }, "default": [] },
+            "suggested_tier": { "enum": ["reference", "usable", "documented", "paper_only", "rejected"] },
+            "evidence": { "type": "array", "items": { "$ref": "#/$defs/evidence" }, "default": [] }
+          }
+        },
+        "human_review": {
+          "type": "object",
+          "description": "Always wins over adjudication. Presence of `tier_override` pins the record's tier.",
+          "additionalProperties": false,
+          "properties": {
+            "reviewer": { "type": "string" },
+            "date": { "type": "string", "format": "date" },
+            "tier_override": { "enum": ["reference", "usable", "documented", "paper_only", "rejected"] },
+            "notes": { "type": "string" }
+          }
+        }
+      }
+    },
+
+    "record_meta": {
+      "type": "object",
+      "required": ["schema_version", "first_seen"],
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": { "type": "string", "const": "0.1.0" },
+        "first_seen": { "type": "string", "format": "date" },
+        "last_extracted": { "type": "string", "format": "date" },
+        "extractor_version": { "type": "string" },
+        "ingest_lane": { "type": "array", "items": { "enum": ["arxiv", "biorxiv", "pubmed", "europepmc", "registry", "manual"] }, "default": [] },
+        "needs_review": { "type": "boolean", "default": false },
+        "notes": { "type": "string" }
+      }
+    }
+  },
+
+  "$defs": {
+    "roleId": {
+      "type": "string",
+      "description": "A step role from schema/ontology/step_roles.yaml. Validated against that file by scripts/validate.py, not by JSON Schema."
+    },
+    "toolId": {
+      "type": "string",
+      "description": "A canonical tool ID from schema/ontology/tools.yaml. Unknown tools are allowed but flagged by the validator so the ontology can grow."
+    },
+    "archetypeId": {
+      "type": "string",
+      "description": "An archetype ID from schema/ontology/archetypes.yaml."
+    },
+
+    "chain": {
+      "type": "object",
+      "description": "An ordered DAG of steps. `steps` carries the nodes; edges are implicit in `order` for linear chains and explicit via `depends_on` when the graph branches.",
+      "required": ["steps"],
+      "additionalProperties": false,
+      "properties": {
+        "source": { "enum": ["methods_text", "abstract_only", "repo_code", "registry_metadata", "manual"], "description": "How this chain was derived. `abstract_only` marks a low-fidelity claimed chain." },
+        "extracted_from": { "type": "array", "items": { "type": "string" }, "default": [], "description": "Locators — section names for text, repo-relative file paths for code." },
+        "completeness": { "enum": ["complete", "partial", "sketch"], "default": "partial", "description": "sketch = tools named but order uncertain." },
+        "steps": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/step" }
+        }
+      }
+    },
+
+    "step": {
+      "type": "object",
+      "required": ["order", "role"],
+      "additionalProperties": false,
+      "properties": {
+        "step_id": { "type": "string", "description": "Local ID, required only if other steps reference it via depends_on." },
+        "order": { "type": "integer", "minimum": 0, "description": "Topological position. Steps sharing an order run in parallel / are alternatives — disambiguate with `alternative_of`." },
+        "depends_on": { "type": "array", "items": { "type": "string" }, "default": [], "description": "step_ids this consumes output from. Omit for a linear chain." },
+        "role": { "$ref": "#/$defs/roleId" },
+        "tool": { "$ref": "#/$defs/toolId" },
+        "tool_raw": { "type": "string", "description": "Verbatim name as written in the paper or invoked in the code, before normalization. Kept for auditability." },
+        "version": { "type": "string" },
+        "optional": { "type": "boolean", "default": false, "description": "Step is conditional/flag-gated in the code, or described as optional in the text." },
+        "alternative_of": { "type": "string", "description": "step_id this is an either/or alternative to, e.g. MEGAHIT vs metaSPAdes behind one config flag." },
+        "params": {
+          "type": "object",
+          "description": "Notable non-default parameters only. Free-form key/value — the point is to capture choices that change results (trunc_len, min_contig_len, --meta), not to reproduce the full CLI.",
+          "additionalProperties": { "type": ["string", "number", "boolean", "array", "null"] }
+        },
+        "database": { "type": "string", "description": "Reference DB this step consumes, e.g. 'SILVA 138.1'." },
+        "purpose": { "type": "string", "description": "One short clause on why this step is here, when it isn't obvious from the role." },
+        "evidence": { "type": "array", "items": { "$ref": "#/$defs/evidence" }, "default": [] }
+      }
+    },
+
+    "evidence": {
+      "type": "object",
+      "description": "Pointer back to the exact text or code this assertion came from. Required discipline: no extracted claim without a locator.",
+      "required": ["source", "locator"],
+      "additionalProperties": false,
+      "properties": {
+        "source": { "enum": ["paper", "repo", "registry", "readme", "adjudicator"] },
+        "locator": { "type": "string", "description": "Section name ('Methods > Sequence processing') or repo-relative path with line range ('workflows/assembly.nf#L40-L58')." },
+        "quote": { "type": "string", "maxLength": 1200, "description": "Verbatim snippet. Keep short; respect the source license recorded in provenance." }
+      }
+    },
+
+    "outputArtifact": {
+      "enum": [
+        "asv_table", "otu_table", "taxonomy_table", "phylogenetic_tree", "representative_sequences",
+        "diversity_metrics", "ordination", "differential_abundance_table", "correlation_network",
+        "assembly_contigs", "mags", "mag_quality_report", "genome_taxonomy", "pangenome",
+        "gene_catalog", "gene_annotations", "functional_profile", "pathway_abundance",
+        "taxonomic_profile", "strain_profile", "variant_calls",
+        "viral_contigs", "plasmid_contigs", "amr_profile", "biosynthetic_gene_clusters",
+        "expression_matrix", "qc_report", "figures", "manuscript_ready_report"
+      ]
+    },
+
+    "engine": {
+      "enum": ["nextflow", "snakemake", "cwl", "wdl", "galaxy", "make", "bash", "python_script", "r_script", "jupyter", "rmarkdown", "quarto", "gui_only", "none", "unknown"]
+    },
+
+    "platform": {
+      "enum": ["ILLUMINA", "OXFORD_NANOPORE", "PACBIO_SMRT", "BGISEQ", "ION_TORRENT", "ELEMENT", "ULTIMA", "CAPILLARY", "ANY"]
+    },
+
+    "libraryStrategy": {
+      "enum": ["AMPLICON", "WGS", "WGA", "RNA-Seq", "ssRNA-seq", "Hi-C", "ATAC-seq", "Bisulfite-Seq", "Targeted-Capture", "OTHER", "ANY"]
+    },
+
+    "librarySource": {
+      "enum": ["METAGENOMIC", "GENOMIC", "METATRANSCRIPTOMIC", "TRANSCRIPTOMIC", "VIRAL_RNA", "SYNTHETIC", "OTHER", "ANY"]
+    },
+
+    "markerGene": {
+      "enum": ["16S", "18S", "ITS", "23S", "rpoB", "gyrB", "cpn60", "amoA", "nifH", "dsrB", "mcrA", "COI", "rbcL", "psbA", "other"]
+    },
+
+    "environment": {
+      "enum": [
+        "soil", "sediment", "freshwater", "marine", "hydrothermal", "groundwater", "wastewater",
+        "cryosphere", "permafrost", "atmosphere", "built_environment", "bioreactor", "compost",
+        "plant_rhizosphere", "plant_phyllosphere", "plant_endosphere",
+        "human_gut", "human_oral", "human_skin", "human_respiratory", "human_urogenital",
+        "animal_gut", "animal_other", "insect", "food_fermentation", "clinical", "mock_community", "any"
+      ]
+    }
+  }
+}

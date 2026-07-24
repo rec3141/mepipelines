@@ -1,0 +1,281 @@
+# EXEMPLAR — hand-written to make the schema concrete. Filename is underscore-prefixed so the
+# validator treats it as a fixture, not catalog data.
+#
+# HONESTY NOTE: the field values below are written from prior knowledge of nf-core/mag, NOT from an
+# actual ingest run. Versions, commit, dates, and scorecard values are placeholders. `needs_review`
+# is true and the record must be re-extracted by the real pipeline before it counts as catalog data.
+# It exists to answer "what does a filled record look like", and to show what a registry-sourced
+# entry looks like: `observed` is rich, `claimed` is thin, because the primary artifact is code.
+
+id: nf-core-mag
+name: nf-core/mag
+aliases: [nf-core mag, nfcore/mag]
+summary: >
+  Community-maintained Nextflow pipeline for metagenome assembly and binning, supporting short-read,
+  long-read, and hybrid input. The most heavily-used composed MAG workflow in the field and the
+  natural reference point that literature chains get scored against.
+
+# hybrid_assembly is deliberately NOT claimed here: nf-core/mag does support hybrid input, but this
+# exemplar's chain has no `polish` step written out, and the validator correctly refuses an
+# archetype whose required roles are absent. Add it back when the real extraction records polishing.
+archetype: [metagenome_assembly_binning, longread_metagenome]
+
+provenance:
+  sources:
+    - kind: doi
+      id: 10.1093/nargab/lqac007
+      title: "nf-core/mag: a best-practice pipeline for metagenome hybrid assembly and binning"
+      venue: NAR Genomics and Bioinformatics
+      date: 2022-03-01
+      license: cc-by
+      fulltext_available: true
+    - kind: registry
+      id: nf-core/mag
+      url: https://nf-co.re/mag
+  code:
+    - url: https://github.com/nf-core/mag
+      host: nf-core
+      resolves: true
+      commit: PLACEHOLDER
+      release: PLACEHOLDER
+      license: MIT
+      engine: nextflow
+      entrypoints: [main.nf, workflows/mag.nf, conf/modules.config]
+  related: []
+
+# Thin by design: for a registry workflow the paper describes the software, while the chain itself
+# lives in code. Compare with a literature-sourced record, where `claimed` is the rich side.
+claimed:
+  source: methods_text
+  extracted_from: ["Implementation"]
+  completeness: sketch
+  steps:
+    - {order: 0, role: trim, tool_raw: "fastp / AdapterRemoval"}
+    - {order: 1, role: filter_host, tool_raw: "Bowtie2"}
+    - {order: 2, role: assemble, tool_raw: "MEGAHIT / SPAdes / Flye"}
+    - {order: 3, role: bin, tool_raw: "MetaBAT2 / MaxBin2"}
+    - {order: 4, role: bin_qc, tool_raw: "BUSCO"}
+    - {order: 5, role: classify_genomes, tool_raw: "GTDB-Tk"}
+
+observed:
+  source: repo_code
+  extracted_from: [workflows/mag.nf, subworkflows/local/, conf/modules.config, modules/nf-core/]
+  completeness: complete
+  steps:
+    - step_id: qc
+      order: 0
+      role: qc_raw
+      tool: fastqc
+      optional: true
+      evidence: [{source: repo, locator: "workflows/mag.nf", quote: "PLACEHOLDER"}]
+
+    - step_id: trim_sr
+      order: 1
+      role: trim
+      tool: fastp
+      params: {note: "AdapterRemoval selectable via --clip_tool"}
+
+    - step_id: trim_lr
+      order: 1
+      role: trim
+      tool: porechop
+      optional: true
+      purpose: Long-read arm — adapter removal, then length/quality filtering with Filtlong.
+
+    - step_id: host
+      order: 2
+      role: filter_host
+      tool: bowtie2
+      depends_on: [trim_sr]
+      params: {also_removes: "PhiX spike-in"}
+      purpose: >
+        Host and PhiX removal. Present in code and named only in passing in the paper — the kind of
+        step that shows up as `undisclosed_step` in literature records that copy this chain.
+
+    - step_id: profile
+      order: 3
+      role: profile_taxonomic
+      tool: kraken2
+      optional: true
+      depends_on: [host]
+      database: "Kraken2 standard (user-supplied)"
+
+    - step_id: asm
+      order: 4
+      role: assemble
+      tool: megahit
+      depends_on: [host]
+
+    - step_id: asm_alt
+      order: 4
+      role: assemble
+      tool: metaspades
+      alternative_of: asm
+      optional: true
+
+    - step_id: asm_lr
+      order: 4
+      role: assemble
+      tool: metaflye
+      alternative_of: asm
+      optional: true
+      purpose: Long-read arm.
+
+    - step_id: asm_qc
+      order: 5
+      role: bin_qc
+      tool: quast
+      depends_on: [asm]
+      purpose: Assembly-level contiguity stats, distinct from bin completeness below.
+
+    - step_id: map
+      order: 6
+      role: map_reads
+      tool: bowtie2
+      depends_on: [asm]
+      purpose: Coverage profiles for differential-coverage binning.
+
+    - step_id: bin_mb
+      order: 7
+      role: bin
+      tool: metabat2
+      depends_on: [map]
+
+    - step_id: bin_mx
+      order: 7
+      role: bin
+      tool: maxbin2
+      optional: true
+      depends_on: [map]
+
+    - step_id: bin_cc
+      order: 7
+      role: bin
+      tool: concoct
+      optional: true
+      depends_on: [map]
+
+    - step_id: refine
+      order: 8
+      role: bin_refine
+      tool: das-tool
+      optional: true
+      depends_on: [bin_mb, bin_mx, bin_cc]
+
+    - step_id: qc_bins
+      order: 9
+      role: bin_qc
+      tool: busco
+      depends_on: [refine]
+      params: {alternatives: "CheckM, CheckM2, GUNC selectable"}
+
+    - step_id: tax
+      order: 10
+      role: classify_genomes
+      tool: gtdbtk
+      optional: true
+      depends_on: [qc_bins]
+      database: "GTDB (release user-supplied)"
+
+    - step_id: annot
+      order: 11
+      role: annotate_function
+      tool: prokka
+      optional: true
+      depends_on: [qc_bins]
+
+    - step_id: rep
+      order: 12
+      role: report
+      tool: multiqc
+
+divergence:
+  - type: undisclosed_step
+    severity: minor
+    role: filter_host
+    description: >
+      PhiX removal runs unconditionally alongside host filtering; the paper mentions host removal
+      without specifying the PhiX step.
+    claimed_value: "host read removal"
+    observed_value: "Bowtie2 host removal + PhiX spike-in removal"
+  - type: db_unspecified
+    severity: material
+    role: classify_genomes
+    description: >
+      GTDB release is user-supplied at runtime and not pinned by the pipeline, so two runs of the
+      same version can produce different taxonomy. Recorded as a caveat rather than a defect —
+      but any downstream record that cites this chain inherits it.
+
+applicability:
+  platform: [ILLUMINA, OXFORD_NANOPORE, PACBIO_SMRT]
+  library_strategy: [WGS, WGA]
+  library_source: [METAGENOMIC]
+  library_layout: [PAIRED, SINGLE]
+  environment: [any]
+  requires_host_reference: false
+  requires_multiple_samples: false
+  reference_databases:
+    - {name: GTDB, version: user-supplied, role: classify_genomes, approx_size_gb: 110}
+    - {name: BUSCO lineage, version: auto-downloaded, role: bin_qc, approx_size_gb: 5}
+    - {name: Kraken2 standard, version: user-supplied, role: profile_taxonomic, approx_size_gb: 70}
+  excluded:
+    - "Not an amplicon pipeline — AMPLICON libraries must not be routed here."
+
+outputs: [assembly_contigs, mags, mag_quality_report, genome_taxonomy, gene_annotations, taxonomic_profile, qc_report]
+
+runnability:
+  engine: nextflow
+  containerized: true
+  container_kind: [docker, singularity, apptainer, biocontainers]
+  env_spec: [conda, dockerfile]
+  versions_pinned: all
+  has_test_data: true
+  has_ci: true
+  install_docs: good
+  resource_profile:
+    peak_ram_gb: 128
+    source: config_declared
+  hpc_ready: true
+
+vetting:
+  tier: reference
+  scorecard:
+    code_resolves: true
+    has_license: true
+    has_env_spec: true
+    has_container: true
+    uses_workflow_engine: true
+    versions_pinned: all
+    has_tagged_release: true
+    has_ci: true
+    has_test_data: true
+    db_versions_recorded: false
+    months_since_last_commit: 0
+    citation_count: 0
+    citation_count_source: PLACEHOLDER
+    fulltext_methods_available: true
+  adjudication:
+    model: PLACEHOLDER
+    prompt_version: PLACEHOLDER
+    date: 2026-07-24
+    confidence: low
+    chain_matches_claims: true
+    strengths:
+      - Every step is containerized and version-pinned; reruns are reproducible modulo reference DBs.
+      - Multi-binner plus DAS Tool refinement plus bin QC is the current consensus shape.
+    caveats:
+      - Reference database versions are supplied at runtime and not captured in the pipeline version.
+      - Bin refinement and QC are optional flags; a default run can emit unvalidated bins.
+    soundness_notes: []
+    suggested_tier: reference
+
+record_meta:
+  schema_version: 0.1.0
+  first_seen: 2026-07-24
+  last_extracted: 2026-07-24
+  extractor_version: hand-written-exemplar
+  ingest_lane: [manual]
+  needs_review: true
+  notes: >
+    Schema exemplar only. Values are from prior knowledge, not extraction. Re-run through the real
+    ingest + extract pipeline before treating any field here as catalog data.

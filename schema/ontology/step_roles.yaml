@@ -1,0 +1,390 @@
+# Step roles — the controlled vocabulary that makes compositions comparable.
+#
+# A role is a SLOT in a chain, not a tool. Two workflows that use MetaBAT2 and SemiBin2 both have a
+# `bin` step; that is what lets us say they are the same chain with a substitution. Roles are
+# deliberately coarse — if two tools are routinely swapped for one another, they share a role.
+#
+# `stage` groups roles into broad phases for display and for coverage analysis.
+# `substitutable` = tools in this role are generally interchangeable within an archetype (drives the
+#   substitution-class analysis in docs/design.md). False means the choice is structural.
+# `order_hint` is a soft canonical position used to sort sketch-completeness chains. It is NOT a
+#   constraint — order violations are interesting findings, not validation errors.
+
+schema_version: 0.1.0
+
+stages:
+  acquire:    Getting reads onto disk and knowing what they are
+  preprocess: Cleaning reads before any biological inference
+  amplicon:   Marker-gene-specific feature construction
+  assembly:   Building contigs and genomes from reads
+  reference:  Comparing reads or genes against reference databases
+  annotate:   Assigning function and identity to sequences
+  ecology:    Community-level statistics and comparison
+  specialty:  Targeted secondary analyses
+  deliver:    Reporting and visualization
+
+roles:
+
+  # --- acquire -------------------------------------------------------------
+  - id: retrieve
+    stage: acquire
+    order_hint: 0
+    substitutable: true
+    description: Fetch reads from a public archive or local store.
+    typical_tools: [sra-tools, kingfisher, ffq, aspera, ena-ftp]
+
+  - id: demultiplex
+    stage: acquire
+    order_hint: 5
+    substitutable: true
+    description: Split pooled reads by barcode/index.
+    typical_tools: [bcl2fastq, bclconvert, cutadapt, qiime2, guppy, dorado]
+
+  - id: basecall
+    stage: acquire
+    order_hint: 3
+    substitutable: true
+    description: Signal to sequence, long-read platforms only. Model choice materially changes accuracy.
+    typical_tools: [dorado, guppy, bonito]
+
+  - id: qc_raw
+    stage: acquire
+    order_hint: 10
+    substitutable: true
+    description: Inspect read quality before any modification. Reporting only — no reads are changed.
+    typical_tools: [fastqc, multiqc, seqkit, nanoplot, nanocomp, falco]
+
+  # --- preprocess ----------------------------------------------------------
+  - id: trim
+    stage: preprocess
+    order_hint: 20
+    substitutable: true
+    description: Adapter removal and quality trimming/filtering.
+    typical_tools: [fastp, trimmomatic, cutadapt, bbduk, trim-galore, chopper, filtlong, nanofilt, porechop]
+
+  - id: remove_primers
+    stage: preprocess
+    order_hint: 22
+    substitutable: false
+    description: >
+      Strip amplicon primers. Structurally distinct from `trim` and order-sensitive — running this
+      after denoising is a classic material error, so it gets its own role rather than folding into trim.
+    typical_tools: [cutadapt, qiime2, dada2, bbduk]
+
+  - id: filter_host
+    stage: preprocess
+    order_hint: 30
+    substitutable: true
+    description: >
+      Remove host or contaminant reads. Frequently present in code and absent from Methods —
+      the single most common `undisclosed_step`.
+    typical_tools: [bowtie2, bwa-mem2, minimap2, bbsplit, hostile, kraken2, samtools]
+
+  - id: merge_reads
+    stage: preprocess
+    order_hint: 35
+    substitutable: true
+    description: Join overlapping paired reads into single amplicon-length sequences.
+    typical_tools: [vsearch, pear, flash, bbmerge, dada2]
+
+  - id: subsample
+    stage: preprocess
+    order_hint: 38
+    substitutable: true
+    description: Downsample reads for cost or normalization. Often undisclosed.
+    typical_tools: [seqtk, bbtools, rasusa, seqkit]
+
+  - id: error_correct
+    stage: preprocess
+    order_hint: 40
+    substitutable: true
+    description: Read-level error correction prior to assembly.
+    typical_tools: [bbnorm, tadpole, lighter, canu, ratatosk]
+
+  # --- amplicon ------------------------------------------------------------
+  - id: dereplicate
+    stage: amplicon
+    order_hint: 45
+    substitutable: true
+    description: Collapse identical sequences with abundance counts.
+    typical_tools: [vsearch, usearch, seqkit]
+
+  - id: denoise
+    stage: amplicon
+    order_hint: 50
+    substitutable: true
+    description: Resolve exact sequence variants (ASVs) via an error model.
+    typical_tools: [dada2, deblur, unoise3, qiime2]
+
+  - id: cluster_otu
+    stage: amplicon
+    order_hint: 50
+    substitutable: true
+    description: >
+      Cluster sequences into OTUs at a similarity threshold. Same order_hint as `denoise` because
+      they are alternatives; presence of this role rather than denoise is the main axis of the
+      ASV-vs-OTU drift analysis.
+    typical_tools: [vsearch, usearch, swarm, mothur, cd-hit, qiime2]
+
+  - id: chimera_removal
+    stage: amplicon
+    order_hint: 55
+    substitutable: true
+    description: Detect and drop chimeric amplicons.
+    typical_tools: [vsearch, uchime, dada2, mothur]
+
+  - id: filter_features
+    stage: amplicon
+    order_hint: 60
+    substitutable: true
+    description: >
+      Drop low-abundance/low-prevalence features, singletons, or non-target lineages. Threshold
+      choices are rarely reported and frequently material.
+    typical_tools: [qiime2, phyloseq, decontam, microbiome]
+
+  - id: decontaminate
+    stage: amplicon
+    order_hint: 62
+    substitutable: false
+    description: Remove reagent/lab contaminants using negative controls. Distinct from filter_features — requires control samples.
+    typical_tools: [decontam, microdecon, sourcetracker]
+
+  # --- assembly ------------------------------------------------------------
+  - id: assemble
+    stage: assembly
+    order_hint: 70
+    substitutable: true
+    description: Reads to contigs. Single-sample or co-assembly.
+    typical_tools: [megahit, spades, metaspades, flye, metaflye, canu, unicycler, skesa, hifiasm-meta, raven, penguin]
+
+  - id: polish
+    stage: assembly
+    order_hint: 75
+    substitutable: true
+    description: >
+      Correct assembly errors with reads. Position relative to `bin` differs across the long-read
+      literature and is a live disagreement worth surveying.
+    typical_tools: [medaka, racon, pilon, polca, homopolish, nextpolish]
+
+  - id: map_reads
+    stage: assembly
+    order_hint: 80
+    substitutable: true
+    description: Align reads to contigs/genomes, usually to produce coverage for binning or abundance.
+    typical_tools: [bowtie2, bwa-mem2, minimap2, coverm, samtools, salmon]
+
+  - id: bin
+    stage: assembly
+    order_hint: 85
+    substitutable: true
+    description: Group contigs into putative genomes.
+    typical_tools: [metabat2, maxbin2, concoct, semibin2, vamb, comebin, metadecoder, graphmb]
+
+  - id: bin_refine
+    stage: assembly
+    order_hint: 90
+    substitutable: true
+    description: Consolidate or clean bin sets from multiple binners.
+    typical_tools: [das-tool, metawrap, magscot, binette, refinem]
+
+  - id: bin_qc
+    stage: assembly
+    order_hint: 95
+    substitutable: true
+    description: Completeness/contamination estimation. Absence of this role is a material soundness flag for any MAG chain.
+    typical_tools: [checkm, checkm2, busco, gunc, magpurify]
+
+  - id: dereplicate_genomes
+    stage: assembly
+    order_hint: 100
+    substitutable: true
+    description: Collapse redundant MAGs across samples into species representatives.
+    typical_tools: [drep, galah, mash, skani, fastani]
+
+  - id: scaffold
+    stage: assembly
+    order_hint: 92
+    substitutable: true
+    description: Extend/join contigs with long reads, Hi-C, or optical maps.
+    typical_tools: [links, ragtag, bin3c, metator, opera-ms]
+
+  # --- reference -----------------------------------------------------------
+  - id: profile_taxonomic
+    stage: reference
+    order_hint: 65
+    substitutable: true
+    description: Reference-based community composition straight from reads, no assembly.
+    typical_tools: [metaphlan, kraken2, bracken, motus, centrifuge, kaiju, sourmash, ganon, sylph]
+
+  - id: profile_functional
+    stage: reference
+    order_hint: 68
+    substitutable: true
+    description: Reference-based pathway/gene-family abundance from reads.
+    typical_tools: [humann, mi-faser, superfocus, samsa2, eggnog-mapper]
+
+  - id: taxonomy_assign
+    stage: reference
+    order_hint: 105
+    substitutable: true
+    description: Assign taxonomy to amplicon features or sequences against a marker-gene database.
+    typical_tools: [qiime2, dada2, mothur, sintax, blast, vsearch, idtaxa]
+
+  - id: classify_genomes
+    stage: reference
+    order_hint: 110
+    substitutable: true
+    description: Place assembled genomes/MAGs in a genome taxonomy.
+    typical_tools: [gtdbtk, phylophlan, checkm, kraken2]
+
+  # --- annotate ------------------------------------------------------------
+  - id: predict_genes
+    stage: annotate
+    order_hint: 115
+    substitutable: true
+    description: Call ORFs/coding sequences on contigs or genomes.
+    typical_tools: [prodigal, pyrodigal, metagenemark, glimmer, genemarks]
+
+  - id: annotate_function
+    stage: annotate
+    order_hint: 120
+    substitutable: true
+    description: Attach functional labels to genes.
+    typical_tools: [prokka, bakta, dram, eggnog-mapper, interproscan, kofamscan, ghostkoala, mmseqs2, blast, diamond]
+
+  - id: build_gene_catalog
+    stage: annotate
+    order_hint: 118
+    substitutable: true
+    description: Non-redundant gene set across samples for downstream quantification.
+    typical_tools: [cd-hit, mmseqs2, linclust]
+
+  - id: quantify
+    stage: annotate
+    order_hint: 125
+    substitutable: true
+    description: Counts/abundance per feature, gene, or genome.
+    typical_tools: [salmon, kallisto, featurecounts, htseq, coverm, rsem, bowtie2]
+
+  - id: phylogeny
+    stage: annotate
+    order_hint: 130
+    substitutable: true
+    description: Align and infer a tree. Alignment and trimming fold in here unless separately notable.
+    typical_tools: [mafft, muscle, iqtree, fasttree, raxml, trimal, gblocks, sepp]
+
+  # --- ecology -------------------------------------------------------------
+  - id: normalize
+    stage: ecology
+    order_hint: 135
+    substitutable: false
+    description: >
+      Rarefaction, CSS, CLR, TMM, TSS, VST. NOT substitutable — the choice is a standing methodological
+      dispute and interacts with `differential_abundance`. Rarefying before ANCOM-BC/ALDEx2 is a
+      soundness flag.
+    typical_tools: [vegan, phyloseq, metagenomeseq, deseq2, edger, aldex2, scikit-bio]
+
+  - id: diversity
+    stage: ecology
+    order_hint: 140
+    substitutable: true
+    description: Alpha and beta diversity metrics.
+    typical_tools: [qiime2, vegan, phyloseq, scikit-bio, unifrac, ampvis2]
+
+  - id: ordination
+    stage: ecology
+    order_hint: 145
+    substitutable: true
+    description: PCoA, NMDS, PCA, RDA/CCA and associated tests (PERMANOVA, ANOSIM, betadisper).
+    typical_tools: [vegan, phyloseq, qiime2, scikit-bio, deicode]
+
+  - id: differential_abundance
+    stage: ecology
+    order_hint: 150
+    substitutable: false
+    description: >
+      Which taxa/genes differ between groups. NOT substitutable — these methods disagree
+      substantially on real data and the choice is a reportable result in itself.
+    typical_tools: [deseq2, aldex2, ancom-bc, lefse, maaslin2, corncob, edger, limma-voom, songbird]
+
+  - id: correlate
+    stage: ecology
+    order_hint: 155
+    substitutable: true
+    description: Co-occurrence networks and taxon-environment correlation.
+    typical_tools: [spieceasi, sparcc, flashweave, wgcna, cooccur, propr]
+
+  - id: model
+    stage: ecology
+    order_hint: 158
+    substitutable: true
+    description: Predictive/ML modelling on community features (classification, regression, source tracking).
+    typical_tools: [randomforest, scikit-learn, sourcetracker, feast, mikropml, songbird]
+
+  # --- specialty -----------------------------------------------------------
+  - id: detect_mge
+    stage: specialty
+    order_hint: 160
+    substitutable: true
+    description: Identify viruses, plasmids, and other mobile elements.
+    typical_tools: [genomad, virsorter2, vibrant, checkv, deepvirfinder, plasmidfinder, mobsuite, platon]
+
+  - id: detect_amr
+    stage: specialty
+    order_hint: 162
+    substitutable: true
+    description: Antimicrobial resistance and virulence gene detection.
+    typical_tools: [abricate, amrfinderplus, rgi, resfinder, deeparg, staramr]
+
+  - id: detect_bgc
+    stage: specialty
+    order_hint: 164
+    substitutable: true
+    description: Biosynthetic gene cluster mining.
+    typical_tools: [antismash, gecco, bigscape, deepbgc, bigslice]
+
+  - id: strain_resolve
+    stage: specialty
+    order_hint: 166
+    substitutable: true
+    description: Sub-species resolution — SNV profiling, haplotypes, strain tracking.
+    typical_tools: [instrain, strainphlan, strainberry, midas, floria, strainge]
+
+  - id: call_variants
+    stage: specialty
+    order_hint: 168
+    substitutable: true
+    description: SNV/indel calling against a reference genome.
+    typical_tools: [bcftools, freebayes, gatk, snippy, lofreq]
+
+  - id: pangenome
+    stage: specialty
+    order_hint: 170
+    substitutable: true
+    description: Core/accessory gene analysis across related genomes.
+    typical_tools: [roary, panaroo, ppanggolin, anvio, panx, pirate]
+
+  # --- deliver -------------------------------------------------------------
+  - id: visualize
+    stage: deliver
+    order_hint: 180
+    substitutable: true
+    description: Figure generation.
+    typical_tools: [ggplot2, phyloseq, matplotlib, seaborn, plotly, krona, ampvis2, anvio, itol]
+
+  - id: report
+    stage: deliver
+    order_hint: 190
+    substitutable: true
+    description: Assembled human-readable output.
+    typical_tools: [multiqc, rmarkdown, quarto, jupyter, knitr]
+
+  # --- escape hatch --------------------------------------------------------
+  - id: custom
+    stage: specialty
+    order_hint: 175
+    substitutable: false
+    description: >
+      A step with no ontology match. Use `purpose` and `tool_raw` to describe it. Frequent `custom`
+      use in one area is the signal to add a real role — review these before every catalog release.
+    typical_tools: []

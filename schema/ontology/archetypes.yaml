@@ -1,0 +1,143 @@
+# Archetypes — recurring shapes of composition.
+#
+# An archetype is a coarse cluster of chains that answer the same question with the same broad
+# strategy. It is the grouping level for consensus analysis: "the modal 2024 short-read MAG chain"
+# is a statement about an archetype.
+#
+# `required_roles` are the roles a chain must contain to be classified into this archetype — used by
+#   the classifier as a floor, not a definition.
+# `expected_roles` are commonly present but optional.
+# `red_flag_missing` are roles whose ABSENCE is a soundness concern the adjudicator should raise.
+#
+# These are hypotheses about the field, seeded from prior knowledge. Phase 5 re-derives them from
+# the actual catalog by clustering chains on role sequence; where the data disagrees, the data wins.
+
+schema_version: 0.1.0
+
+archetypes:
+
+  - id: amplicon_asv
+    label: Amplicon → ASV
+    description: >
+      Marker-gene survey resolved to exact sequence variants. The dominant 16S/ITS shape since ~2017.
+    required_roles: [denoise, taxonomy_assign]
+    expected_roles: [qc_raw, remove_primers, trim, merge_reads, chimera_removal, filter_features, diversity, ordination]
+    red_flag_missing: [remove_primers, chimera_removal]
+    typical_outputs: [asv_table, taxonomy_table, representative_sequences, diversity_metrics, ordination]
+
+  - id: amplicon_otu
+    label: Amplicon → OTU
+    description: >
+      Similarity-threshold clustering. Largely superseded by ASV methods but still current in some
+      subfields and in re-analyses of older data. Tracking its decline is a survey result.
+    required_roles: [cluster_otu, taxonomy_assign]
+    expected_roles: [qc_raw, remove_primers, merge_reads, dereplicate, chimera_removal, diversity, ordination]
+    red_flag_missing: [chimera_removal]
+    typical_outputs: [otu_table, taxonomy_table, representative_sequences, diversity_metrics]
+
+  - id: metagenome_read_profiling
+    label: Metagenome → reference profile
+    description: >
+      Assembly-free community characterization against reference databases. Cheap, fast, bounded by
+      what is in the database.
+    required_roles: [profile_taxonomic]
+    expected_roles: [trim, filter_host, profile_functional, diversity, ordination, differential_abundance]
+    red_flag_missing: []
+    typical_outputs: [taxonomic_profile, functional_profile, pathway_abundance, diversity_metrics]
+
+  - id: metagenome_assembly_binning
+    label: Metagenome → MAGs (short read)
+    description: >
+      Recover genomes from short-read metagenomes. The most compositionally complex archetype and
+      the one with the most substitution variance.
+    required_roles: [assemble, bin]
+    expected_roles: [trim, filter_host, map_reads, bin_refine, bin_qc, dereplicate_genomes, classify_genomes, annotate_function]
+    red_flag_missing: [bin_qc]
+    typical_outputs: [assembly_contigs, mags, mag_quality_report, genome_taxonomy, gene_annotations]
+
+  - id: longread_metagenome
+    label: Metagenome → MAGs (long read)
+    description: >
+      Nanopore/PacBio metagenome assembly. Distinguished from the short-read archetype by the
+      presence and contested placement of `polish`.
+    required_roles: [assemble]
+    expected_roles: [basecall, trim, polish, map_reads, bin, bin_refine, bin_qc, classify_genomes]
+    red_flag_missing: [bin_qc]
+    typical_outputs: [assembly_contigs, mags, mag_quality_report, genome_taxonomy]
+
+  - id: hybrid_assembly
+    label: Hybrid short + long assembly
+    description: Combines platforms, either for hybrid assembly or long-read scaffolding with short-read polishing.
+    required_roles: [assemble, polish]
+    expected_roles: [trim, map_reads, scaffold, bin, bin_qc]
+    red_flag_missing: []
+    typical_outputs: [assembly_contigs, mags, mag_quality_report]
+
+  - id: isolate_genome
+    label: Isolate genome
+    description: Single-organism assembly and annotation. Not community ecology, but omc runs it and papers frequently pair it with community work.
+    required_roles: [assemble, annotate_function]
+    expected_roles: [qc_raw, trim, polish, bin_qc, classify_genomes, detect_amr, detect_bgc]
+    red_flag_missing: []
+    typical_outputs: [assembly_contigs, gene_annotations, genome_taxonomy, amr_profile]
+
+  - id: metatranscriptome
+    label: Metatranscriptome
+    description: Community gene expression. Distinguished by rRNA depletion handling and expression-level statistics.
+    required_roles: [quantify]
+    expected_roles: [trim, filter_host, assemble, predict_genes, annotate_function, normalize, differential_abundance]
+    red_flag_missing: [normalize]
+    typical_outputs: [expression_matrix, functional_profile, differential_abundance_table]
+
+  - id: viromics
+    label: Viromics
+    description: Viral community recovery and characterization.
+    required_roles: [detect_mge]
+    expected_roles: [trim, assemble, bin_qc, classify_genomes, annotate_function, quantify]
+    red_flag_missing: []
+    typical_outputs: [viral_contigs, taxonomic_profile, gene_annotations]
+
+  - id: comparative_genomics
+    label: Comparative genomics / pangenome
+    description: Cross-genome comparison, core/accessory structure, phylogenomics.
+    required_roles: [pangenome]
+    expected_roles: [predict_genes, annotate_function, phylogeny, dereplicate_genomes]
+    red_flag_missing: []
+    typical_outputs: [pangenome, phylogenetic_tree, gene_annotations]
+
+  - id: strain_level
+    label: Strain-level analysis
+    description: Sub-species resolution within or across samples.
+    required_roles: [strain_resolve]
+    expected_roles: [trim, map_reads, call_variants, profile_taxonomic, phylogeny]
+    red_flag_missing: []
+    typical_outputs: [strain_profile, variant_calls, phylogenetic_tree]
+
+  - id: functional_mining
+    label: Functional mining
+    description: Targeted search for a functional class — AMR, BGCs, specific pathways — rather than whole-community description.
+    required_roles: []
+    expected_roles: [assemble, predict_genes, annotate_function, detect_amr, detect_bgc, quantify]
+    red_flag_missing: []
+    typical_outputs: [amr_profile, biosynthetic_gene_clusters, gene_annotations]
+
+  - id: ecological_analysis_only
+    label: Downstream ecology only
+    description: >
+      Starts from an existing feature table. Common in re-analysis papers and ecology-heavy work.
+      Valuable because these chains carry the field's statistical practice with none of the upstream noise.
+    required_roles: []
+    expected_roles: [normalize, diversity, ordination, differential_abundance, correlate, model, visualize]
+    red_flag_missing: []
+    typical_outputs: [diversity_metrics, ordination, differential_abundance_table, correlation_network, figures]
+
+  - id: benchmark
+    label: Benchmark / comparison study
+    description: >
+      Papers whose contribution is comparing tools at one role. They do not supply a reusable chain,
+      but they are the field's evidence base for substitution decisions — catalogued and linked via
+      `provenance.related.benchmarks`.
+    required_roles: []
+    expected_roles: []
+    red_flag_missing: []
+    typical_outputs: [figures]

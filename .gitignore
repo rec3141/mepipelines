@@ -1,0 +1,14 @@
+.venv/
+__pycache__/
+*.pyc
+.DS_Store
+.env
+
+# Ingest cache — raw API responses and cloned repos, keyed by source ID.
+# Re-fetchable by design; never committed.
+ingest/.cache/
+extract/.cache/
+
+# Compiled outputs. catalog/workflows/*.yaml is the source of truth.
+catalog/catalog.json
+catalog/catalog.sqlite
