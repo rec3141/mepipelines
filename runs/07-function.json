@@ -1,0 +1,1440 @@
+[
+  {
+    "paper": {
+      "id": "PPR1186430",
+      "doi": "10.21203/rs.3.rs-9463803/v1",
+      "title": "Diverse assimilation pathways drive carbon fixation in the global ocean",
+      "authors": "Baltar F, Gonz\u00e1lez J.",
+      "date": "2026-05-06",
+      "journal": "Research Square",
+      "is_open_access": true
+    },
+    "methods_chars": 10540,
+    "chain": {
+      "completeness": "sketch",
+      "steps": [
+        {
+          "order": 0,
+          "role": "retrieve",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "The OM-RGC.v2 sequences, retrieved from https://www.ocean-microbiome.org",
+          "_matched": null
+        },
+        {
+          "order": 1,
+          "role": "predict_genes",
+          "tool_raw": "Prodigal",
+          "version": "2.6.3",
+          "params": null,
+          "database": null,
+          "evidence": "The OM-RGC.v2 sequences, retrieved from https://www.ocean-microbiome.org, were translated with Prodigal , version 2.6.3.",
+          "_matched": "prodigal"
+        },
+        {
+          "order": 2,
+          "role": "classify_genomes",
+          "tool_raw": "GTDB-Tk",
+          "version": "2.3.2",
+          "params": null,
+          "database": "release 214",
+          "evidence": "Prokaryotic genomes were classified with the GTDB Toolkit (GTDB-Tk) version 2.3.2 and database release 214 to assign a taxonomic label to the peptides from the genome database.",
+          "_matched": "gtdbtk"
+        },
+        {
+          "order": 3,
+          "role": "annotate_function",
+          "tool_raw": "HMMER",
+          "version": "3.4",
+          "params": null,
+          "database": "KOfam",
+          "evidence": "4-Hydroxybutyryl-CoA dehydratase in the 3-hydroxypropionate/4-hydroxybutyrate and dicarboxylate-hydroxybutyrate cycles was identified with K14534 using HMMER version 3.4 and the adaptive score threshold .",
+          "_matched": "hmmer"
+        },
+        {
+          "order": 4,
+          "role": "annotate_function",
+          "tool_raw": "BLASTP",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "a first search was carried out by BLASTP of all translated metatranscriptome and metagenome sequences and a relaxed searching parameter (minimum bitscore of 50).",
+          "_matched": "blast"
+        },
+        {
+          "order": 5,
+          "role": "phylogeny",
+          "tool_raw": "PaPaRa",
+          "version": "2.5",
+          "params": null,
+          "database": null,
+          "evidence": "OM-RGC.v2 peptides were aligned with the aligned reference sequences using the package PaPaRa version 2.5.",
+          "_matched": null
+        },
+        {
+          "order": 6,
+          "role": "phylogeny",
+          "tool_raw": "EPA-ng",
+          "version": "0.3.8",
+          "params": null,
+          "database": null,
+          "evidence": "A maximum likelihood placement was carried out with EPA-ng , version 0.3.8",
+          "_matched": null
+        },
+        {
+          "order": 7,
+          "role": "phylogeny",
+          "tool_raw": "IQ-TREE",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "with an amino acid substitution model predicted with IQ-TREE.",
+          "_matched": "iqtree"
+        },
+        {
+          "order": 8,
+          "role": "custom",
+          "tool_raw": "gappa",
+          "version": "0.9.0",
+          "params": null,
+          "database": null,
+          "evidence": "Finally, the jplace file was converted into a newick text file using gappa , version 0.9.0.",
+          "_matched": null
+        },
+        {
+          "order": 9,
+          "role": "filter_features",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Placed sequences with branch lengths longer than the longest distance between all pairs of sequences on the reference tree were removed (<1% of the sequences).",
+          "_matched": null
+        },
+        {
+          "order": 10,
+          "role": "custom",
+          "tool_raw": "gappa",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "the sum of the \u2018like weight ratio\u2019 was first normalized with gappa (gappat edit filter\u2013normalize-before)",
+          "_matched": null
+        },
+        {
+          "order": 11,
+          "role": "taxonomy_assign",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "the taxonomy was chosen as the lowest taxonomic rank that had a sum of \u2018like weight ratio\u2019 \u226580%.",
+          "_matched": null
+        },
+        {
+          "order": 12,
+          "role": "visualize",
+          "tool_raw": "iToL",
+          "version": "7",
+          "params": null,
+          "database": null,
+          "evidence": "The taxonomic assignment and placement of the peptides were visually inspected with iToL , version 7 .",
+          "_matched": "itol"
+        },
+        {
+          "order": 13,
+          "role": "normalize",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "gene abundance was normalized by gene length and relative to housekeeping genes",
+          "_matched": null
+        },
+        {
+          "order": 14,
+          "role": "ordination",
+          "tool_raw": "scikit-learn MDS",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Non-metric multidimensional scaling (NMDS) was applied to square-root-transformed normalized metatranscriptomic abundances of the DIC-assimilation pathways. Bray-Curtis dissimilarities were calculated and subjected to NMDS (scikit-learn MDS, metric=False, 2-D, 20 starts, 300 iterations).",
+          "_matched": null
+        },
+        {
+          "order": 15,
+          "role": "ordination",
+          "tool_raw": "PERMANOVA",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Group significance was tested with PERMANOVA (999 permutations).",
+          "_matched": null
+        },
+        {
+          "order": 16,
+          "role": "correlate",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Pairwise Spearman rank correlations between each pathway and each environmental variable were computed in 5000 non-parametric bootstrap resamples (rows resampled with replacement).",
+          "_matched": null
+        }
+      ],
+      "source": "methods_text"
+    },
+    "provenance": {
+      "model": "local:google/gemma-4-26b-a4b",
+      "prompt_version": "claimed_v1"
+    },
+    "stats": {
+      "completion_tokens": 1624,
+      "reasoning_tokens": 0,
+      "elapsed_s": 21.78
+    },
+    "tools_known": [
+      "Prodigal",
+      "GTDB-Tk",
+      "HMMER",
+      "BLASTP",
+      "IQ-TREE",
+      "iToL"
+    ],
+    "tools_unknown": [
+      "PaPaRa",
+      "EPA-ng",
+      "gappa",
+      "gappa",
+      "scikit-learn MDS",
+      "PERMANOVA"
+    ]
+  },
+  {
+    "paper": {
+      "id": "PPR1044143",
+      "doi": "10.1101/2025.06.30.662282",
+      "title": "Bacterial extracellular vesicles exhibit distinct functional potential across the biogeographic provinces of the South Pacific Ocean",
+      "authors": "Fadeev E, Orel N, Tinta T, Afjehi-Sadat L, Liu H, Browning TJ, Yuan Z, Achterberg EP, Biller SJ, Sher DJ, Herndl GJ.",
+      "date": "2025-06-30",
+      "journal": "bioRxiv",
+      "is_open_access": true
+    },
+    "methods_chars": 10988,
+    "chain": {
+      "completeness": "sketch",
+      "steps": [
+        {
+          "order": 0,
+          "role": "custom",
+          "tool_raw": "snakemake",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "The sequences from all samples were subject to the snakemake () metagenomic workflow in Anvi\u2019o v8 ().",
+          "_matched": null
+        },
+        {
+          "order": 1,
+          "role": "qc_raw",
+          "tool_raw": "illumina-utils",
+          "version": "2.13",
+          "params": null,
+          "database": null,
+          "evidence": "the raw FASTQ files were subject to quality control by \u2018illumina-utils\u2019 v2.13 ()",
+          "_matched": null
+        },
+        {
+          "order": 2,
+          "role": "profile_taxonomic",
+          "tool_raw": "KrakenUniq",
+          "version": "1.0.4",
+          "params": null,
+          "database": null,
+          "evidence": "and taxonomic classification using KrakenUniq v1.0.4 ()",
+          "_matched": "kraken2"
+        },
+        {
+          "order": 3,
+          "role": "visualize",
+          "tool_raw": "pavian",
+          "version": "1.2.1",
+          "params": null,
+          "database": null,
+          "evidence": "and analysed using R package \u2018pavian\u2019 v1.2.1 ().",
+          "_matched": null
+        },
+        {
+          "order": 4,
+          "role": "assemble",
+          "tool_raw": "MEGAHIT",
+          "version": "1.2.9",
+          "params": null,
+          "database": null,
+          "evidence": "Then the reads were assembled using MEGAHIT v1.2.9 ()",
+          "_matched": "megahit"
+        },
+        {
+          "order": 5,
+          "role": "predict_genes",
+          "tool_raw": "Prodigal",
+          "version": "2.6.3",
+          "params": null,
+          "database": null,
+          "evidence": "and the gene calling was performed using Prodigal v2.6.3 ().",
+          "_matched": "prodigal"
+        },
+        {
+          "order": 6,
+          "role": "taxonomy_assign",
+          "tool_raw": "Kaiju",
+          "version": "1.9.2",
+          "params": null,
+          "database": "NCBI RefSeq",
+          "evidence": "Taxonomic affiliation of the protein coding genes was estimated using Kaiju v1.9.2 () against the NCBI RefSeq database",
+          "_matched": "kaiju"
+        },
+        {
+          "order": 7,
+          "role": "taxonomy_assign",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": "NCBI nr",
+          "evidence": "followed by classification of sequences with unknown taxonomic affiliation against the NCBI nr database",
+          "_matched": null
+        },
+        {
+          "order": 8,
+          "role": "annotate_function",
+          "tool_raw": "InterProScan",
+          "version": "5.66",
+          "params": null,
+          "database": "InterPro v98, NCBIfam v17.0, and Pfam v37",
+          "evidence": "Functional annotation of the protein coding genes was carried out against InterPro v98 (), NCBIfam v17.0 (Wenjun ), and Pfam v37 () databases using InterProScan v5.66 ()",
+          "_matched": "interproscan"
+        },
+        {
+          "order": 9,
+          "role": "annotate_function",
+          "tool_raw": "BLASTp",
+          "version": null,
+          "params": null,
+          "database": "NCBI RefSeq",
+          "evidence": "The unidentified proteins sequences with no hits, were assigned to their taxonomy and function using BLASTp () best-hit approach against NCBI RefSDef database",
+          "_matched": "blast"
+        },
+        {
+          "order": 10,
+          "role": "predict_genes",
+          "tool_raw": "DeepLoc",
+          "version": "2.0",
+          "params": null,
+          "database": null,
+          "evidence": "Protein sub-cellular localization predictions were established using DeepLoc v2.0 ().",
+          "_matched": null
+        },
+        {
+          "order": 11,
+          "role": "annotate_function",
+          "tool_raw": "PSIBLAST",
+          "version": null,
+          "params": "{identity: '> 30%', e-value: '< 0.001', bit_score: '> 50'}",
+          "database": "Transporter Classification Database (TCDB)",
+          "evidence": "Porins and TonB-dependent receptors were further classified using PSIBLAST () against the Transporter Classification Database (TCDB) (), best hit was defined based on identity > 30%, e-value < 0.001 and bit score > 50.",
+          "_matched": null
+        },
+        {
+          "order": 12,
+          "role": "build_gene_catalog",
+          "tool_raw": "CD-HIT",
+          "version": "4.6.881",
+          "params": "{similarity: '99%'}",
+          "database": null,
+          "evidence": "bacterial protein coding genes were clustered at 97% similarity using CD-HIT v4.6.881 ()",
+          "_matched": "cd-hit"
+        },
+        {
+          "order": 13,
+          "role": "custom",
+          "tool_raw": "Proteome Discoverer",
+          "version": "2.2.0.338",
+          "params": "{enzyme: 'trypsin', fragment_mass_tolerance: '0.8 Da', max_missed_cleavages: 2, fixed_modifications: 'carbamidomethyl (Cys)', optional_modifications: 'oxidation (Met)'}",
+          "database": null,
+          "evidence": "The MS raw files of proteins extracted from the bacterial cells and the BEVs were processed using the Spectrum Files RC node in Proteome Discoverer v2.2.0.338 (ThermoFisher Scientific, MA, USA) and searched using SEQUEST-HT against the bacterial protein coding genes from the co-assembled metagenome.",
+          "_matched": null
+        },
+        {
+          "order": 14,
+          "role": "custom",
+          "tool_raw": "Percolator",
+          "version": null,
+          "params": "{max_delta_Cn: 0.6, max_rank: 0, FDR: 0.05}",
+          "database": null,
+          "evidence": "Percolator parameters were as follows: max. delta Cn: 0.6, max. rank: 0, validation based on q-value, false discovery rate (calculated by automatic decoy searches) 0.05.",
+          "_matched": null
+        },
+        {
+          "order": 15,
+          "role": "differential_abundance",
+          "tool_raw": "DEqMS",
+          "version": "1.22.0",
+          "params": "{min_samples: 2, absolute_log2_fold_change: '> 1', adjusted_p_value: '< 0.1'}",
+          "database": null,
+          "evidence": "Protein enrichment analysis was performed using the R package \u2018DEqMS\u2019 v1.22.0 (). Only those proteins were included that were observed in at least two samples in each fraction. The criteria for a significantly enriched protein were an absolute log2 fold change > 1 and adjusted p-value < 0.1.",
+          "_matched": null
+        },
+        {
+          "order": 16,
+          "role": "visualize",
+          "tool_raw": "ggplot2",
+          "version": "3.5.1",
+          "params": null,
+          "database": null,
+          "evidence": "All figures were generated using the R package ggplot2 v3.5.1 ().",
+          "_matched": "ggplot2"
+        }
+      ],
+      "source": "methods_text"
+    },
+    "provenance": {
+      "model": "local:google/gemma-4-26b-a4b",
+      "prompt_version": "claimed_v1"
+    },
+    "stats": {
+      "completion_tokens": 1877,
+      "reasoning_tokens": 0,
+      "elapsed_s": 25.85
+    },
+    "tools_known": [
+      "KrakenUniq",
+      "MEGAHIT",
+      "Prodigal",
+      "Kaiju",
+      "InterProScan",
+      "BLASTp",
+      "CD-HIT",
+      "ggplot2"
+    ],
+    "tools_unknown": [
+      "snakemake",
+      "illumina-utils",
+      "pavian",
+      "DeepLoc",
+      "PSIBLAST",
+      "Proteome Discoverer",
+      "Percolator",
+      "DEqMS"
+    ]
+  },
+  {
+    "paper": {
+      "id": "PPR1189098",
+      "doi": "10.21203/rs.3.rs-9474472/v1",
+      "title": "Donor Microbiota Metabolic Capacity Determines Engraftment Dynamics and Modulates Gut\u2013Brain Signaling in Recipient Mice",
+      "authors": "Farzi A, Durdevic M, Fellendorf F, Schimmel P, Kuehnast T, Bukowski-Thall G, Gorkiewicz S, Ip CK, Habisch H, Fischer S, M\u00f6rkl S, Wagner-Skacel J, Bengesser S, Lenger M, Dalkner N, Hoegenauer C, Madl T, Moissl-Eichinger C, Gorkiewicz G, Reininghaus E.",
+      "date": "2026-05-11",
+      "journal": "Research Square",
+      "is_open_access": true
+    },
+    "methods_chars": 9315,
+    "chain": {
+      "completeness": "sketch",
+      "steps": [
+        {
+          "order": 0,
+          "role": "trim",
+          "tool_raw": "DADA2 denoise-pyro",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Initial steps included quality filtering, denoising, and chimera removal using the DADA2 denoise-pyro plugin. To ensure high-quality amplicon sequence variants (ASVs), all reads were trimmed by 15 bases from the 5' end and truncated to 220 bases at the 3' end.",
+          "_matched": "dada2"
+        },
+        {
+          "order": 1,
+          "role": "denoise",
+          "tool_raw": "DADA2 denoise-pyro",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Initial steps included quality filtering, denoising, and chimera removal using the DADA2 denoise-pyro plugin.",
+          "_matched": "dada2"
+        },
+        {
+          "order": 2,
+          "role": "chimera_removal",
+          "tool_raw": "DADA2 denoise-pyro",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Initial steps included quality filtering, denoising, and chimera removal using the DADA2 denoise-pyro plugin.",
+          "_matched": "dada2"
+        },
+        {
+          "order": 3,
+          "role": "taxonomy_assign",
+          "tool_raw": "Naive Bayes classifier",
+          "version": null,
+          "params": null,
+          "database": "SILVA ribosomal RNA database version 138",
+          "evidence": "Taxonomic assignment of ASVs was carried out using a Naive Bayes classifier trained on the SILVA ribosomal RNA database (version 138)",
+          "_matched": null
+        },
+        {
+          "order": 4,
+          "role": "phylogeny",
+          "tool_raw": "align-to-tree-mafft-fasttree pipeline",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Phylogenetic tree construction was performed using the align-to-tree-mafft-fasttree pipeline.",
+          "_matched": "mafft"
+        },
+        {
+          "order": 5,
+          "role": "model",
+          "tool_raw": "MICOM",
+          "version": "0.37",
+          "params": null,
+          "database": "AGORA database (v201) and McMurGut database",
+          "evidence": "Microbial interactions and metabolic production within the community were modeled using MICOM (v0.37)",
+          "_matched": "micom"
+        },
+        {
+          "order": 6,
+          "role": "differential_abundance",
+          "tool_raw": "mp_diff_analysis function from the MicrobiotaProcess R package",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Differentially abundant metabolites were identified using the mp_diff_analysis function from the MicrobiotaProcess R package.",
+          "_matched": null
+        },
+        {
+          "order": 7,
+          "role": "custom",
+          "tool_raw": "MetaboAnalyst",
+          "version": "6.0",
+          "params": null,
+          "database": null,
+          "evidence": "These metabolites were further analyzed with the web-based analysis platform MetaboAnalyst (v6.0) to evaluate their involvement in metabolic pathways and to compare metabolic activity between groups",
+          "_matched": null
+        },
+        {
+          "order": 8,
+          "role": "visualize",
+          "tool_raw": "ggplot2 and visNetwork",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Final visualizations, including microbe-metabolite interaction networks, were generated in R using the ggplot2 and visNetwork packages",
+          "_matched": "ggplot2"
+        }
+      ],
+      "source": "methods_text"
+    },
+    "provenance": {
+      "model": "local:google/gemma-4-26b-a4b",
+      "prompt_version": "claimed_v1"
+    },
+    "stats": {
+      "completion_tokens": 928,
+      "reasoning_tokens": 0,
+      "elapsed_s": 12.5
+    },
+    "tools_known": [
+      "DADA2 denoise-pyro",
+      "DADA2 denoise-pyro",
+      "DADA2 denoise-pyro",
+      "align-to-tree-mafft-fasttree pipeline",
+      "MICOM",
+      "ggplot2 and visNetwork"
+    ],
+    "tools_unknown": [
+      "Naive Bayes classifier",
+      "mp_diff_analysis function from the MicrobiotaProcess R package",
+      "MetaboAnalyst"
+    ]
+  },
+  {
+    "paper": {
+      "id": "PPR1230368",
+      "doi": "10.64898/2025.12.23.696296",
+      "title": "Methanotrophic acetogenesis drives a novel pathway of arsenic mobilization in reducing groundwaters",
+      "authors": "Bassil N, Xiu W, Richards L, van Dongen B, Polya D, Guo H, Probst A, Lloyd J.",
+      "date": "2025-12-24",
+      "journal": "bioRxiv",
+      "is_open_access": true
+    },
+    "methods_chars": 7231,
+    "chain": {
+      "completeness": "sketch",
+      "steps": [
+        {
+          "order": 0,
+          "role": "trim",
+          "tool_raw": "Fastp",
+          "version": "0.19.7",
+          "params": null,
+          "database": null,
+          "evidence": "Raw reads were trimmed and quality-filtered using Fastp (v0.19.7)",
+          "_matched": "fastp"
+        },
+        {
+          "order": 1,
+          "role": "assemble",
+          "tool_raw": "metaSPAdes",
+          "version": "3.15.4",
+          "params": "--k-list 21, 33, 55, 77",
+          "database": null,
+          "evidence": "High-quality reads from single samples were assembled into scaffolds using metaSPAdes version 3.15.4 (--k-list 21, 33, 55, 77)",
+          "_matched": "metaspades"
+        },
+        {
+          "order": 2,
+          "role": "assemble",
+          "tool_raw": "MEGAHIT",
+          "version": "1.2.9",
+          "params": null,
+          "database": null,
+          "evidence": "all-samples were co-assembled utilizing MEGAHIT v1.2.9 with default parameters",
+          "_matched": "megahit"
+        },
+        {
+          "order": 3,
+          "role": "bin",
+          "tool_raw": "metaWRAP",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "The assemblies of each sample and co-assemblies were binned using metaWRAP",
+          "_matched": "metawrap"
+        },
+        {
+          "order": 4,
+          "role": "bin_qc",
+          "tool_raw": "CheckM",
+          "version": "1.0.11",
+          "params": null,
+          "database": null,
+          "evidence": "The contamination and completeness of metagenome-assembled genomes (MAGs) was estimated using CheckM (v.1.0.11)",
+          "_matched": "checkm"
+        },
+        {
+          "order": 5,
+          "role": "dereplicate_genomes",
+          "tool_raw": "dRep",
+          "version": "3.4.0",
+          "params": "-comp 50 -con 10",
+          "database": null,
+          "evidence": "dereplicated at 99% average nucleotide identity using dRep v3.4.0 (-comp 50 -con 10 options)",
+          "_matched": "drep"
+        },
+        {
+          "order": 6,
+          "role": "filter_features",
+          "tool_raw": null,
+          "version": null,
+          "params": "completeness > 50% and contamination \u2264 10%",
+          "database": null,
+          "evidence": "Final good-quality MAGs (completeness > 50% and contamination \u2264 10%) were kept for downstream analysis",
+          "_matched": null
+        },
+        {
+          "order": 7,
+          "role": "classify_genomes",
+          "tool_raw": "GTDB-Tk",
+          "version": "2.1.1",
+          "params": null,
+          "database": "214",
+          "evidence": "including taxonomic assignment using GTDB-Tk v2.1.1 (database release 2\u00a014)",
+          "_matched": "gtdbtk"
+        },
+        {
+          "order": 8,
+          "role": "annotate_function",
+          "tool_raw": "METABOLIC_",
+          "version": "4.0",
+          "params": null,
+          "database": null,
+          "evidence": "metabolic potential annotation (METABOLIC_v4.0) with updated As cycling gene database",
+          "_matched": null
+        },
+        {
+          "order": 9,
+          "role": "visualize",
+          "tool_raw": "iTOL",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Trees of good-quality MAGs were visualized and annotated with Interactive Tree Of Life (iTOL)",
+          "_matched": "itol"
+        },
+        {
+          "order": 10,
+          "role": "visualize",
+          "tool_raw": "TBtools",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Heatmap of metabolic pathways and the MW stores (metabolic weight score) were visualized using TBtools",
+          "_matched": null
+        }
+      ],
+      "source": "methods_text"
+    },
+    "provenance": {
+      "model": "local:google/gemma-4-26b-a4b",
+      "prompt_version": "claimed_v1"
+    },
+    "stats": {
+      "completion_tokens": 1086,
+      "reasoning_tokens": 0,
+      "elapsed_s": 15.12
+    },
+    "tools_known": [
+      "Fastp",
+      "metaSPAdes",
+      "MEGAHIT",
+      "metaWRAP",
+      "CheckM",
+      "dRep",
+      "GTDB-Tk",
+      "iTOL"
+    ],
+    "tools_unknown": [
+      "METABOLIC_",
+      "TBtools"
+    ]
+  },
+  {
+    "paper": {
+      "id": "PPR1227220",
+      "doi": "10.64898/2026.01.30.702831",
+      "title": "Macroecology of microbial performance across Earth\u2019s biomes",
+      "authors": "Rain-Franco A, Andrei A, Pernthaler J.",
+      "date": "2026-01-31",
+      "journal": "bioRxiv",
+      "is_open_access": true
+    },
+    "methods_chars": 8078,
+    "chain": {
+      "completeness": "sketch",
+      "steps": [
+        {
+          "order": 0,
+          "role": "filter_features",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Samples with (i) a minimum of 1000 quality-filtered reads, (ii) at least 3 different OTUs, and (iii) valid biome descriptors in the MAP metadata were further retained for downstream analyses.",
+          "_matched": null
+        },
+        {
+          "order": 1,
+          "role": "filter_features",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Extremely rare OTUs with occurrences <0.01% in single biomes were discarded from downstream analyses.",
+          "_matched": null
+        },
+        {
+          "order": 2,
+          "role": "subsample",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "we first standardized our sampling to the biome with the lowest sample number (plant spermosphere, n=1059). We then randomly selected 1059 samples (without replacement) from each of the 24 biomes",
+          "_matched": null
+        },
+        {
+          "order": 3,
+          "role": "custom",
+          "tool_raw": "multielo",
+          "version": "0.4.0",
+          "params": null,
+          "database": null,
+          "evidence": "We quantified microbial species relative performance in each of the 24 custom-defined MAP biomes using a modified version of Elo-rating for multiplayer ranking, as implemented in multielo v0.4.0",
+          "_matched": null
+        },
+        {
+          "order": 4,
+          "role": "custom",
+          "tool_raw": "MultiElo_switchable.py",
+          "version": null,
+          "params": "--mode \u201cclassic\u201d and \u201ccorrected\u201d",
+          "database": null,
+          "evidence": "Calculations were computed with a custom Python script, MultiElo_switchable.py, available at https://github.com/angelrainf/microbes.bbscore. The script was run using the --mode \u201cclassic\u201d and \u201ccorrected\u201d for Elo-rating and the BB-score estimation, respectively.",
+          "_matched": null
+        },
+        {
+          "order": 5,
+          "role": "diversity",
+          "tool_raw": "vegan",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Richness and Simpson (1-D) diversity were computed using vegan",
+          "_matched": "vegan"
+        },
+        {
+          "order": 6,
+          "role": "correlate",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Associations between biome-level BB-scores and diversity indices (richness, Simpson, Pielou\u2019s evenness) were tested with Spearman\u2019s rank correlation",
+          "_matched": null
+        },
+        {
+          "order": 7,
+          "role": "correlate",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "differences between free-living vs host-associated biomes average BB-scores were assessed with a Wilcoxon rank-sum test.",
+          "_matched": null
+        },
+        {
+          "order": 8,
+          "role": "correlate",
+          "tool_raw": "CooccurrenceAffinity",
+          "version": null,
+          "params": "\u03b1 > 0, p-adjusted < 0.05",
+          "database": null,
+          "evidence": "To determine whether similarity was higher than by chance, we used the maximum likelihood estimation, \u03b1, from the CooccurrenceAffinity R package ( ). Pairs were filtered to those with \u03b1 > 0 (indicating higher similarity than expected by chance), and p-adjusted < 0.05.",
+          "_matched": null
+        },
+        {
+          "order": 9,
+          "role": "custom",
+          "tool_raw": "qgraph",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Transitivity, average path length and small-worldness were calculated using qgraph package",
+          "_matched": null
+        },
+        {
+          "order": 10,
+          "role": "visualize",
+          "tool_raw": "Gephi",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "The final network was visualized in Gephi.",
+          "_matched": "gephi"
+        }
+      ],
+      "source": "methods_text"
+    },
+    "provenance": {
+      "model": "local:google/gemma-4-26b-a4b",
+      "prompt_version": "claimed_v1"
+    },
+    "stats": {
+      "completion_tokens": 1136,
+      "reasoning_tokens": 0,
+      "elapsed_s": 16.05
+    },
+    "tools_known": [
+      "vegan",
+      "Gephi"
+    ],
+    "tools_unknown": [
+      "multielo",
+      "MultiElo_switchable.py",
+      "CooccurrenceAffinity",
+      "qgraph"
+    ]
+  },
+  {
+    "paper": {
+      "id": "PPR1050643",
+      "doi": "10.21203/rs.3.rs-7053203/v1",
+      "title": "Microbial degradation of jellyfish detritus promotes phytoplankton growth in coastal marine ecosystems",
+      "authors": "Tinta T, Fadeev E, Celussi M, Balestra C, Klun K, Mozeti\u010d P, Herndl G.",
+      "date": "2025-07-14",
+      "journal": "Research Square",
+      "is_open_access": true
+    },
+    "methods_chars": 16159,
+    "chain": {
+      "completeness": "sketch",
+      "steps": [
+        {
+          "order": 0,
+          "role": "qc_raw",
+          "tool_raw": "illumina-utils",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Quality control of raw reads was carried out using illumina-utils.",
+          "_matched": null
+        },
+        {
+          "order": 1,
+          "role": "profile_taxonomic",
+          "tool_raw": "Kaiju",
+          "version": null,
+          "params": null,
+          "database": "nr_euk",
+          "evidence": "Taxonomic classification of raw reads was performed using Kaiju against the pre-built database \u2018nr_euk\u2019 generated on 10.05.2023.",
+          "_matched": "kaiju"
+        },
+        {
+          "order": 2,
+          "role": "assemble",
+          "tool_raw": "Megahit",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "The reads from each type of microcosm were pooled and co-assembled using Megahit",
+          "_matched": "megahit"
+        },
+        {
+          "order": 3,
+          "role": "map_reads",
+          "tool_raw": "Bowtie",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "and the reads mapping on the assemblies were carried out using Bowtie.",
+          "_matched": "bowtie2"
+        },
+        {
+          "order": 4,
+          "role": "bin",
+          "tool_raw": "MaxBin2",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "The reconstruction of metagenome assembled genomes (MAGs) was performed using MaxBin2",
+          "_matched": "maxbin2"
+        },
+        {
+          "order": 5,
+          "role": "bin",
+          "tool_raw": "metaBAT2",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "The reconstruction of metagenome assembled genomes (MAGs) was performed using MaxBin2 metaBAT2",
+          "_matched": "metabat2"
+        },
+        {
+          "order": 6,
+          "role": "bin",
+          "tool_raw": "CONCOCT",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "The reconstruction of metagenome assembled genomes (MAGs) was performed using MaxBin2 metaBAT2 and CONCOCT",
+          "_matched": "concoct"
+        },
+        {
+          "order": 7,
+          "role": "bin_refine",
+          "tool_raw": "MetaWrap",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "and then refined by MetaWrap.",
+          "_matched": "metawrap"
+        },
+        {
+          "order": 8,
+          "role": "bin_qc",
+          "tool_raw": "anvi-estimate-metabolism",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Using the program \u2018anvi-estimate-metabolism\u2019 or each MAG, we calculated the degree of completeness for a given KEGG module genomes using the annotation of genes with KEGG orthologs.",
+          "_matched": null
+        },
+        {
+          "order": 9,
+          "role": "custom",
+          "tool_raw": "anvi-compute-metabolic-enrichment",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "The program \u2018anvi-compute-metabolic-enrichment\u2019 as then used to determine whether a given metabolic module was enriched in certain microcosms.",
+          "_matched": null
+        },
+        {
+          "order": 10,
+          "role": "visualize",
+          "tool_raw": "ggplot2",
+          "version": "3.5.1",
+          "params": null,
+          "database": null,
+          "evidence": "All figures were generated using the R package \u2018ggplot2\u2019 v3.5.1.",
+          "_matched": "ggplot2"
+        }
+      ],
+      "source": "methods_text"
+    },
+    "provenance": {
+      "model": "local:google/gemma-4-26b-a4b",
+      "prompt_version": "claimed_v1"
+    },
+    "stats": {
+      "completion_tokens": 974,
+      "reasoning_tokens": 0,
+      "elapsed_s": 13.75
+    },
+    "tools_known": [
+      "Kaiju",
+      "Megahit",
+      "Bowtie",
+      "MaxBin2",
+      "metaBAT2",
+      "CONCOCT",
+      "MetaWrap",
+      "ggplot2"
+    ],
+    "tools_unknown": [
+      "illumina-utils",
+      "anvi-estimate-metabolism",
+      "anvi-compute-metabolic-enrichment"
+    ]
+  },
+  {
+    "paper": {
+      "id": "PPR1004358",
+      "doi": "10.21203/rs.3.rs-6422717/v1",
+      "title": "Coccolithophore blooms boost particle fluxes in the Nordic Seas",
+      "authors": "Rasse R, Neukermans G.",
+      "date": "2025-04-16",
+      "journal": "Research Square",
+      "is_open_access": true
+    },
+    "methods_chars": 7532,
+    "chain": {
+      "completeness": "sketch",
+      "steps": [
+        {
+          "order": 0,
+          "role": "retrieve",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "We used the GlobColour (https://hermes.acri.fr) daily PIC satellite product with a spatial resolution of 4 km.",
+          "_matched": null
+        },
+        {
+          "order": 1,
+          "role": "subsample",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "We extracted time series of satellite PIC that matched with the sampling time and location of the floats following Terrats et al. 2020. Briefly, matchups of satellite PIC were averaged for temporal and spatial windows of 9 days and 20 x 20 km.",
+          "_matched": null
+        },
+        {
+          "order": 2,
+          "role": "custom",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Coccolithophore bloom phenology metrics (bloom start, peak, and end) were calculated as described in Hopkins et al., 2015 for defining the entire blooming periods.",
+          "_matched": null
+        },
+        {
+          "order": 3,
+          "role": "custom",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "To this end, we first applied a smoothing function to each profile of bbp and chl to extract bbpS and chlS, respectively.",
+          "_matched": null
+        },
+        {
+          "order": 4,
+          "role": "filter_features",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "The bbpS and bbpS:chlS values, with thresholds of \u2265 0.0033 m\u2212 1 and \u2265 0.0063 m2 mg\u2212 1 at the surface, were used to identify particle assemblages with a very high content of PIC per unit organic matter",
+          "_matched": null
+        },
+        {
+          "order": 5,
+          "role": "custom",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "We partitioned the bbp signal due to bbps and large particles (bbpL) by applying a smoothing function with window sizes of 3 and 7 points to each profile with 10, and 3-m vertical resolution, respectively.",
+          "_matched": null
+        },
+        {
+          "order": 6,
+          "role": "filter_features",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "We excluded residual values above 0.0028 m\u2212 1 likely caused by zooplankton.",
+          "_matched": null
+        }
+      ],
+      "source": "methods_text"
+    },
+    "provenance": {
+      "model": "local:google/gemma-4-26b-a4b",
+      "prompt_version": "claimed_v1"
+    },
+    "stats": {
+      "completion_tokens": 743,
+      "reasoning_tokens": 0,
+      "elapsed_s": 11.07
+    },
+    "tools_known": [],
+    "tools_unknown": []
+  },
+  {
+    "paper": {
+      "id": "PPR1226278",
+      "doi": "10.64898/2026.01.15.699719",
+      "title": "A protein language model unveils the <i>E. coli</i> pangenome functional landscape regulating host proteostasis",
+      "authors": "Martinez-Martinez D, Aprodu A, Backes C, Ottens F, Ze\u010di\u0107 A, Doherty HM, Widder J, Ivan A, Game L, Kaneva I, Roumellioti G, Montoya A, Kramer H, Hoppe T, Cabreiro F.",
+      "date": "2026-01-15",
+      "journal": "bioRxiv",
+      "is_open_access": true
+    },
+    "methods_chars": 7984,
+    "chain": {
+      "completeness": "sketch",
+      "steps": [
+        {
+          "order": 0,
+          "role": "demultiplex",
+          "tool_raw": "DRAGEN GenerateFastQ",
+          "version": "3.7.4",
+          "params": null,
+          "database": null,
+          "evidence": "Sequences were demultiplexed using DRAGEN GenerateFastQ (v3.7.4) by using the i5/i7 barcodes to separate the different libraries.",
+          "_matched": null
+        },
+        {
+          "order": 1,
+          "role": "demultiplex",
+          "tool_raw": "idemux",
+          "version": "0.1.6",
+          "params": null,
+          "database": null,
+          "evidence": "Each library was further demultiplexed by using idemux (v.0.1.6) and by using each library and sample i1 barcode identifiers.",
+          "_matched": null
+        },
+        {
+          "order": 2,
+          "role": "trim",
+          "tool_raw": "trimmomatic",
+          "version": "0.39",
+          "params": null,
+          "database": null,
+          "evidence": "Sequences were quality-cleaned with trimmomatic (v.0.39), removing Illumina adapters and dropping sequences below 65 nucleotides.",
+          "_matched": "trimmomatic"
+        },
+        {
+          "order": 3,
+          "role": "filter_features",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Outlier samples with extremely low read count were discarded at this point.",
+          "_matched": null
+        },
+        {
+          "order": 4,
+          "role": "filter_features",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Quality-filtered reads were then filtered to exclude samples with less than 4\u00d710^5 reads",
+          "_matched": null
+        },
+        {
+          "order": 5,
+          "role": "map_reads",
+          "tool_raw": "salmon",
+          "version": "1.10.2",
+          "params": null,
+          "database": "Ensembl (version 111)",
+          "evidence": "Reads have been mapped to the cDNA of the C. elegans reference genome in Enild Ensembl (version 111) with salmon (v.1.10.2)",
+          "_matched": "salmon"
+        },
+        {
+          "order": 6,
+          "role": "custom",
+          "tool_raw": "tximport",
+          "version": "1.28",
+          "params": null,
+          "database": null,
+          "evidence": "to build the counts matrix and then imported to R with tximport (v.1.28).",
+          "_matched": null
+        },
+        {
+          "order": 7,
+          "role": "differential_abundance",
+          "tool_raw": "DESeq2",
+          "version": "1.40.1",
+          "params": null,
+          "database": null,
+          "evidence": "were analyzed with DESeq2 (v.1.40.1) using the phylogroup as the main group and using the library information to avoid possible batch effect",
+          "_matched": "deseq2"
+        },
+        {
+          "order": 8,
+          "role": "filter_features",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Genes that had less than 10 reads in total were discarded.",
+          "_matched": null
+        },
+        {
+          "order": 9,
+          "role": "ordination",
+          "tool_raw": "DESeq2",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "PCA calculations were performed with the plotPCA function from DESeq2 with the data transformed with the vst function.",
+          "_matched": "deseq2"
+        },
+        {
+          "order": 10,
+          "role": "filter_features",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Outliers from the PCA plot from normalized counts but not batch-corrected were removed from the analysis.",
+          "_matched": null
+        },
+        {
+          "order": 11,
+          "role": "custom",
+          "tool_raw": "limma",
+          "version": "3.64.1",
+          "params": null,
+          "database": null,
+          "evidence": "Batch correction was performed with the removeBatchEffect function from limma (v.3.64.1).",
+          "_matched": "limma"
+        },
+        {
+          "order": 12,
+          "role": "custom",
+          "tool_raw": "scran",
+          "version": "1.36.0",
+          "params": null,
+          "database": null,
+          "evidence": "Per-gene variance was modelled with the function modelGeneVar from the scran package (v.1.36.0).",
+          "_matched": null
+        },
+        {
+          "order": 13,
+          "role": "retrieve",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": "WormCat",
+          "evidence": "the curated database from WormCat containing categories at level 1 to 3 was downloaded (Nov-2021 version).",
+          "_matched": null
+        },
+        {
+          "order": 14,
+          "role": "retrieve",
+          "tool_raw": null,
+          "version": "16.2.0",
+          "params": null,
+          "database": "NCBI",
+          "evidence": "The metadata was downloaded on January 11th, 2024, and was downloaded with the NCBI dataset download tool (v. 16.2.0).",
+          "_matched": null
+        },
+        {
+          "order": 15,
+          "role": "filter_features",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Genomes that were not at the assembly level of \u201cchromosome\u201d, \u201ccomplete genome\u201d or \u201cscaffold\u201d were removed.",
+          "_matched": null
+        },
+        {
+          "order": 16,
+          "role": "filter_features",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "The scaffold N50 was used to filter out genomes with a value lower than 150K.",
+          "_matched": null
+        },
+        {
+          "order": 17,
+          "role": "bin_qc",
+          "tool_raw": "CheckM",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "CheckM metrics were used to remove genomes with a completeness lower than 95% and a contamination higher than 1%.",
+          "_matched": "checkm"
+        },
+        {
+          "order": 18,
+          "role": "custom",
+          "tool_raw": "mash",
+          "version": "1.1",
+          "params": null,
+          "database": null,
+          "evidence": "Mash distances (mash v. 1.1) were calculated pairwise between all genomes, and those strains whose mean distances were higher than 0.05 were removed.",
+          "_matched": "mash"
+        },
+        {
+          "order": 19,
+          "role": "filter_features",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Finally, genomes with a sequence length greater than 7Mbp, and/or genomes with a contig count higher than 300 were removed.",
+          "_matched": null
+        },
+        {
+          "order": 20,
+          "role": "taxonomy_assign",
+          "tool_raw": "EzClermont",
+          "version": "0.7.0",
+          "params": null,
+          "database": null,
+          "evidence": "Phylogroups were assigned with the EzClermont v. 0.7.0 tool",
+          "_matched": null
+        },
+        {
+          "order": 21,
+          "role": "filter_features",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "genomes belonging to class cryptic, U/cryptic and fails were discarded.",
+          "_matched": null
+        },
+        {
+          "order": 22,
+          "role": "annotate_function",
+          "tool_raw": "Bakta",
+          "version": "1.9.3",
+          "params": null,
+          "database": "v. 5.1",
+          "evidence": "Genome annotation was performed with Bakta (v. 1.9.3) using the full database (v. 5.1)",
+          "_matched": "bakta"
+        },
+        {
+          "order": 23,
+          "role": "pangenome",
+          "tool_raw": "Panaroo",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "The pangenome was analyzed with Panaroo, selecting a strict clean mode and removing invalid genes.",
+          "_matched": "panaroo"
+        },
+        {
+          "order": 24,
+          "role": "custom",
+          "tool_raw": "biopython",
+          "version": "1.84",
+          "params": null,
+          "database": null,
+          "evidence": "The reference sequences from the gene families were then translated into proteins (using a custom Python script with biopyton v. 1.84).",
+          "_matched": null
+        },
+        {
+          "order": 25,
+          "role": "ordination",
+          "tool_raw": "scikit-learn",
+          "version": "1.5.1",
+          "params": null,
+          "database": null,
+          "evidence": "Gene presence/absence matrix was used to calculate the Principal Component Analysis shown in the main text by using the PCA function from scikit-learn v. 1.5.1.",
+          "_matched": null
+        },
+        {
+          "order": 26,
+          "role": "phylogeny",
+          "tool_raw": "mafft",
+          "version": "7.526",
+          "params": null,
+          "database": null,
+          "evidence": "The alignment was done using mafft (v. 7. 526)",
+          "_matched": "mafft"
+        },
+        {
+          "order": 27,
+          "role": "phylogeny",
+          "tool_raw": "IQ-Tree",
+          "version": "2.3.6",
+          "params": null,
+          "database": null,
+          "evidence": "and the tree was constructed with IQ-Tree (v. 2.3.6) with the GTR+I+G substitution model.",
+          "_matched": "iqtree"
+        }
+      ],
+      "source": "methods_text"
+    },
+    "provenance": {
+      "model": "local:google/gemma-4-26b-a4b",
+      "prompt_version": "claimed_v1"
+    },
+    "stats": {
+      "completion_tokens": 2596,
+      "reasoning_tokens": 0,
+      "elapsed_s": 32.53
+    },
+    "tools_known": [
+      "trimmomatic",
+      "salmon",
+      "DESeq2",
+      "DESeq2",
+      "limma",
+      "CheckM",
+      "mash",
+      "Bakta",
+      "Panaroo",
+      "mafft",
+      "IQ-Tree"
+    ],
+    "tools_unknown": [
+      "DRAGEN GenerateFastQ",
+      "idemux",
+      "tximport",
+      "scran",
+      "EzClermont",
+      "biopython",
+      "scikit-learn"
+    ]
+  }
+]

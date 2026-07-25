@@ -26,7 +26,7 @@ tools:
   - {id: mothur, name: mothur, kind: suite, roles: [merge_reads, dereplicate, cluster_otu, chimera_removal, taxonomy_assign, diversity, ordination], aliases: [mothur]}
   # Third suite to show the same pattern (after VEBA and BBTools): papers cite the SUBCOMMAND,
   # never the suite. anvi-refine and anvi-pan-genome both went unmatched on real preprints.
-  - {id: anvio, name: anvi'o, kind: suite, roles: [assemble, map_reads, bin, bin_refine, bin_qc, annotate_function, pangenome, visualize], aliases: [anvio, anvi'o, anvi o, anvi-refine, anvi-pan-genome, anvi-gen-contigs-database, anvi-run-hmms, anvi-summarize, anvi-cluster-contigs, anvi-estimate-genome-completeness, anvi-interactive]}
+  - {id: anvio, name: anvi'o, kind: suite, roles: [assemble, map_reads, bin, bin_refine, bin_qc, annotate_function, pangenome, visualize], aliases: [anvio, anvi'o, anvi o, anvi-refine, anvi-pan-genome, anvi-gen-contigs-database, anvi-run-hmms, anvi-summarize, anvi-cluster-contigs, anvi-estimate-genome-completeness, anvi-interactive, anvi-estimate-metabolism, anvi-script-reformat-fasta]}
   - {id: metawrap, name: metaWRAP, kind: suite, roles: [trim, filter_host, assemble, bin, bin_refine, bin_qc, classify_genomes, quantify], aliases: [metawrap, meta-wrap]}
   # VEBA wraps the whole MAG chain behind module names — papers cite "the preprocess.py module",
   # "assembly.py", "binning.py" rather than the tools underneath. Aliasing the modules to the suite
@@ -57,16 +57,24 @@ tools:
   - {id: trimmomatic, name: Trimmomatic, kind: tool, roles: [trim], aliases: [trimmomatic]}
   - {id: cutadapt, name: Cutadapt, kind: tool, roles: [trim, remove_primers, demultiplex], aliases: [cutadapt]}
   - {id: faqcs, name: FaQCs, kind: tool, roles: [trim, qc_raw], aliases: [faqcs]}
+  - {id: sickle, name: Sickle, kind: tool, roles: [trim], aliases: [sickle]}
+  - {id: illumina-utils, name: illumina-utils, kind: tool, roles: [qc_raw, trim, demultiplex], aliases: [illumina-utils, iu-filter-quality-minoche, idemux]}
+  - {id: seqfu, name: SeqFu, kind: tool, roles: [qc_raw], aliases: [seqfu]}
   - {id: trim-galore, name: Trim Galore, kind: tool, roles: [trim], aliases: [trim-galore, trim galore, trimgalore]}
   - {id: chopper, name: Chopper, kind: tool, roles: [trim], aliases: [chopper]}
   - {id: filtlong, name: Filtlong, kind: tool, roles: [trim, subsample], aliases: [filtlong]}
   - {id: nanofilt, name: NanoFilt, kind: tool, roles: [trim], aliases: [nanofilt]}
   - {id: porechop, name: Porechop, kind: tool, roles: [trim, demultiplex], aliases: [porechop, porechop_abi, porechop abi]}
+  - {id: sortmerna, name: SortMeRNA, kind: tool, roles: [filter_features], aliases: [sortmerna]}
+  - {id: bmtagger, name: BMTagger, kind: tool, roles: [filter_host], aliases: [bmtagger, ncbi bmtagger]}
   - {id: hostile, name: Hostile, kind: tool, roles: [filter_host], aliases: [hostile]}
   - {id: seqtk, name: seqtk, kind: tool, roles: [subsample], aliases: [seqtk]}
   - {id: rasusa, name: Rasusa, kind: tool, roles: [subsample], aliases: [rasusa]}
 
   # --- alignment ------------------------------------------------------------
+  - {id: star, name: STAR, kind: tool, roles: [map_reads], aliases: [star, star aligner]}
+  - {id: picard, name: Picard, kind: tool, roles: [map_reads], aliases: [picard, picard tools, markduplicates]}
+  - {id: pysam, name: pysam, kind: library, roles: [map_reads], aliases: [pysam]}
   - {id: bowtie2, name: Bowtie 2, kind: tool, roles: [map_reads, filter_host, quantify], aliases: [bowtie2, bowtie 2, bowtie]}
   - {id: bwa-mem2, name: BWA-MEM2, kind: tool, roles: [map_reads, filter_host], aliases: [bwa-mem2, bwa mem2, bwa-mem, bwa mem, bwa]}
   - {id: minimap2, name: minimap2, kind: tool, roles: [map_reads, filter_host], aliases: [minimap2, minimap]}
@@ -88,6 +96,8 @@ tools:
   - {id: feast, name: FEAST, kind: tool, roles: [model], aliases: [feast]}
   - {id: idtaxa, name: IDTAXA, kind: library, roles: [taxonomy_assign], aliases: [idtaxa, decipher]}
   - {id: rescript, name: RESCRIPt, kind: tool, roles: [taxonomy_assign], aliases: [rescript]}
+  - {id: epa-ng, name: EPA-ng, kind: tool, roles: [phylogeny], aliases: [epa-ng, epang, papara, pplacer]}
+  - {id: gappa, name: gappa, kind: tool, roles: [phylogeny], aliases: [gappa]}
   - {id: sepp, name: SEPP, kind: tool, roles: [phylogeny], aliases: [sepp, q2-fragment-insertion]}
 
   # --- assembly -------------------------------------------------------------
@@ -125,6 +135,7 @@ tools:
   - {id: graphmb, name: GraphMB, kind: tool, roles: [bin], aliases: [graphmb]}
   - {id: das-tool, name: DAS Tool, kind: tool, roles: [bin_refine], aliases: [das-tool, das tool, dastool]}
   - {id: magscot, name: MAGScoT, kind: tool, roles: [bin_refine], aliases: [magscot]}
+  - {id: graphbin, name: GraphBin, kind: tool, roles: [bin_refine], aliases: [graphbin, graphbin2]}
   - {id: binette, name: Binette, kind: tool, roles: [bin_refine], aliases: [binette]}
   - {id: checkm, name: CheckM, kind: tool, roles: [bin_qc, classify_genomes], aliases: [checkm, checkm1]}
   - {id: checkm2, name: CheckM2, kind: tool, roles: [bin_qc], aliases: [checkm2, checkm 2]}
@@ -147,6 +158,10 @@ tools:
   - {id: centrifuge, name: Centrifuge, kind: tool, roles: [profile_taxonomic], aliases: [centrifuge]}
   - {id: kaiju, name: Kaiju, kind: tool, roles: [profile_taxonomic], aliases: [kaiju]}
   - {id: sourmash, name: sourmash, kind: tool, roles: [profile_taxonomic, dereplicate_genomes], aliases: [sourmash]}
+  - {id: singlem, name: SingleM, kind: tool, roles: [profile_taxonomic], aliases: [singlem]}
+  - {id: krakentools, name: KrakenTools, kind: tool, roles: [profile_taxonomic, visualize], aliases: [krakentools, pavian]}
+  - {id: cat-bat, name: CAT/BAT, kind: tool, roles: [classify_genomes, taxonomy_assign], aliases: [cat, bat, cat bat, contig annotation tool]}
+  - {id: taxonkit, name: TaxonKit, kind: tool, roles: [taxonomy_assign], aliases: [taxonkit]}
   - {id: sylph, name: sylph, kind: tool, roles: [profile_taxonomic], aliases: [sylph]}
   - {id: ganon, name: ganon, kind: tool, roles: [profile_taxonomic], aliases: [ganon]}
   - {id: humann, name: HUMAnN, kind: tool, roles: [profile_functional], aliases: [humann, humann2, humann3, humann-n]}
@@ -165,6 +180,9 @@ tools:
   - {id: prodigal, name: Prodigal, kind: tool, roles: [predict_genes], aliases: [prodigal, prodigal-gv, pyrodigal, prodigal_gv]}
   - {id: prokka, name: Prokka, kind: tool, roles: [predict_genes, annotate_function], aliases: [prokka]}
   - {id: bakta, name: Bakta, kind: tool, roles: [predict_genes, annotate_function], aliases: [bakta]}
+  - {id: metabolic, name: METABOLIC, kind: tool, roles: [annotate_function], aliases: [metabolic, metabolic-g, metabolic-c]}
+  - {id: trnascan, name: tRNAscan-SE, kind: tool, roles: [predict_genes], aliases: [trnascan-se, trnascan]}
+  - {id: signalp, name: SignalP, kind: tool, roles: [annotate_function], aliases: [signalp, deeploc, deeptmhmm, tmhmm, wolfpsort, psortb]}
   - {id: dram, name: DRAM, kind: tool, roles: [annotate_function], aliases: [dram, dram v, dram-v]}
   - {id: clusterprofiler, name: clusterProfiler, kind: library, roles: [annotate_function], aliases: [clusterprofiler]}
   - {id: eggnog-mapper, name: eggNOG-mapper, kind: tool, roles: [annotate_function, profile_functional], aliases: [eggnog-mapper, eggnog mapper, emapper, eggnog]}
@@ -191,6 +209,7 @@ tools:
 
   # --- ecology / statistics -------------------------------------------------
   - {id: phyloseq, name: phyloseq, kind: library, roles: [filter_features, normalize, diversity, ordination, visualize], aliases: [phyloseq]}
+  - {id: pairwiseadonis, name: pairwiseAdonis, kind: library, roles: [ordination], aliases: [pairwiseadonis]}
   - {id: vegan, name: vegan, kind: library, roles: [normalize, diversity, ordination], aliases: [vegan, adonis, adonis2, metamds]}
   - {id: ampvis2, name: ampvis2, kind: library, roles: [diversity, ordination, visualize], aliases: [ampvis2, ampvis]}
   - {id: microviz, name: microViz, kind: library, roles: [diversity, ordination, visualize], aliases: [microviz]}
@@ -212,6 +231,7 @@ tools:
   - {id: sparcc, name: SparCC, kind: tool, roles: [correlate], aliases: [sparcc, fastspar]}
   - {id: flashweave, name: FlashWeave, kind: tool, roles: [correlate], aliases: [flashweave]}
   - {id: netcomi, name: NetCoMi, kind: library, roles: [correlate], aliases: [netcomi]}
+  - {id: igraph, name: igraph, kind: library, roles: [correlate, visualize], aliases: [igraph, qgraph]}
   - {id: wgcna, name: WGCNA, kind: library, roles: [correlate], aliases: [wgcna]}
   - {id: randomforest, name: Random forest, kind: library, roles: [model], aliases: [randomforest, random forest, ranger]}
   - {id: mikropml, name: mikropml, kind: library, roles: [model], aliases: [mikropml]}
@@ -220,12 +240,16 @@ tools:
   - {id: valencia, name: VALENCIA, kind: tool, roles: [model], aliases: [valencia]}
 
   # --- specialty ------------------------------------------------------------
+  - {id: iphop, name: iPHoP, kind: tool, roles: [detect_mge], aliases: [iphop]}
+  - {id: pharokka, name: Pharokka, kind: tool, roles: [annotate_function, detect_mge], aliases: [pharokka, phold, phatyp, taxmyphage, phables]}
+  - {id: viralverify, name: viralVerify, kind: tool, roles: [detect_mge], aliases: [viralverify, plasmidverify]}
   - {id: genomad, name: geNomad, kind: tool, roles: [detect_mge], aliases: [genomad, geNomad]}
   - {id: virsorter2, name: VirSorter2, kind: tool, roles: [detect_mge], aliases: [virsorter2, virsorter 2, virsorter]}
   - {id: vibrant, name: VIBRANT, kind: tool, roles: [detect_mge], aliases: [vibrant]}
   - {id: checkv, name: CheckV, kind: tool, roles: [bin_qc, detect_mge], aliases: [checkv]}
   - {id: deepvirfinder, name: DeepVirFinder, kind: tool, roles: [detect_mge], aliases: [deepvirfinder, virfinder]}
   - {id: plasmidfinder, name: PlasmidFinder, kind: tool, roles: [detect_mge], aliases: [plasmidfinder, platon, mob-suite, mobsuite, mob_recon]}
+  - {id: amrplusplus, name: AMR++, kind: tool, roles: [detect_amr], aliases: [amr++, amrplusplus, resistomeanalyzer]}
   - {id: abricate, name: ABRicate, kind: tool, roles: [detect_amr], aliases: [abricate]}
   - {id: amrfinderplus, name: AMRFinderPlus, kind: tool, roles: [detect_amr], aliases: [amrfinderplus, amrfinder, amrfinder+]}
   - {id: rgi, name: RGI / CARD, kind: tool, roles: [detect_amr], aliases: [rgi, card, resistance gene identifier]}
@@ -242,6 +266,8 @@ tools:
   - {id: freebayes, name: FreeBayes, kind: tool, roles: [call_variants], aliases: [freebayes]}
   - {id: snippy, name: Snippy, kind: tool, roles: [call_variants], aliases: [snippy]}
   - {id: gatk, name: GATK, kind: tool, roles: [call_variants], aliases: [gatk, haplotypecaller]}
+  - {id: orthofinder, name: OrthoFinder, kind: tool, roles: [pangenome], aliases: [orthofinder]}
+  - {id: enveomics, name: Enveomics Collection, kind: tool, roles: [bin_qc, dereplicate_genomes], aliases: [enveomics, enveomics collection]}
   - {id: roary, name: Roary, kind: tool, roles: [pangenome], aliases: [roary]}
   - {id: panaroo, name: Panaroo, kind: tool, roles: [pangenome], aliases: [panaroo]}
   - {id: ppanggolin, name: PPanGGOLiN, kind: tool, roles: [pangenome], aliases: [ppanggolin]}

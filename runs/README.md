@@ -11,11 +11,20 @@ non-deterministic, so it would not reproduce the same site).
 reading, no human check, and no `observed` side to diff against. Records earn their way into
 `catalog/workflows/` only after Phase 3 verification and Phase 4 adjudication.
 
-| file | query | yield |
+| file | records | usable chains |
 |---|---|---|
-| `01-amplicon.json` | `microbiome AND amplicon` | 9/20 |
-| `02-mag.json` | `metagenome AND (MAG OR "metagenome-assembled genome" OR binning)` | 9/25 |
-| `03-longread-env.json` | `(nanopore OR "long read" OR soil OR marine) AND (metagenome OR microbiome)` | 12/25 |
+| `01-amplicon.json` | 9 | 8 |
+| `02-mag.json` | 9 | 8 |
+| `03-longread-env.json` | 12 | 10 |
+| `04-community.json` | 7 | 7 |
+| `05-marker.json` | 11 | 11 |
+| `06-ecology.json` | 11 | 11 |
+| `07-function.json` | 8 | 8 |
+| `08-biogeochem.json` | 8 | 8 |
+| `09-host.json` | 8 | 8 |
+
+Queries are recorded in each batch's commit message; the ecology-focused set (04-09) was
+written to avoid the eukaryotic-genome papers that earlier broad queries pulled in.
 
 Yield is bounded by full-text availability, not by extraction: roughly two thirds of Europe PMC
 hits have no retrievable XML, and nothing in the search metadata predicts which. See
