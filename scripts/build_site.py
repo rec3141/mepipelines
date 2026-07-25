@@ -54,6 +54,11 @@ MIN_USES_FOR_CONSENSUS = 3
 # chart, so the page reports when the corpus becomes powerful enough instead of guessing.
 MIN_PER_BUCKET = 6
 
+# Multi-year periods rather than single years. Publication counts are uneven by construction —
+# ingest is stratified by period, and some individual years land 1-2 papers — so per-year buckets
+# fragment a corpus that is perfectly adequate when grouped the way it was sampled.
+PERIOD_YEARS = 3
+
 
 def clean(s: str | None) -> str:
     """Strip inline markup and collapse whitespace. Preprint titles carry <i> tags."""
@@ -137,15 +142,21 @@ def build(records: list[dict]) -> dict:
     roles.sort(key=lambda r: (-r["concentration"], -r["n"]))
 
     # --- temporal ------------------------------------------------------------
-    # Bucket by publication year. Finer buckets are tempting and wrong at this corpus size.
-    buckets = sorted({p["date"][:4] for p in papers if p["date"]})
+    def period(datestr: str) -> str:
+        """Label a date with its multi-year bucket, e.g. '2017-19'."""
+        y = int(datestr[:4])
+        start = y - (y % PERIOD_YEARS)
+        end = start + PERIOD_YEARS - 1
+        return f"{start}-{str(end)[2:]}"
+
+    buckets = sorted({period(p["date"]) for p in papers if p["date"]})
     by_role_bucket: dict = collections.defaultdict(lambda: collections.defaultdict(collections.Counter))
     version_rate = {b: {"withVersion": 0, "total": 0} for b in buckets}
 
     for p in papers:
-        b = p["date"][:4]
-        if not b:
+        if not p["date"]:
             continue
+        b = period(p["date"])
         for st in p["steps"]:
             version_rate[b]["total"] += 1
             if st["version"]:

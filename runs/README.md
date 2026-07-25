@@ -22,13 +22,22 @@ reading, no human check, and no `observed` side to diff against. Records earn th
 | `07-function.json` | 8 | 8 |
 | `08-biogeochem.json` | 8 | 8 |
 | `09-host.json` | 8 | 8 |
+| `10-pub-2016-2018.json` | 18 | 18 |
+| `11-pub-2019-2021.json` | 12 | 12 |
+| `12-pub-2022-2023.json` | 20 | 20 |
+| `13-pub-2024-2025.json` | 20 | 20 |
 
 Queries are recorded in each batch's commit message; the ecology-focused set (04-09) was
 written to avoid the eukaryotic-genome papers that earlier broad queries pulled in.
 
-Yield is bounded by full-text availability, not by extraction: roughly two thirds of Europe PMC
-hits have no retrievable XML, and nothing in the search metadata predicts which. See
-`ingest/europepmc.py`.
+Batches 01-09 are **preprints** (`SRC:"PPR"`), where only 28-40% of hits have retrievable full
+text. Batches 10-13 are the **published open-access literature** (`SRC:"MED"`, via `--published`),
+where availability measured **100%** on a 25-record sample and the pool is ~100x larger
+(97k vs 826 hits on a representative query). Batches 10-13 are also stratified by publication
+period, which is what makes the drift analysis possible.
+
+One caveat inherent to mixing the two: a preprint and its published version are separate Europe PMC
+records, so the same study can in principle appear twice. Dedupe is by record ID, not by work.
 
 Batches overlap — `build_site.py` dedupes by paper ID, so 30 records collapse to 22 papers.
 

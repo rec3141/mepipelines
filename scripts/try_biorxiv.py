@@ -107,7 +107,7 @@ def run_one(paper, client, alias_index, show_methods: bool) -> dict | None:
     print(f"\n{'=' * 78}\n{paper.id}  {paper.date[:10]}\n{paper.title[:76]}\n{'=' * 78}")
 
     try:
-        xml = europepmc.fetch_fulltext(paper.id)
+        xml = europepmc.fetch_fulltext(paper.id, getattr(paper, "pmcid", ""))
     except Exception as exc:  # noqa: BLE001
         print(f"  fetch failed: {type(exc).__name__}: {exc}")
         return None
@@ -169,6 +169,13 @@ def main() -> int:
     ap.add_argument("--show-methods", action="store_true")
     ap.add_argument("--json", type=Path)
     ap.add_argument("--model", default=None)
+    ap.add_argument("--all-sources", action="store_true",
+                    help="search preprints and published literature together")
+    ap.add_argument("--published", action="store_true",
+                    help="search the published OA literature (SRC:MED). Full-text availability is "
+                         "~100%% there against 28-40%% for preprints, and the pool is ~100x larger.")
+    ap.add_argument("--year-from", type=int, help="PUB_YEAR lower bound (inclusive)")
+    ap.add_argument("--year-to", type=int, help="PUB_YEAR upper bound (inclusive)")
     args = ap.parse_args()
 
     tool_index, db_index = load_alias_index()
@@ -186,7 +193,12 @@ def main() -> int:
                 print(f"  {pid}: not found")
     else:
         print(f"query: {args.query}")
-        papers = europepmc.search(args.query, args.limit)
+        papers = europepmc.search(
+            args.query, args.limit,
+            preprints_only=not args.all_sources and not args.published,
+            sources=("MED",) if args.published else None,
+            year_from=args.year_from, year_to=args.year_to,
+        )
     print(f"{len(papers)} paper(s)")
 
     results = [r for p in papers if (r := run_one(p, client, tool_index, args.show_methods))]

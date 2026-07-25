@@ -1,0 +1,3810 @@
+[
+  {
+    "paper": {
+      "id": "41204024",
+      "doi": "10.1007/s00248-025-02630-0",
+      "title": "Bacterial Communities Harboured by Amblyomma Hebraeum Infesting Small Stock in Mahikeng city, South Africa.",
+      "authors": "Mileng K, Mani S, Bezuidenhout JJ, Mokgokong PS, Ramatla TA, Thekisoe OMM, Lekota KE.",
+      "date": "2025-11-08",
+      "journal": "preprint",
+      "is_open_access": true,
+      "pmcid": "PMC12594692",
+      "source": "MED"
+    },
+    "methods_chars": 5202,
+    "chain": {
+      "completeness": "sketch",
+      "steps": [
+        {
+          "order": 0,
+          "role": "demultiplex",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Raw reads were first demultiplexed",
+          "_matched": null
+        },
+        {
+          "order": 1,
+          "role": "remove_primers",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "primers and indexes were removed",
+          "_matched": null
+        },
+        {
+          "order": 2,
+          "role": "trim",
+          "tool_raw": "DADA2",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "followed by quality filtering",
+          "_matched": "dada2"
+        },
+        {
+          "order": 3,
+          "role": "chimera_removal",
+          "tool_raw": "DADA2",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "and chimera removal",
+          "_matched": "dada2"
+        },
+        {
+          "order": 4,
+          "role": "trim",
+          "tool_raw": "DADA2",
+          "version": null,
+          "params": "{ \"truncation_length\": \"250 bp\", \"max_expected_error\": 5 }",
+          "database": null,
+          "evidence": "Reads were truncated at 250 bp with a maximum expected error of 5, allowing no ambiguous bases.",
+          "_matched": "dada2"
+        },
+        {
+          "order": 5,
+          "role": "merge_reads",
+          "tool_raw": "DADA2",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Error rates for forward and reverse reads were learned independently and then merged.",
+          "_matched": "dada2"
+        },
+        {
+          "order": 6,
+          "role": "denoise",
+          "tool_raw": "DADA2",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "The amplicon sequence variant table was constructed",
+          "_matched": "dada2"
+        },
+        {
+          "order": 7,
+          "role": "taxonomy_assign",
+          "tool_raw": null,
+          "version": null,
+          "params": "{ \"classification_level\": \"genus\" }",
+          "database": "SILVA 138.1",
+          "evidence": "taxonomy classification was assigned to the sequence variants using SILVA 138.1 database up to genus level.",
+          "_matched": null
+        },
+        {
+          "order": 8,
+          "role": "diversity",
+          "tool_raw": "phyloseq",
+          "version": null,
+          "params": "{ \"alpha_indices\": [\"Observed ASVs\", \"Chao1\", \"Shannon\", \"Simpson\"], \"beta_metrics\": [\"Bray\u2013Curtis dissimilarity\", \"Jaccard distance matrices\"] }",
+          "database": null,
+          "evidence": "Alpha diversity was assessed using Observed ASVs, Chao1, Shannon, and Simpson indices. Beta diversity was evaluated using Bray\u2013Curtis dissimilarity and Jaccard distance matrices",
+          "_matched": "phyloseq"
+        },
+        {
+          "order": 9,
+          "role": "ordination",
+          "tool_raw": "phyloseq",
+          "version": null,
+          "params": "{ \"methods\": [\"Principal Coordinate Analysis (PCoA)\", \"Non-Metric Multidimensional Scaling (NMDS)\"] }",
+          "database": null,
+          "evidence": "visualized through Principal Coordinate Analysis (PCoA) and Non-Metric Multidimensional Scaling (NMDS), respectively.",
+          "_matched": "phyloseq"
+        },
+        {
+          "order": 10,
+          "role": "visualize",
+          "tool_raw": "ggplot2",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Microbial abundance was visualised using ggplot2.",
+          "_matched": "ggplot2"
+        },
+        {
+          "order": 11,
+          "role": "differential_abundance",
+          "tool_raw": null,
+          "version": null,
+          "params": "{ \"test\": \"Kruskal\u2013Wallis test\" }",
+          "database": null,
+          "evidence": "The statistical significance of alpha diversity differences between host groups was tested using the Kruskal\u2013Wallis test.",
+          "_matched": null
+        },
+        {
+          "order": 12,
+          "role": "differential_abundance",
+          "tool_raw": null,
+          "version": null,
+          "params": "{ \"test\": \"Adonis tests\" }",
+          "database": null,
+          "evidence": "Adonis tests were used to assess beta diversity differences for host groups and for the locations.",
+          "_matched": null
+        }
+      ],
+      "source": "methods_text"
+    },
+    "provenance": {
+      "model": "local:google/gemma-4-26b-a4b",
+      "prompt_version": "claimed_v1"
+    },
+    "stats": {
+      "completion_tokens": 1161,
+      "reasoning_tokens": 0,
+      "elapsed_s": 15.6
+    },
+    "tools_known": [
+      "DADA2",
+      "DADA2",
+      "DADA2",
+      "DADA2",
+      "DADA2",
+      "phyloseq",
+      "phyloseq",
+      "ggplot2"
+    ],
+    "tools_unknown": []
+  },
+  {
+    "paper": {
+      "id": "41476181",
+      "doi": "10.1038/s41598-025-29105-z",
+      "title": "Taxonomy and functional profile of microbial communities across the depths of the Alpine Cenote Abyss ice cave.",
+      "authors": "Fedi S, Ghezzi D, Firrincieli A, Lopo E, Romeo A, Sauro F, Cappelletti M.",
+      "date": "2025-12-31",
+      "journal": "preprint",
+      "is_open_access": true,
+      "pmcid": "PMC12764899",
+      "source": "MED"
+    },
+    "methods_chars": 10228,
+    "chain": {
+      "completeness": "sketch",
+      "steps": [
+        {
+          "order": 0,
+          "role": "demultiplex",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "The demultiplexed and primer clipped reads were trimmed based on quality and length.",
+          "_matched": null
+        },
+        {
+          "order": 1,
+          "role": "remove_primers",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "The demultiplexed and primer clipped reads were trimmed based on quality and length.",
+          "_matched": null
+        },
+        {
+          "order": 2,
+          "role": "trim",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "The demultiplexed and primer clipped reads were trimmed based on quality and length.",
+          "_matched": null
+        },
+        {
+          "order": 3,
+          "role": "dereplicate",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Trimmed sequences were dereplicated, denoised, and merged, and chimeras were removed.",
+          "_matched": null
+        },
+        {
+          "order": 4,
+          "role": "denoise",
+          "tool_raw": "DADA2",
+          "version": "1.5.0",
+          "params": null,
+          "database": null,
+          "evidence": "The sequence analysis of 16S rRNA amplicons was performed by using Qiime2 version 2018.4 and DADA2 package version 1.5.0.",
+          "_matched": "dada2"
+        },
+        {
+          "order": 5,
+          "role": "merge_reads",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Trimmed sequences were dereplicated, denoised, and merged, and chimeras were removed.",
+          "_matched": null
+        },
+        {
+          "order": 6,
+          "role": "chimera_removal",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Trimmed sequences were dereplicated, denoised, and merged, and chimeras were removed.",
+          "_matched": null
+        },
+        {
+          "order": 7,
+          "role": "taxonomy_assign",
+          "tool_raw": "Qiime2",
+          "version": "2018.4",
+          "params": null,
+          "database": "SILVA 138 SSU reference database",
+          "evidence": "The resulting 16S rRNA gene amplicon sequence variants (ASVs) were taxonomically classified using SILVA 138 SSU reference database.",
+          "_matched": "qiime2"
+        },
+        {
+          "order": 8,
+          "role": "trim",
+          "tool_raw": "BBMap",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Adapter and quality trimming of Illumina reads was performed with BBMap",
+          "_matched": "bbtools"
+        },
+        {
+          "order": 9,
+          "role": "profile_taxonomic",
+          "tool_raw": "Kaiju",
+          "version": null,
+          "params": null,
+          "database": "NCBI BLAST nr database",
+          "evidence": "Specifically, the taxonomy profiling was performed using Kaiju against the NCBI BLAST nr database",
+          "_matched": "kaiju"
+        },
+        {
+          "order": 10,
+          "role": "profile_functional",
+          "tool_raw": "mi-faser",
+          "version": null,
+          "params": null,
+          "database": "reference database of prokaryotic proteins",
+          "evidence": "The functional profiling was performed through mi-faser against a reference database of prokaryotic proteins.",
+          "_matched": null
+        }
+      ],
+      "source": "methods_text"
+    },
+    "provenance": {
+      "model": "local:google/gemma-4-26b-a4b",
+      "prompt_version": "claimed_v1"
+    },
+    "stats": {
+      "completion_tokens": 967,
+      "reasoning_tokens": 0,
+      "elapsed_s": 12.3
+    },
+    "tools_known": [
+      "DADA2",
+      "Qiime2",
+      "BBMap",
+      "Kaiju"
+    ],
+    "tools_unknown": [
+      "mi-faser"
+    ]
+  },
+  {
+    "paper": {
+      "id": "41597565",
+      "doi": "10.3390/microorganisms14010045",
+      "title": "Multi-Regional Study on the Microbial Community Structure, Core Microbiome and Functional Characteristics in Deep Fracture Waters.",
+      "authors": "Li X, Huang T, Li Y, Pang Z, Zhang Y.",
+      "date": "2025-12-25",
+      "journal": "preprint",
+      "is_open_access": true,
+      "pmcid": "PMC12844516",
+      "source": "MED"
+    },
+    "methods_chars": 10488,
+    "chain": {
+      "completeness": "sketch",
+      "steps": [
+        {
+          "order": 0,
+          "role": "retrieve",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Raw high-throughput 16S rRNA gene amplicon sequence data sets for the SURF groundwater were obtained from the European Nucleotide Archive at the European Bioinformatics Institute, under accession no. PRJEB35125 [] and PRJEB44691 []",
+          "_matched": null
+        },
+        {
+          "order": 1,
+          "role": "remove_primers",
+          "tool_raw": "cutadapt",
+          "version": "5.2",
+          "params": null,
+          "database": null,
+          "evidence": "Primer sequences were trimmed from the raw sequencing reads of each sample using cutadapt (version 5.2) []",
+          "_matched": "cutadapt"
+        },
+        {
+          "order": 2,
+          "role": "trim",
+          "tool_raw": "Dada2",
+          "version": "1.34.0",
+          "params": null,
+          "database": null,
+          "evidence": "Sequence quality filtering was performed by truncating all reads exceeding 220 base pairs (discarding bases with quality scores < 30)",
+          "_matched": "dada2"
+        },
+        {
+          "order": 3,
+          "role": "denoise",
+          "tool_raw": "Dada2",
+          "version": "1.34.0",
+          "params": null,
+          "database": null,
+          "evidence": "The Dada2 [] method was used to infer Amplicon Sequence Variants (ASVs) from quality-filtered reads, remove sequencing errors, merge forward and reverse reads while disallowing mismatches in overlapping regions, remove chimeras, and generate a ASV table.",
+          "_matched": "dada2"
+        },
+        {
+          "order": 4,
+          "role": "trim",
+          "tool_raw": "FASTQ Trimmer by column",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "the first 5 nucleotides of the forward and reverse reads were trimmed using the FASTQ Trimmer by column (Galaxy Version 1.2+galaxy0)",
+          "_matched": null
+        },
+        {
+          "order": 5,
+          "role": "trim",
+          "tool_raw": "FASTQ Trimmer by column",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "the last 21 nucleotides of the reverse read were trimmed using FASTQ Trimmer by column.",
+          "_matched": null
+        },
+        {
+          "order": 6,
+          "role": "trim",
+          "tool_raw": "Trimmomatic",
+          "version": "0.39+galaxy2",
+          "params": null,
+          "database": null,
+          "evidence": "Trimmomatic (Galaxy Version 0.39+galaxy2) [] was used for quality filtering of the reads (SLIDINGWINDOW:100:28), and adapters (TruSeq3, paired\u2014ended, for MiSeq and HiSeq) were removed.",
+          "_matched": "trimmomatic"
+        },
+        {
+          "order": 7,
+          "role": "merge_reads",
+          "tool_raw": "fastq-join",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Paired end reads were joined using fastq-join [] (-p 3 -m 20).",
+          "_matched": null
+        },
+        {
+          "order": 8,
+          "role": "denoise",
+          "tool_raw": "Dada2",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "an ASV table was generated in R using the Dada2 package.",
+          "_matched": "dada2"
+        },
+        {
+          "order": 9,
+          "role": "trim",
+          "tool_raw": "Dada2",
+          "version": "1.34.0",
+          "params": null,
+          "database": null,
+          "evidence": "Sequence quality filtering was carried out the same as for the SURF dataset, with the sole modification that reads exceeding 230 bp were truncated.",
+          "_matched": "dada2"
+        },
+        {
+          "order": 10,
+          "role": "denoise",
+          "tool_raw": "Dada2",
+          "version": "1.34.0",
+          "params": null,
+          "database": null,
+          "evidence": "The Dada2 [] method was used to infer Amplicon Sequence Variants (ASVs) from quality-filtered reads, remove sequencing errors, merge forward and reverse reads while disallowing mismatches in overlapping regions, remove chimeras, and generate a ASV table.",
+          "_matched": "dada2"
+        },
+        {
+          "order": 11,
+          "role": "dereplicate",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Finally, the sequence tables generated for each dataset were merged, with duplicate ASVs resolved to produce a ASV count matrix for subsequent analysis.",
+          "_matched": null
+        },
+        {
+          "order": 12,
+          "role": "taxonomy_assign",
+          "tool_raw": "dada2",
+          "version": null,
+          "params": null,
+          "database": "Silva nr99 v138.2",
+          "evidence": "ASVs were annotated using the dada2 package and the Silva nr99 v138.2 dataset [,,].",
+          "_matched": "dada2"
+        },
+        {
+          "order": 13,
+          "role": "diversity",
+          "tool_raw": "phyloseq",
+          "version": "1.50.0",
+          "params": null,
+          "database": null,
+          "evidence": "Shannon and Observed indices were used to study alpha diversity.",
+          "_matched": "phyloseq"
+        },
+        {
+          "order": 14,
+          "role": "ordination",
+          "tool_raw": "phyloseq",
+          "version": "1.50.0",
+          "params": null,
+          "database": null,
+          "evidence": "For beta diversity analyses, we calculated community similarity at both the phylum and the ASV level using both the Bray\u2013Curtis and weighted Unifrac metrics.",
+          "_matched": "phyloseq"
+        },
+        {
+          "order": 15,
+          "role": "ordination",
+          "tool_raw": "NbClust",
+          "version": "3.0.1",
+          "params": null,
+          "database": null,
+          "evidence": "The optimal number of clusters was determined by silhouette analysis [] on the Bray\u2013Curtis dissimilarity matrix [] using the NbClint() (min.nc = 2, max.nc = 10, method = \u201cward.D\u201d, index = \u201csilhouette\u201d) from NbClust (version 3.0.1) package",
+          "_matched": null
+        },
+        {
+          "order": 16,
+          "role": "visualize",
+          "tool_raw": "VennDiagram",
+          "version": "1.7.3",
+          "params": null,
+          "database": null,
+          "evidence": "The VennDiagram (version 1.7.3) [] package in R was used to draw Venn diagrams.",
+          "_matched": null
+        },
+        {
+          "order": 17,
+          "role": "custom",
+          "tool_raw": "FAPROTAX",
+          "version": "1.2.1",
+          "params": null,
+          "database": null,
+          "evidence": "Functional aggregation was performed using the official collapse_table.py script [] provided by FAPROTAX (v1.2.1)",
+          "_matched": null
+        },
+        {
+          "order": 18,
+          "role": "visualize",
+          "tool_raw": "Complex Heatmap",
+          "version": "2.22.0",
+          "params": null,
+          "database": null,
+          "evidence": "Finally, the packages \u201cComplex Heatmap (version 2.22.0)\u201d and \u201cvegan (version 2.7.2) \u201d in R were used to generate the heatmap of functional relative abundance.",
+          "_matched": "pheatmap"
+        }
+      ],
+      "source": "methods_text"
+    },
+    "provenance": {
+      "model": "local:google/gemma-4-26b-a4b",
+      "prompt_version": "claimed_v1"
+    },
+    "stats": {
+      "completion_tokens": 1940,
+      "reasoning_tokens": 0,
+      "elapsed_s": 24.56
+    },
+    "tools_known": [
+      "cutadapt",
+      "Dada2",
+      "Dada2",
+      "Trimmomatic",
+      "Dada2",
+      "Dada2",
+      "Dada2",
+      "dada2",
+      "phyloseq",
+      "phyloseq",
+      "Complex Heatmap"
+    ],
+    "tools_unknown": [
+      "FASTQ Trimmer by column",
+      "FASTQ Trimmer by column",
+      "fastq-join",
+      "NbClust",
+      "VennDiagram",
+      "FAPROTAX"
+    ]
+  },
+  {
+    "paper": {
+      "id": "40610473",
+      "doi": "10.1038/s41598-025-08050-x",
+      "title": "Machine learning-based mapping of Acidobacteriota and Planctomycetota using 16 S rRNA gene metabarcoding data across soils in Russia.",
+      "authors": "Ivanova EA, Suleymanov AR, Nikitin DA, Semenov MV, Abakumov EV.",
+      "date": "2025-07-03",
+      "journal": "preprint",
+      "is_open_access": true,
+      "pmcid": "PMC12229483",
+      "source": "MED"
+    },
+    "methods_chars": 9409,
+    "chain": {
+      "completeness": "sketch",
+      "steps": [
+        {
+          "order": 0,
+          "role": "custom",
+          "tool_raw": "SAGA GIS",
+          "version": "9.3.3",
+          "params": null,
+          "database": null,
+          "evidence": "Derived terrain variables such as slope, curvatures, terrain position index, valley depth, SAGA Wetness Index, and multiresolution index of valley bottom flatness were calculated using the System for Automated Geoscientific Analyses\u2014Geographic Information System (SAGA GIS) software, version 9.3.3",
+          "_matched": null
+        },
+        {
+          "order": 1,
+          "role": "custom",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": "SoilGrids",
+          "evidence": "Soil properties map at 0\u20135 and 5\u201315 cm depths were derived from the SoilGrids.",
+          "_matched": null
+        },
+        {
+          "order": 2,
+          "role": "model",
+          "tool_raw": "ranger",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "All steps to implement spatial modelling, cross-validation, and statistical analysis were performed using \u201cranger\u201d (RF implementation)",
+          "_matched": "randomforest"
+        },
+        {
+          "order": 3,
+          "role": "custom",
+          "tool_raw": "NNDM",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "\u201cNNDM\u201d (cross-validation)",
+          "_matched": null
+        },
+        {
+          "order": 4,
+          "role": "custom",
+          "tool_raw": "fastshap",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "\u201cfastshap\u201d (Shapley values)",
+          "_matched": null
+        }
+      ],
+      "source": "methods_text"
+    },
+    "provenance": {
+      "model": "local:google/gemma-4-26b-a4b",
+      "prompt_version": "claimed_v1"
+    },
+    "stats": {
+      "completion_tokens": 465,
+      "reasoning_tokens": 0,
+      "elapsed_s": 6.35
+    },
+    "tools_known": [
+      "ranger"
+    ],
+    "tools_unknown": [
+      "SAGA GIS",
+      "NNDM",
+      "fastshap"
+    ]
+  },
+  {
+    "paper": {
+      "id": "41291216",
+      "doi": "10.1007/s00248-025-02628-8",
+      "title": "Field-Scale AMD Remediation: Microbial Community Dynamics and Functional Insights in Biochemical Passive Reactors.",
+      "authors": "Jurado J, Garcia-Vega A, Vasquez Y, Villegas-Plazas M, Roldan F.",
+      "date": "2025-11-25",
+      "journal": "preprint",
+      "is_open_access": true,
+      "pmcid": "PMC12764544",
+      "source": "MED"
+    },
+    "methods_chars": 3648,
+    "chain": {
+      "completeness": "complete",
+      "steps": [
+        {
+          "order": 0,
+          "role": "qc_raw",
+          "tool_raw": "FastQC",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Shotgun reads were quality-filtered (Trimmomatic/FastQC)",
+          "_matched": "fastqc"
+        },
+        {
+          "order": 1,
+          "role": "trim",
+          "tool_raw": "Trimmomatic",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Shotgun reads were quality-filtered (Trimmomatic/FastQC)",
+          "_matched": "trimmomatic"
+        },
+        {
+          "order": 2,
+          "role": "assemble",
+          "tool_raw": "metaSPAdes",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "assembled (metaSPAdes)",
+          "_matched": "metaspades"
+        },
+        {
+          "order": 3,
+          "role": "bin",
+          "tool_raw": "MaxBin2",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "and binned (MaxBin2, MetaBAT2, CONCOCT)",
+          "_matched": "maxbin2"
+        },
+        {
+          "order": 4,
+          "role": "bin",
+          "tool_raw": "MetaBAT2",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "and binned (MaxBin2, MetaBAT2, CONCOCT)",
+          "_matched": "metabat2"
+        },
+        {
+          "order": 5,
+          "role": "bin",
+          "tool_raw": "CONCOCT",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "and binned (MaxBin2, MetaBAT2, CONCOCT)",
+          "_matched": "concoct"
+        },
+        {
+          "order": 6,
+          "role": "bin_refine",
+          "tool_raw": "DAS Tool",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "with DAS Tool dereplication",
+          "_matched": "das-tool"
+        },
+        {
+          "order": 7,
+          "role": "bin_qc",
+          "tool_raw": "CheckM",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "CheckM filtered medium-to-high-quality MAGs",
+          "_matched": "checkm"
+        },
+        {
+          "order": 8,
+          "role": "annotate_function",
+          "tool_raw": "RASTtk/DRAM",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "functions were annotated with RASTtk/DRAM",
+          "_matched": "dram"
+        },
+        {
+          "order": 9,
+          "role": "classify_genomes",
+          "tool_raw": "GTDB-Tk",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "taxonomy assigned with GTDB-Tk",
+          "_matched": "gtdbtk"
+        },
+        {
+          "order": 10,
+          "role": "denoise",
+          "tool_raw": "Deblur",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Reads were processed in QIIME 2 with Deblur to infer ASVs",
+          "_matched": "deblur"
+        },
+        {
+          "order": 11,
+          "role": "taxonomy_assign",
+          "tool_raw": "SILVA",
+          "version": "138",
+          "params": null,
+          "database": "SILVA 138",
+          "evidence": "and taxonomically assigned with SILVA 138 (515F/806R).",
+          "_matched": null
+        },
+        {
+          "order": 12,
+          "role": "normalize",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Diversity analyses (alpha/beta) were performed after rarefaction in QIIME 2/R",
+          "_matched": null
+        },
+        {
+          "order": 13,
+          "role": "diversity",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Diversity analyses (alpha/beta) were performed after rarefaction in QIIME 2/R",
+          "_matched": null
+        },
+        {
+          "order": 14,
+          "role": "ordination",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "with PERMANOVA for group differences",
+          "_matched": null
+        },
+        {
+          "order": 15,
+          "role": "differential_abundance",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "and Kruskal\u2013Wallis/Mann\u2013Whitney with FDR correction for pairwise tests.",
+          "_matched": null
+        },
+        {
+          "order": 16,
+          "role": "correlate",
+          "tool_raw": "Corplot",
+          "version": null,
+          "params": "p < 0.05",
+          "database": null,
+          "evidence": "Correlation matrices between physicochemical parameters and alpha diversity indices were calculated using the Corplot library in R v4.3.1, and significant values (p < 0.05) were visualized.",
+          "_matched": null
+        }
+      ],
+      "source": "methods_text"
+    },
+    "provenance": {
+      "model": "local:google/gemma-4-26b-a4b",
+      "prompt_version": "claimed_v1"
+    },
+    "stats": {
+      "completion_tokens": 1361,
+      "reasoning_tokens": 0,
+      "elapsed_s": 17.2
+    },
+    "tools_known": [
+      "FastQC",
+      "Trimmomatic",
+      "metaSPAdes",
+      "MaxBin2",
+      "MetaBAT2",
+      "CONCOCT",
+      "DAS Tool",
+      "CheckM",
+      "RASTtk/DRAM",
+      "GTDB-Tk",
+      "Deblur"
+    ],
+    "tools_unknown": [
+      "SILVA",
+      "Corplot"
+    ]
+  },
+  {
+    "paper": {
+      "id": "41299662",
+      "doi": "10.1186/s40793-025-00819-x",
+      "title": "Microbial community characterization in Red Sea-derived samples using a field-deployable DNA extraction system and nanopore sequencing.",
+      "authors": "Jim\u00e9nez DJ, Jamil T, Miliotis G, Schultz J, Patel N, Aldakheel L, Kontis N, Garc\u00eda FC, Villela HDM, Duarte GAS, Barno AR, Farran A, Alsaggaf A, Santoro \u00c9P, Tumeo A, Page A, Wong S, Kabza A, Putra A, Park C, Angelov A, Driguez P, Peixoto RS, Green SJ, Tighe S, Rosado AS, Venkateswaran K.",
+      "date": "2025-11-26",
+      "journal": "preprint",
+      "is_open_access": true,
+      "pmcid": "PMC12763976",
+      "source": "MED"
+    },
+    "methods_chars": 16162,
+    "chain": {
+      "completeness": "sketch",
+      "steps": [
+        {
+          "order": 0,
+          "role": "trim",
+          "tool_raw": "Porechop",
+          "version": "0.2.4",
+          "params": null,
+          "database": null,
+          "evidence": "Raw metagenome sequence reads were trimmed to remove adapter and barcode sequences using Porechop (v0.2.4).",
+          "_matched": "porechop"
+        },
+        {
+          "order": 1,
+          "role": "trim",
+          "tool_raw": "fastp",
+          "version": "0.23.2",
+          "params": null,
+          "database": null,
+          "evidence": "Quality filtering was subsequently performed with fastp (v0.23.2)",
+          "_matched": "fastp"
+        },
+        {
+          "order": 2,
+          "role": "filter_features",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Raw bacterial 16S rRNA gene sequences were filtered based on length, with a minimum of 1,200 bp and a maximum of 1,800 bp, as well as a minimum per-read Phred quality score of 15.",
+          "_matched": null
+        },
+        {
+          "order": 3,
+          "role": "profile_taxonomic",
+          "tool_raw": "EPI2ME Labs wf-metagenomics pipeline (Nextflow)",
+          "version": "2.0.8",
+          "params": null,
+          "database": "NCBI 16S rRNA and 18S rRNA gene databases",
+          "evidence": "Taxonomic classification of high-quality sequences was performed using the EPI2 $\text{ME}$ Labs wf-metagenomics pipeline (Nextflow) v2.0.8, via Kraken2 and utilizing the NCBI 16S rRNA and 18S rRNA gene databases for reference sequences",
+          "_matched": null
+        },
+        {
+          "order": 4,
+          "role": "filter_features",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Underrepresented taxa, defined as those species with 10 or fewer reads across samples (less than 0.00005% in relative abundance), were excluded from further analysis.",
+          "_matched": null
+        },
+        {
+          "order": 5,
+          "role": "decontaminate",
+          "tool_raw": "decontam",
+          "version": "1.12",
+          "params": null,
+          "database": null,
+          "evidence": "Potential contaminant taxa were identified and removed using the decontam R package (v1.12) [] by assigning a probability to each species of it being a contaminant based on its prevalence in negative control samples versus true samples. Those taxa with a contaminant probability greater than 0.5 were classified as contaminants and subsequently removed from the dataset.",
+          "_matched": "decontam"
+        },
+        {
+          "order": 6,
+          "role": "profile_taxonomic",
+          "tool_raw": "SqueezeMeta",
+          "version": "1.6.3",
+          "params": null,
+          "database": null,
+          "evidence": "Filtered reads were then analyzed using SqueezeMeta (v1.6.3) [] through an assembly-free (i.e., gene-centric) approach implemented by the Perl script \"sqm_longreads.pl,\" which performs taxonomic classifications of open reading frames (ORFs) by executing DIAMOND searches, assigning taxonomy using the lowest common ancestor (LCA) method, and applies KEGG functional annotations.",
+          "_matched": "squeezemeta"
+        },
+        {
+          "order": 7,
+          "role": "annotate_function",
+          "tool_raw": "SqueezeMeta",
+          "version": "1.6.3",
+          "params": null,
+          "database": "KEGG",
+          "evidence": "which performs taxonomic classifications of open reading frames (ORFs) by executing DIAMOND searches, assigning taxonomy using the lowest common ancestor (LCA) method, and applies KEGG functional annotations.",
+          "_matched": "squeezemeta"
+        },
+        {
+          "order": 8,
+          "role": "diversity",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Alpha diversity of the microbial communities was estimated using the Shannon diversity index and observed species values to assess species evenness and richness, respectively, within each sample.",
+          "_matched": null
+        },
+        {
+          "order": 9,
+          "role": "ordination",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Beta diversity was calculated using the Bray\u2013Curtis dissimilarity metric to evaluate differences in community composition between samples and non-metric multidimensional scaling (NMDS) to visualize differences.",
+          "_matched": null
+        },
+        {
+          "order": 10,
+          "role": "ordination",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Group differences in microbial community composition were assessed using Permutational Multivariate Analysis of Variance (PERMANOVA) tests based on the Bray\u2013Curtis dissimilarity matrix with 999 permutations and a significance threshold set at P-values < 0.05.",
+          "_matched": null
+        },
+        {
+          "order": 11,
+          "role": "differential_abundance",
+          "tool_raw": "DESeq2",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Differentially abundant taxa between groups were identified based on the negative binomial distribution using the DESeq2 package [].",
+          "_matched": "deseq2"
+        }
+      ],
+      "source": "methods_text"
+    },
+    "provenance": {
+      "model": "local:google/gemma-4-26b-a4b",
+      "prompt_version": "claimed_v1"
+    },
+    "stats": {
+      "completion_tokens": 1352,
+      "reasoning_tokens": 0,
+      "elapsed_s": 18.15
+    },
+    "tools_known": [
+      "Porechop",
+      "fastp",
+      "decontam",
+      "SqueezeMeta",
+      "SqueezeMeta",
+      "DESeq2"
+    ],
+    "tools_unknown": [
+      "EPI2ME Labs wf-metagenomics pipeline (Nextflow)"
+    ]
+  },
+  {
+    "paper": {
+      "id": "41188517",
+      "doi": "10.1007/s00248-025-02617-x",
+      "title": "The Gut Microbial Community of Solitary Bees is Acquired through Host and Location Filtering.",
+      "authors": "Hettiarachchi A, Tuerlings T, Weekers T, Marshall L, Leclercq N, Wood TJ, Cejas D, Gerard M, Vereecken NJ, Michez D, Smagghe G, Joossens M, Vandamme P.",
+      "date": "2025-11-05",
+      "journal": "preprint",
+      "is_open_access": true,
+      "pmcid": "PMC12586223",
+      "source": "MED"
+    },
+    "methods_chars": 7604,
+    "chain": {
+      "completeness": "sketch",
+      "steps": [
+        {
+          "order": 0,
+          "role": "trim",
+          "tool_raw": "DADA2",
+          "version": "1.16",
+          "params": null,
+          "database": null,
+          "evidence": "Bacterial forward and reverse reads were trimmed to a length of 280 bp and 230 bp, respectively, and primers were removed using the trimLeft parameter.",
+          "_matched": "dada2"
+        },
+        {
+          "order": 1,
+          "role": "remove_primers",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "and primers were removed using the trimLeft parameter.",
+          "_matched": null
+        },
+        {
+          "order": 2,
+          "role": "merge_reads",
+          "tool_raw": "DADA2",
+          "version": "1.16",
+          "params": null,
+          "database": null,
+          "evidence": "Merged paired reads with a length between 400 and 428 bp were retained for further analyses.",
+          "_matched": "dada2"
+        },
+        {
+          "order": 3,
+          "role": "remove_primers",
+          "tool_raw": "cutadapt",
+          "version": "3.4",
+          "params": null,
+          "database": null,
+          "evidence": "ITS2 primers were removed with cutadapt version 3.4",
+          "_matched": "cutadapt"
+        },
+        {
+          "order": 4,
+          "role": "denoise",
+          "tool_raw": "DADA2",
+          "version": "1.16",
+          "params": null,
+          "database": null,
+          "evidence": "the rest of the DADA2 pipeline was followed with default parameters.",
+          "_matched": "dada2"
+        },
+        {
+          "order": 5,
+          "role": "taxonomy_assign",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": "SILVA SSU database version 138.1",
+          "evidence": "Taxonomy assignment to the final 16S rRNA and ITS2 amplicon sequence variants (ASVs) was performed with the DADA2 formatted training FASTR files from the SILVA SSU database version 138.1",
+          "_matched": null
+        },
+        {
+          "order": 6,
+          "role": "taxonomy_assign",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": "UNITE ITS database version 8.3",
+          "evidence": "and the General FASTA release files from the UNITE ITS database version 8.3 (all eukaryotes) [], respectively.",
+          "_matched": null
+        },
+        {
+          "order": 7,
+          "role": "filter_features",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "ASVs without a taxonomic assignment or assigned to chloroplasts, mitochondria, Archaea, and Eukarya were removed from the 16S rRNA dataset, whereas only fungal ASVs were retained in the ITS2 dataset.",
+          "_matched": null
+        },
+        {
+          "order": 8,
+          "role": "diversity",
+          "tool_raw": "phyloseq",
+          "version": "1.40.0",
+          "params": null,
+          "database": null,
+          "evidence": "Alpha diversity estimates (observed richness and Shannon diversity) were calculated for the bacterial and fungal datasets and plotted using the phyloseq package version 1.40.0",
+          "_matched": "phyloseq"
+        },
+        {
+          "order": 9,
+          "role": "ordination",
+          "tool_raw": "vegan",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Community dissimilarity was assessed via PERMANOVA tests (\u2018adonis2\u2019 function with 9,999 permutations) on Bray\u2013Curtis dissimilarity matrices using the vegan package",
+          "_matched": "vegan"
+        },
+        {
+          "order": 10,
+          "role": "correlate",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "We then compared the Bray\u2013Curtis dissimilarity in bacterial and fungal communities to the dissimilarity in bee community, landscape, climate, and geographical distance matrices using Mantel tests (Spearman\u2019s correlation coefficient with 9999 permutations).",
+          "_matched": null
+        },
+        {
+          "order": 11,
+          "role": "ordination",
+          "tool_raw": "vegan",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "we used a redundancy analysis to select for variables that could best explain the variation in the microbial community.",
+          "_matched": "vegan"
+        },
+        {
+          "order": 12,
+          "role": "filter_features",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Core bacterial and fungal ASVs were determined for each bee species, based on the definition that a core ASV should have at least 50% prevalence and 1% relative read abundance",
+          "_matched": null
+        }
+      ],
+      "source": "methods_text"
+    },
+    "provenance": {
+      "model": "local:google/gemma-4-26b-a4b",
+      "prompt_version": "claimed_v1"
+    },
+    "stats": {
+      "completion_tokens": 1256,
+      "reasoning_tokens": 0,
+      "elapsed_s": 16.78
+    },
+    "tools_known": [
+      "DADA2",
+      "DADA2",
+      "cutadapt",
+      "DADA2",
+      "phyloseq",
+      "vegan",
+      "vegan"
+    ],
+    "tools_unknown": []
+  },
+  {
+    "paper": {
+      "id": "41196055",
+      "doi": "10.1128/spectrum.01732-25",
+      "title": "Assessment of protocols for characterization of the human skin microbiome using shotgun metagenomics and comparative analysis with 16S metabarcoding.",
+      "authors": "Plaza O\u00f1ate F, Quinquis B, Thirion F, Gilles M, Morabito C, Valeille K, Martin R, Guidet B, Kern C, P\u00e9castaings S.",
+      "date": "2025-11-06",
+      "journal": "preprint",
+      "is_open_access": true,
+      "pmcid": "PMC12671131",
+      "source": "MED"
+    },
+    "methods_chars": 13028,
+    "chain": {
+      "completeness": "sketch",
+      "steps": [
+        {
+          "order": 0,
+          "role": "basecall",
+          "tool_raw": "SMRT Link",
+          "version": "12.0.0.177059",
+          "params": null,
+          "database": null,
+          "evidence": "Circular consensus sequence (CCS) reads were generated from the raw PacBio sequencing data using the standard software tools provided by the manufacturer (Pacific Biosciences) with minPasses = 3 and minPredictedAccuracy = 0.999 in the SMRT Link software (release_12.0.0.177059).",
+          "_matched": null
+        },
+        {
+          "order": 1,
+          "role": "trim",
+          "tool_raw": "AlienTrimmer",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Sequencing data quality control was carried out with AlienTrimmer ( ). First, sequencing adapters were eliminated, then poor-quality reads were shortened, and reads that were too short (< 45 bases) were discarded.",
+          "_matched": null
+        },
+        {
+          "order": 2,
+          "role": "filter_host",
+          "tool_raw": "bowtie2",
+          "version": null,
+          "params": null,
+          "database": "T2T-CHM13v2.0, GCF_009914755.1",
+          "evidence": "Finally, reads aligned to the human reference genome (T2T-CHM13v2.0, GCF_009914755.1) with bowtie2 () were removed.",
+          "_matched": "bowtie2"
+        },
+        {
+          "order": 3,
+          "role": "profile_taxonomic",
+          "tool_raw": "MetaPhlan4",
+          "version": null,
+          "params": null,
+          "database": "vOct22",
+          "evidence": "A species abundance table was generated with MetaPhlan4 () based on the vOct22 database.",
+          "_matched": "metaphlan"
+        },
+        {
+          "order": 4,
+          "role": "profile_functional",
+          "tool_raw": "Meteor",
+          "version": "2.0.14",
+          "params": null,
+          "database": null,
+          "evidence": "The abundance of KEGG gene families (KOs) was obtained with Meteor (version: 2.0.14) ().",
+          "_matched": null
+        },
+        {
+          "order": 5,
+          "role": "map_reads",
+          "tool_raw": "bowtie2",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "First, selected high-quality reads were mapped with bowtie2 () to a gene catalog representative of the human skin microbiome, comprising 2.9 million genes ().",
+          "_matched": "bowtie2"
+        },
+        {
+          "order": 6,
+          "role": "filter_features",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Alignments with nucleotide identity < 95% were discarded",
+          "_matched": null
+        },
+        {
+          "order": 7,
+          "role": "annotate_function",
+          "tool_raw": "KofamScan",
+          "version": null,
+          "params": null,
+          "database": "KEGG 107",
+          "evidence": "The gene annotation at the KO level was obtained with KofamScan () relying on KEGG 107.",
+          "_matched": "kofamscan"
+        },
+        {
+          "order": 8,
+          "role": "remove_primers",
+          "tool_raw": "cutadapt",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Briefly, primer sequences were removed with cutadapt ().",
+          "_matched": "cutadapt"
+        },
+        {
+          "order": 9,
+          "role": "cluster_otu",
+          "tool_raw": "SWARM",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Sequence clustering was performed with SWARM () using the fastidious method (d = 1).",
+          "_matched": "swarm"
+        },
+        {
+          "order": 10,
+          "role": "taxonomy_assign",
+          "tool_raw": "BLASTn",
+          "version": null,
+          "params": null,
+          "database": "SILVA database v138.1",
+          "evidence": "Taxonomic annotation was performed by aligning cluster representatives with BLASTn () against the SILVA database v138.1 () restricted to bacteria.",
+          "_matched": "blast"
+        }
+      ],
+      "source": "methods_text"
+    },
+    "provenance": {
+      "model": "local:google/gemma-4-26b-a4b",
+      "prompt_version": "claimed_v1"
+    },
+    "stats": {
+      "completion_tokens": 1116,
+      "reasoning_tokens": 0,
+      "elapsed_s": 15.09
+    },
+    "tools_known": [
+      "bowtie2",
+      "MetaPhlan4",
+      "bowtie2",
+      "KofamScan",
+      "cutadapt",
+      "SWARM",
+      "BLASTn"
+    ],
+    "tools_unknown": [
+      "SMRT Link",
+      "AlienTrimmer",
+      "Meteor"
+    ]
+  },
+  {
+    "paper": {
+      "id": "41156863",
+      "doi": "10.3390/microorganisms13102405",
+      "title": "Distinct Gut and Skin Microbiomes of a Carnivorous Caecilian Larva (&lt;i&gt;Ichthyophis bannanicus&lt;/i&gt;) Show Ecological and Phylogenetic Divergence from Anuran Tadpoles.",
+      "authors": "Rajput AP, Sun D, Zhou S, Meegaskumbura M.",
+      "date": "2025-10-21",
+      "journal": "preprint",
+      "is_open_access": true,
+      "pmcid": "PMC12566441",
+      "source": "MED"
+    },
+    "methods_chars": 6060,
+    "chain": {
+      "completeness": "sketch",
+      "steps": [
+        {
+          "order": 0,
+          "role": "demultiplex",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Paired-end reads were assigned to the samples based on their unique barcode",
+          "_matched": null
+        },
+        {
+          "order": 1,
+          "role": "trim",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "truncated by cutting off the barcode and primer sequence.",
+          "_matched": null
+        },
+        {
+          "order": 2,
+          "role": "merge_reads",
+          "tool_raw": "FLASH",
+          "version": "1.2.11",
+          "params": null,
+          "database": null,
+          "evidence": "The paired-end reads were further merged using FLASH v 1.2.11",
+          "_matched": "flash"
+        },
+        {
+          "order": 3,
+          "role": "filter_features",
+          "tool_raw": "fastp",
+          "version": "0.23.1",
+          "params": null,
+          "database": null,
+          "evidence": "the splicing sequences were filtered using fastp v0.23.1 to obtain high-quality data",
+          "_matched": "fastp"
+        },
+        {
+          "order": 4,
+          "role": "chimera_removal",
+          "tool_raw": "UCHIME",
+          "version": null,
+          "params": null,
+          "database": "SILVA",
+          "evidence": "The filtered data were compared with the SILVA database... using the UCHIME algorithm to detect chimaera sequences",
+          "_matched": "usearch"
+        },
+        {
+          "order": 5,
+          "role": "denoise",
+          "tool_raw": "DADA2",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "then denoised using DADA2 in the QIIME2 v 2020.06, to obtain initial Amplicon Sequence Variants (ASVs).",
+          "_matched": "dada2"
+        },
+        {
+          "order": 6,
+          "role": "taxonomy_assign",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": "SILVA",
+          "evidence": "The SILVA database was used to annotate the taxonomic information.",
+          "_matched": null
+        },
+        {
+          "order": 7,
+          "role": "filter_features",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "The final 12 574 ASVs were retained after removing the sequences classified to archaea, mitochondria, chloroplasts, and unassigned ASVs.",
+          "_matched": null
+        },
+        {
+          "order": 8,
+          "role": "normalize",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "The ASV abundance was normalised using the standard sequence number corresponding to the sample with the fewest sequences.",
+          "_matched": null
+        },
+        {
+          "order": 9,
+          "role": "phylogeny",
+          "tool_raw": "QIIME2",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "The multiple sequence alignment was performed using QIIME2, to study the phylogenetic relationship of each ASV.",
+          "_matched": "qiime2"
+        },
+        {
+          "order": 10,
+          "role": "visualize",
+          "tool_raw": "ggvenn",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "The shared and unique classification and ASVs between the skin and gut of I. bannanicus were visualised in Venn diagrams that were generated using the \u201cggvenn\u201d package",
+          "_matched": null
+        },
+        {
+          "order": 11,
+          "role": "diversity",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "we calculated Bray\u2013Curtis and UniFrac distances at the ASV level",
+          "_matched": null
+        },
+        {
+          "order": 12,
+          "role": "ordination",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "then performed an analysis of similarity (ANOSIM), and principal coordinate analysis (PCoA)",
+          "_matched": null
+        },
+        {
+          "order": 13,
+          "role": "differential_abundance",
+          "tool_raw": "LEfSe",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Linear discriminant analysis (LDA) and effect size (LEfSe) identified differential bacterial taxa",
+          "_matched": "lefse"
+        },
+        {
+          "order": 14,
+          "role": "predict_genes",
+          "tool_raw": "PICRUSt",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "We performed PICRUSt analysis to predict the functional attributes of microbiomes",
+          "_matched": "picrust2"
+        },
+        {
+          "order": 15,
+          "role": "correlate",
+          "tool_raw": null,
+          "version": null,
+          "params": "{'rho': '> 0.7', 'p-value': '< 0.05'}",
+          "database": null,
+          "evidence": "The networks of bacterial interactions were constructed based on Spearman correlation coefficients (\u03c1) > 0.7 and adjusted p-values < 0.05",
+          "_matched": null
+        },
+        {
+          "order": 16,
+          "role": "visualize",
+          "tool_raw": "Gephi",
+          "version": "0.9.7",
+          "params": null,
+          "database": null,
+          "evidence": "and visualised in Gephi v 0.9.7",
+          "_matched": "gephi"
+        },
+        {
+          "order": 17,
+          "role": "diversity",
+          "tool_raw": "vegan",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "we calculated the bacterial richness and evenness using the package \u201cvegan\u201d",
+          "_matched": "vegan"
+        }
+      ],
+      "source": "methods_text"
+    },
+    "provenance": {
+      "model": "local:google/gemma-4-26b-a4b",
+      "prompt_version": "claimed_v1"
+    },
+    "stats": {
+      "completion_tokens": 1545,
+      "reasoning_tokens": 0,
+      "elapsed_s": 21.28
+    },
+    "tools_known": [
+      "FLASH",
+      "fastp",
+      "UCHIME",
+      "DADA2",
+      "QIIME2",
+      "LEfSe",
+      "PICRUSt",
+      "Gephi",
+      "vegan"
+    ],
+    "tools_unknown": [
+      "ggvenn"
+    ]
+  },
+  {
+    "paper": {
+      "id": "41188334",
+      "doi": "10.1038/s41598-025-22523-z",
+      "title": "Manually weighted taxonomy classifiers improve species-specific rumen microbiome analysis compared to unweighted or average weighted taxonomy classifiers.",
+      "authors": "Kang R, Yu Z, Kim H, Seo J, Kim M, Park T.",
+      "date": "2025-11-04",
+      "journal": "preprint",
+      "is_open_access": true,
+      "pmcid": "PMC12586449",
+      "source": "MED"
+    },
+    "methods_chars": 4165,
+    "chain": {
+      "completeness": "sketch",
+      "steps": [
+        {
+          "order": 0,
+          "role": "retrieve",
+          "tool_raw": "q2-rescript",
+          "version": null,
+          "params": null,
+          "database": "NCBI RefSeq (16S rRNA; October 14, 2024), SILVA (versions 138.1 and 138.2), GTDB (R220), GG2 (versions 2022.10 and 2024.09), and the RDP bacterial and archaeal hierarchy model (version 2.14; August 2023)",
+          "evidence": "reference databases for bacteria and archaea were retrieved using q2-rescript, including the NCBI RefSeq (16S rRNA; October 14, 2024), SILVA (versions 138.1 and 138.2), GTDB (R220), GG2 (versions 2022.10 and 2024.09), and the RPH bacterial and archaeal hierarchy model (version 2.14; August 2023).",
+          "_matched": "qiime2"
+        },
+        {
+          "order": 1,
+          "role": "filter_features",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Archaeal sequences shorter than 900 bp and bacterial sequences shorter than 1,200 bp were filtered from all databases",
+          "_matched": null
+        },
+        {
+          "order": 2,
+          "role": "dereplicate",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "all the database sequences were dereplicated within each database to eliminate redundancy.",
+          "_matched": null
+        },
+        {
+          "order": 3,
+          "role": "retrieve",
+          "tool_raw": "q2-clawback",
+          "version": null,
+          "params": null,
+          "database": "Qiita",
+          "evidence": "Publicly available 16S rRNA gene sequences corresponding to the V4 region were retrieved from Qiita using q2-clawback.",
+          "_matched": "qiime2"
+        },
+        {
+          "order": 4,
+          "role": "qc_raw",
+          "tool_raw": "fastp",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "The metagenomic shotgun dataset from Hanwoo steers (36 samples) and cows (5 samples) was preprocessed using fastp for quality control",
+          "_matched": "fastp"
+        },
+        {
+          "order": 5,
+          "role": "filter_host",
+          "tool_raw": "Bowtie2",
+          "version": "2.5.4",
+          "params": null,
+          "database": "Hanwoo genome (GCA_028973685.2) and feed-derived sequences",
+          "evidence": "followed by sequence filtering with Bowtie2 (version 2.5.4) to remove host-derived sequences by aligning reads to the Hanwoo genome (GCA_028973685.2) and feed-derived sequences by aligning to the genomes of feed ingredients consumed by each animal group.",
+          "_matched": "bowtie2"
+        },
+        {
+          "order": 6,
+          "role": "filter_features",
+          "tool_raw": "SortMeRNA",
+          "version": "4.3.7",
+          "params": null,
+          "database": null,
+          "evidence": "The filtered metagenomic datasets were processed using SortMeRNA (version 4.3.7) to extract the rRNA gene sequences.",
+          "_matched": "sortmerna"
+        },
+        {
+          "order": 7,
+          "role": "dereplicate",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "a feature table was generated after sequence dereplication.",
+          "_matched": null
+        },
+        {
+          "order": 8,
+          "role": "remove_primers",
+          "tool_raw": "Cutadapt",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "primer sequence were removed using Cutadapt",
+          "_matched": "cutadapt"
+        },
+        {
+          "order": 9,
+          "role": "merge_reads",
+          "tool_raw": "FLASH2",
+          "version": "2.2.00",
+          "params": null,
+          "database": null,
+          "evidence": "the paired-end reads were then merged using FLASH2 (version 2.2.00) with a minimum overlap of 20 bp.",
+          "_matched": "flash"
+        },
+        {
+          "order": 10,
+          "role": "denoise",
+          "tool_raw": "Deblur",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "followed by denoising with Deblur using default options.",
+          "_matched": "deblur"
+        },
+        {
+          "order": 11,
+          "role": "denoise",
+          "tool_raw": "DADA2 denoise-ccs",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "For the PacBio sequencing run, raw reads were directly imported into QIIME2 and denoised using DADA2 denoise-ccs with default options.",
+          "_matched": "dada2"
+        },
+        {
+          "order": 12,
+          "role": "custom",
+          "tool_raw": "Python script",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "A custom Python script was used to combine the feature tables and the corresponding representative sequences to generate the input file for taxonomy weight generation.",
+          "_matched": null
+        },
+        {
+          "order": 13,
+          "role": "retrieve",
+          "tool_raw": "q2-clawback",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Sequence variants from combined datasets were then generated using q2-clawback.",
+          "_matched": "qiime2"
+        },
+        {
+          "order": 14,
+          "role": "filter_host",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": "chloroplasts and mitochondria",
+          "evidence": "Sequences associated with chloroplasts and mitochondria were removed before generating the classifier to ensure accuracy.",
+          "_matched": null
+        },
+        {
+          "order": 15,
+          "role": "taxonomy_assign",
+          "tool_raw": "feature-classifier",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "including AWTC and UWTC generated with the na\u00efve Bayes algorithm using the \u2018feature-classifier\u2019 plugin.",
+          "_matched": "qiime2"
+        }
+      ],
+      "source": "methods_text"
+    },
+    "provenance": {
+      "model": "local:google/gemma-4-26b-a4b",
+      "prompt_version": "claimed_v1"
+    },
+    "stats": {
+      "completion_tokens": 1670,
+      "reasoning_tokens": 0,
+      "elapsed_s": 23.36
+    },
+    "tools_known": [
+      "q2-rescript",
+      "q2-clawback",
+      "fastp",
+      "Bowtie2",
+      "SortMeRNA",
+      "Cutadapt",
+      "FLASH2",
+      "Deblur",
+      "DADA2 denoise-ccs",
+      "q2-clawback",
+      "feature-classifier"
+    ],
+    "tools_unknown": [
+      "Python script"
+    ]
+  },
+  {
+    "paper": {
+      "id": "41852396",
+      "doi": "10.3389/frmbi.2025.1688681",
+      "title": "Impact of DNA extraction techniques and sequencing approaches on microbial community profiling accuracy.",
+      "authors": "Zoruk P, Morozov M, Veselovsky V, Strokach A, Babenko V, Klimina K.",
+      "date": "2025-12-16",
+      "journal": "preprint",
+      "is_open_access": true,
+      "pmcid": "PMC12993687",
+      "source": "MED"
+    },
+    "methods_chars": 11963,
+    "chain": {
+      "completeness": "sketch",
+      "steps": [
+        {
+          "order": 0,
+          "role": "remove_primers",
+          "tool_raw": "Porechop",
+          "version": "0.2.4",
+          "params": null,
+          "database": null,
+          "evidence": "Reads obtained from ONT sequencing were processed using Porechop v0.2.4 (https://github.com/rrwick/Porechop) to remove adapters and PCR primers, with default parameter settings.",
+          "_matched": "porechop"
+        },
+        {
+          "order": 1,
+          "role": "trim",
+          "tool_raw": "Chopper",
+          "version": "0.6.0",
+          "params": null,
+          "database": null,
+          "evidence": "Reads with Phred quality score below 10 and those shorter than 1,300 nucleotides (nt) or longer than 1,800 nt were filtered out using Chopper v0.6.0 () with the settings -l 1300 and \u2013maxlength 1800.",
+          "_matched": "chopper"
+        },
+        {
+          "order": 2,
+          "role": "taxonomy_assign",
+          "tool_raw": "Emu",
+          "version": "3.4.5",
+          "params": null,
+          "database": null,
+          "evidence": "Taxonomic classification was performed with the Emu pipeline v3.4.5 () with default parameters.",
+          "_matched": null
+        },
+        {
+          "order": 3,
+          "role": "qc_raw",
+          "tool_raw": "NanoStat",
+          "version": "1.6.0",
+          "params": null,
+          "database": null,
+          "evidence": "Read quality statistics were generated using NanoStat v1.6.0 ().",
+          "_matched": "nanoplot"
+        },
+        {
+          "order": 4,
+          "role": "custom",
+          "tool_raw": "MicrobiotaProcess",
+          "version": "1.16.1",
+          "params": null,
+          "database": null,
+          "evidence": "The processed data were then imported into RStudio (version 2024.04.2 + 764, R 4.4.1) for downstream analysis using the MicrobiotaProcess package v1.16.1 ().",
+          "_matched": null
+        },
+        {
+          "order": 5,
+          "role": "trim",
+          "tool_raw": "Fastp",
+          "version": "0.23.4",
+          "params": null,
+          "database": null,
+          "evidence": "Raw reads obtained from Illumina sequencing were filtered and trimmed using Fastp v0.23.4 ().",
+          "_matched": "fastp"
+        },
+        {
+          "order": 6,
+          "role": "denoise",
+          "tool_raw": "DADA2",
+          "version": "1.26.0",
+          "params": null,
+          "database": null,
+          "evidence": "followed by further processing with the DADA2 pipeline v1.26.0 () was used to carry out further processing.",
+          "_matched": "dada2"
+        },
+        {
+          "order": 7,
+          "role": "taxonomy_assign",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": "SILVA database v138.1",
+          "evidence": "Taxonomic annotation was carried out using the SILVA database v138.1 ().",
+          "_matched": null
+        },
+        {
+          "order": 8,
+          "role": "custom",
+          "tool_raw": "MicrobiotaProcess",
+          "version": "1.16.1",
+          "params": null,
+          "database": null,
+          "evidence": "The MicrobiotaProcess package v1.16.1 () was then used to evaluate the collected data.",
+          "_matched": null
+        },
+        {
+          "order": 9,
+          "role": "remove_primers",
+          "tool_raw": "Porechop",
+          "version": "0.2.4",
+          "params": null,
+          "database": null,
+          "evidence": "ONT reads were preprocessed using Porechop v0.2.4 (https://github.com/rrwick/Porechop) with default parameter settings",
+          "_matched": "porechop"
+        },
+        {
+          "order": 10,
+          "role": "trim",
+          "tool_raw": "Chopper",
+          "version": "0.6.0",
+          "params": null,
+          "database": null,
+          "evidence": "and Chopper v0.6.0 () for filtering reads with Phred score below 10.",
+          "_matched": "chopper"
+        },
+        {
+          "order": 11,
+          "role": "filter_host",
+          "tool_raw": "Minimap2",
+          "version": "2.26",
+          "params": null,
+          "database": "GRCh38",
+          "evidence": "To remove host (human) sequences, reads were aligned to the human reference genome GRCh38 (https://www.ncbi.nlm.nih.gov/datasets/genome/GCF_000001405.40) using Minimap2 v2.26 ().",
+          "_matched": "minimap2"
+        },
+        {
+          "order": 12,
+          "role": "taxonomy_assign",
+          "tool_raw": "Emu",
+          "version": "3.4.5",
+          "params": null,
+          "database": null,
+          "evidence": "Taxonomic classification of the remaining reads was performed using the Emu pipeline v3.4.5 () with default parameters.",
+          "_matched": null
+        },
+        {
+          "order": 13,
+          "role": "map_reads",
+          "tool_raw": "BWA",
+          "version": "0.7.18",
+          "params": null,
+          "database": "ZymoBIOMICS Gut Microbiome Standard reference",
+          "evidence": "Filtered reads were also mapped to the ZymoBIOMICS Gut Microbiome Standard reference (https://s3.amazonaws.com/zymo-files/BioPool/D6331.refseq.zip) using the BWA software package v0.7.18 () with its default settings",
+          "_matched": "bwa-mem2"
+        },
+        {
+          "order": 14,
+          "role": "custom",
+          "tool_raw": "SAMtools",
+          "version": "1.21",
+          "params": null,
+          "database": null,
+          "evidence": "and mapping statistics were calculated using SAMtools v1.21 ().",
+          "_matched": "samtools"
+        },
+        {
+          "order": 15,
+          "role": "qc_raw",
+          "tool_raw": "FastQC",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Illumina metagenomic reads were quality-checked with FastQC (https://www.bioinformatics.babraham.ac.uk/projects/fastqc/).",
+          "_matched": "fastqc"
+        },
+        {
+          "order": 16,
+          "role": "trim",
+          "tool_raw": "Fastp",
+          "version": "0.23.4",
+          "params": null,
+          "database": null,
+          "evidence": "Low-quality sequences and adapters were removed from the raw data using Fastp v0.23.4.",
+          "_matched": "fastp"
+        },
+        {
+          "order": 17,
+          "role": "filter_host",
+          "tool_raw": "HiSAT2",
+          "version": "2.2.1",
+          "params": null,
+          "database": "GRCh38",
+          "evidence": "Human reads were filtered out by aligning against the GRCh3\u00a08 genome using HiSAT2 v2.2.1 ().",
+          "_matched": null
+        },
+        {
+          "order": 18,
+          "role": "profile_taxonomic",
+          "tool_raw": "MetaPhlAn4",
+          "version": "4.0.6",
+          "params": null,
+          "database": null,
+          "evidence": "Taxonomic profiling was performed with MetaPhlAn4 v4.0.6 ().",
+          "_matched": "metaphlan"
+        },
+        {
+          "order": 19,
+          "role": "custom",
+          "tool_raw": "MicrobiotaProcess",
+          "version": "1.16.1",
+          "params": null,
+          "database": null,
+          "evidence": "The MicrobiotaProcess package v1.16.1 () was used to analyze the collected data.",
+          "_matched": null
+        }
+      ],
+      "source": "methods_text"
+    },
+    "provenance": {
+      "model": "local:google/gemma-4-26b-a4b",
+      "prompt_version": "claimed_v1"
+    },
+    "stats": {
+      "completion_tokens": 2035,
+      "reasoning_tokens": 0,
+      "elapsed_s": 28.49
+    },
+    "tools_known": [
+      "Porechop",
+      "Chopper",
+      "NanoStat",
+      "Fastp",
+      "DADA2",
+      "Porechop",
+      "Chopper",
+      "Minimap2",
+      "BWA",
+      "SAMtools",
+      "FastQC",
+      "Fastp",
+      "MetaPhlAn4"
+    ],
+    "tools_unknown": [
+      "Emu",
+      "MicrobiotaProcess",
+      "MicrobiotaProcess",
+      "Emu",
+      "HiSAT2",
+      "MicrobiotaProcess"
+    ]
+  },
+  {
+    "paper": {
+      "id": "41272806",
+      "doi": "10.1186/s40793-025-00801-7",
+      "title": "Methane cycling microorganisms drive seasonal variation of methane emission in mangrove ecosystems.",
+      "authors": "Zhang CJ, Hou J, Zhou J, Zou D, Zhang H, Ma Q, Li M.",
+      "date": "2025-11-21",
+      "journal": "preprint",
+      "is_open_access": true,
+      "pmcid": "PMC12639694",
+      "source": "MED"
+    },
+    "methods_chars": 12970,
+    "chain": {
+      "completeness": "sketch",
+      "steps": [
+        {
+          "order": 0,
+          "role": "merge_reads",
+          "tool_raw": "join_paired_ends.py",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Paired-end reads were merged using the join_paired_ends.py script from the Quantitative Insights into Microbial Ecology (QIIME)",
+          "_matched": null
+        },
+        {
+          "order": 1,
+          "role": "denoise",
+          "tool_raw": "DADA2",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "sequences were denoised, dereplicated, and clustered into amplicon sequence variants (ASVs) using the DADA2 plugin.",
+          "_matched": "dada2"
+        },
+        {
+          "order": 2,
+          "role": "dereplicate",
+          "tool_raw": "DADA2",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "sequences were denoised, dereplicated, and clustered into amplicon sequence variants (ASVs) using the DADA2 plugin.",
+          "_matched": "dada2"
+        },
+        {
+          "order": 3,
+          "role": "cluster_otu",
+          "tool_raw": "DADA2",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "sequences were denoised, dereplicated, and clustered into amplicon sequence variants (ASVs) using the DADA2 plugin.",
+          "_matched": "dada2"
+        },
+        {
+          "order": 4,
+          "role": "taxonomy_assign",
+          "tool_raw": "classify-sklearn",
+          "version": null,
+          "params": null,
+          "database": "SILVA v138",
+          "evidence": "Taxonomy was assigned to ASV representatives using the classify-sklearn method against the SILVA v138 reference database",
+          "_matched": "qiime2"
+        },
+        {
+          "order": 5,
+          "role": "normalize",
+          "tool_raw": null,
+          "version": null,
+          "params": "rarefied to a uniform depth of 56,384 sequences per sample",
+          "database": null,
+          "evidence": "All samples were rarefied to a uniform depth of 56,384 sequences per sample, a depth determined by the minimum number of sequences per sample.",
+          "_matched": null
+        },
+        {
+          "order": 6,
+          "role": "diversity",
+          "tool_raw": "QIIME 2",
+          "version": null,
+          "params": "Shannon\u2013Wiener index",
+          "database": null,
+          "evidence": "Alpha diversity metrics, including the Shannon\u2013Wiener index, were calculated using the diversity module in QIIME 2.",
+          "_matched": "qiime2"
+        },
+        {
+          "order": 7,
+          "role": "qc_raw",
+          "tool_raw": "MetaWRAP",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "the raw reads were quality controlled using the read_qc module",
+          "_matched": "metawrap"
+        },
+        {
+          "order": 8,
+          "role": "assemble",
+          "tool_raw": "MEGAHIT",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "co-assembled for the five layers using MEGAHIT module with default parameters.",
+          "_matched": "megahit"
+        },
+        {
+          "order": 9,
+          "role": "filter_features",
+          "tool_raw": null,
+          "version": null,
+          "params": "Scaffolds longer than 1000 bp from the eight metagenomic co-assemblies were retained",
+          "database": null,
+          "evidence": "Scaffolds longer than 1000 bp from the eight metagenomic co-assemblies were retained",
+          "_matched": null
+        },
+        {
+          "order": 10,
+          "role": "predict_genes",
+          "tool_raw": "Prodigal",
+          "version": null,
+          "params": "--p meta",
+          "database": null,
+          "evidence": "coding sequences were predicted using Prodigal with the \u201c-p meta\u201d parameter",
+          "_matched": "prodigal"
+        },
+        {
+          "order": 11,
+          "role": "bin",
+          "tool_raw": "MetaBAT2",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "The assembled fragments were sorted into metagenome-assembled genomes (MAGs) via the binning module, which integrates MetaBAT2, CONCOT and MaxBin2 algorithms with default parameters.",
+          "_matched": "metabat2"
+        },
+        {
+          "order": 12,
+          "role": "bin_qc",
+          "tool_raw": "CheckM",
+          "version": null,
+          "params": ">50% completeness, <10% contamination",
+          "database": null,
+          "evidence": "Only MAGs with > 50% completeness and < 10% contamination were retained for downstream analysis.",
+          "_matched": "checkm"
+        },
+        {
+          "order": 13,
+          "role": "classify_genomes",
+          "tool_raw": "GTDB-Tk",
+          "version": null,
+          "params": null,
+          "database": "Genome Taxonomy Database",
+          "evidence": "Taxonomic classification of the MAGs was performed against the Genome Taxonomy Database with GTDB-Tk",
+          "_matched": "gtdbtk"
+        },
+        {
+          "order": 14,
+          "role": "dereplicate_genomes",
+          "tool_raw": "dRep",
+          "version": null,
+          "params": "ANI cut-off of 97%",
+          "database": null,
+          "evidence": "After dereplication with dRep with an ANI cut-off of 97%",
+          "_matched": "drep"
+        },
+        {
+          "order": 15,
+          "role": "predict_genes",
+          "tool_raw": "Prodigal",
+          "version": null,
+          "params": "--p meta",
+          "database": null,
+          "evidence": "The MAGs were translated by Prodigal using the \u201c-p meta\u201d parameters",
+          "_matched": "prodigal"
+        },
+        {
+          "order": 16,
+          "role": "annotate_function",
+          "tool_raw": "eggNOG-mapper",
+          "version": null,
+          "params": null,
+          "database": "KEGG",
+          "evidence": "For each predicted coding sequence (CDS), the protein function was annotated using the Kyoto Encyclopedia of Genes and Genomes (KEGG) server and eggNOG-mapper",
+          "_matched": "eggnog-mapper"
+        },
+        {
+          "order": 17,
+          "role": "trim",
+          "tool_raw": "Trimmomatic",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Raw RNA-seq reads were quality-controlled by removing low-quality sequences using Trimmomatic with the default parameters",
+          "_matched": "trimmomatic"
+        },
+        {
+          "order": 18,
+          "role": "filter_host",
+          "tool_raw": "SortMeRNA",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "and were filtered using SortMeRNA to remove tRNA and rRNA sequences",
+          "_matched": "sortmerna"
+        },
+        {
+          "order": 19,
+          "role": "map_reads",
+          "tool_raw": "BWA",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "cDNA reads were mapped to the above reference McrA and PmoA sequences using Burrows\u2013Wheeler Altras (BWA)",
+          "_matched": "bwa-mem2"
+        },
+        {
+          "order": 20,
+          "role": "custom",
+          "tool_raw": "SAMtools",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "SAM files generated from alignment were converted to BAM format via SAMtools",
+          "_matched": "samtools"
+        },
+        {
+          "order": 21,
+          "role": "quantify",
+          "tool_raw": "BEDTools",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "followed by read coverage analysis using BEDTools",
+          "_matched": null
+        }
+      ],
+      "source": "methods_text"
+    },
+    "provenance": {
+      "model": "local:google/gemma-4-26b-a4b",
+      "prompt_version": "claimed_v1"
+    },
+    "stats": {
+      "completion_tokens": 1980,
+      "reasoning_tokens": 0,
+      "elapsed_s": 28.31
+    },
+    "tools_known": [
+      "DADA2",
+      "DADA2",
+      "DADA2",
+      "classify-sklearn",
+      "QIIME 2",
+      "MetaWRAP",
+      "MEGAHIT",
+      "Prodigal",
+      "MetaBAT2",
+      "CheckM",
+      "GTDB-Tk",
+      "dRep",
+      "Prodigal",
+      "eggNOG-mapper",
+      "Trimmomatic",
+      "SortMeRNA",
+      "BWA",
+      "SAMtools"
+    ],
+    "tools_unknown": [
+      "join_paired_ends.py",
+      "BEDTools"
+    ]
+  },
+  {
+    "paper": {
+      "id": "41310832",
+      "doi": "10.1186/s40168-025-02213-8",
+      "title": "Prediction of symptomatic and asymptomatic bacteriuria in spinal cord injury patients using machine learning.",
+      "authors": "Hoque MM, Noorian P, Espinoza-Vergara G, To J, Leo D, Chari P, Weber G, Pryor J, Duggin IG, Lee BB, Rice SA, McDougald D.",
+      "date": "2025-11-27",
+      "journal": "preprint",
+      "is_open_access": true,
+      "pmcid": "PMC12661733",
+      "source": "MED"
+    },
+    "methods_chars": 13248,
+    "chain": {
+      "completeness": "complete",
+      "steps": [
+        {
+          "order": 0,
+          "role": "retrieve",
+          "tool_raw": "qiime tools import plugin",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Raw fastq sequencing reads were imported to QIIME2 using qiime ools importplugin.",
+          "_matched": "qiime2"
+        },
+        {
+          "order": 1,
+          "role": "remove_primers",
+          "tool_raw": "cutadapt",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "The reads were filtered to remove sequencing primers using cutadapt []",
+          "_matched": "cutadapt"
+        },
+        {
+          "order": 2,
+          "role": "denoise",
+          "tool_raw": "DADA2",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "The primer-trimmed sequences were denoised and clustered to amplicon sequence variants (ASVs) using DADA2 plugins.",
+          "_matched": "dada2"
+        },
+        {
+          "order": 3,
+          "role": "custom",
+          "tool_raw": "DADA2",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "At the denoising step, the forward and reverse reads were truncated at position 220 and 160 bp, respectively, to retain only high-quality sequences []",
+          "_matched": "dada2"
+        },
+        {
+          "order": 4,
+          "role": "custom",
+          "tool_raw": "escript orient-seq plugin",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "The orientation of the denoised sequences was corrected by aligning to the reference sequences using escript orient-seqplugins []",
+          "_matched": null
+        },
+        {
+          "order": 5,
+          "role": "taxonomy_assign",
+          "tool_raw": "feature-classifier plugin",
+          "version": null,
+          "params": null,
+          "database": "greengenes2 16S rRNA reference database (V4 region)",
+          "evidence": "For taxonomic assignments, the oriented sequences were aligned to the greengenes2 16S rRNA reference database (V4 region) using eature-classifierplugin []",
+          "_matched": "qiime2"
+        },
+        {
+          "order": 6,
+          "role": "filter_features",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "The feature table was filtered to remove unassigned features based on the taxa table obtained during the alignment step.",
+          "_matched": null
+        },
+        {
+          "order": 7,
+          "role": "filter_features",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "The feature table was further subjected to taxonomic filtering to remove low-abundant phyla (if feature frequency less than 5).",
+          "_matched": null
+        },
+        {
+          "order": 8,
+          "role": "phylogeny",
+          "tool_raw": "afft and fasttree plugins",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "The filtered sequences were aligned using \u2018afft and fasttree\u2019 plugins to generate rooted phylogenetic trees [, ]",
+          "_matched": "fasttree"
+        },
+        {
+          "order": 9,
+          "role": "subsample",
+          "tool_raw": "phyloseq",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "All samples were subsampled at 11,000 reads with the phyloseq function \u2018rarefy_even_depth\u2019 to normalise the variance with parameter \u201crngseed = 1\u201d and \u201creplace = FALSE\u201d []",
+          "_matched": "phyloseq"
+        },
+        {
+          "order": 10,
+          "role": "diversity",
+          "tool_raw": "Microbiome",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "The alpha diversity \u2018Shannon index\u2019 was computed using the alpha function of the R package \u2018Microbiome\u2019 []",
+          "_matched": null
+        },
+        {
+          "order": 11,
+          "role": "ordination",
+          "tool_raw": "microeco",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Principal coordinates analysis (PCoA) was carried out on the beta diversity (weighted and unweighted unifrac) distance metrics using the \u2018microeco\u2019 R package []",
+          "_matched": null
+        },
+        {
+          "order": 12,
+          "role": "differential_abundance",
+          "tool_raw": "ANCOMBC",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Differential abundance analysis was performed using ANCOM-BC (Analysis of Compositions of Microbiomes with Bias Correction) to identify ASVs that differed significantly in relative abundance between asymptomatic and symptomatic bacteriuria group with the following formula: bacteriuria status ~ ASVs []",
+          "_matched": "ancombc"
+        },
+        {
+          "order": 13,
+          "role": "visualize",
+          "tool_raw": "ggplot2",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Data was visualised using the \u2018ggplot2\u2019 package in R version 4.2 []",
+          "_matched": "ggplot2"
+        },
+        {
+          "order": 14,
+          "role": "custom",
+          "tool_raw": "mikropml",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "The ASVs counts and taxonomic abundance data were pre-processed in three steps using the R package mikropml []",
+          "_matched": "mikropml"
+        },
+        {
+          "order": 15,
+          "role": "custom",
+          "tool_raw": "MicrobiomeStat",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Statistical significance for the alpha diversity (Shannon index) metric was calculated with a linear mixed effects model using the \u2018generate_alpha_test_pair\u2019 function of the \u2018MicrobiomeStat\u2019 package in R.",
+          "_matched": null
+        },
+        {
+          "order": 16,
+          "role": "custom",
+          "tool_raw": "QIIME2",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Statistical significance for beta diversity (weighted and unweighted unifrac distance) metrics was determined by Permutational Multivariate Analysis of Variance (PERMANOVA) with a number of 999 permutations using the QIIME2 \u2018diversity beta group significance\u2019 plugin []",
+          "_matched": "qiime2"
+        }
+      ],
+      "source": "methods_text"
+    },
+    "provenance": {
+      "model": "local:google/gemma-4-26b-a4b",
+      "prompt_version": "claimed_v1"
+    },
+    "stats": {
+      "completion_tokens": 1623,
+      "reasoning_tokens": 0,
+      "elapsed_s": 24.0
+    },
+    "tools_known": [
+      "qiime tools import plugin",
+      "cutadapt",
+      "DADA2",
+      "DADA2",
+      "feature-classifier plugin",
+      "afft and fasttree plugins",
+      "phyloseq",
+      "ANCOMBC",
+      "ggplot2",
+      "mikropml",
+      "QIIME2"
+    ],
+    "tools_unknown": [
+      "escript orient-seq plugin",
+      "Microbiome",
+      "microeco",
+      "MicrobiomeStat"
+    ]
+  },
+  {
+    "paper": {
+      "id": "40771682",
+      "doi": "10.3389/fmicb.2025.1650455",
+      "title": "Cyanobacterial mats and their associated microbiomes in saline and freshwater lakes from the Bolivian Altiplano.",
+      "authors": "Hentschke GS, Semedo M, Ciancas J, Hoepfner C, Guzm\u00e1n D, Rivera DS, Vasconcelos VM.",
+      "date": "2025-07-23",
+      "journal": "preprint",
+      "is_open_access": true,
+      "pmcid": "PMC12325342",
+      "source": "MED"
+    },
+    "methods_chars": 6009,
+    "chain": {
+      "completeness": "sketch",
+      "steps": [
+        {
+          "order": 0,
+          "role": "remove_primers",
+          "tool_raw": "QIIME2",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "16S rRNA gene raw sequences from Illumina NextSeq 2000 were pre-processed by removing primers and adapters using QIIME2 platform.",
+          "_matched": "qiime2"
+        },
+        {
+          "order": 1,
+          "role": "trim",
+          "tool_raw": "QIIME2",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Quality filtering, trimming, error models, and dereplication were performed with default settings.",
+          "_matched": "qiime2"
+        },
+        {
+          "order": 2,
+          "role": "dereplicate",
+          "tool_raw": "QIIME2",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Quality filtering, trimming, error models, and dereplication were performed with default settings.",
+          "_matched": "qiime2"
+        },
+        {
+          "order": 3,
+          "role": "denoise",
+          "tool_raw": "dada2",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Trimmed sequences were denoised to ASV using the dada2 R package.",
+          "_matched": "dada2"
+        },
+        {
+          "order": 4,
+          "role": "taxonomy_assign",
+          "tool_raw": "Na\u00efve Bayes classifier",
+          "version": null,
+          "params": null,
+          "database": "SILVA database version 138-NR99",
+          "evidence": "Subsequently, taxonomy at different taxonomic rank levels was assigned using the Na\u00efve Bayes classifier based on SILVA database version 138-NR99.",
+          "_matched": null
+        },
+        {
+          "order": 5,
+          "role": "differential_abundance",
+          "tool_raw": "LEfSe",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Differences in community composition from freshwater and saline lakes were analyzed using linear discriminant analysis effect size (LEfSe) using a standard threshold of 2.0 logarithmic LDA score and an alpha value of 0.05 for Kruskal-Wallis and paired Wilcoxon test.",
+          "_matched": "lefse"
+        },
+        {
+          "order": 6,
+          "role": "filter_features",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Specifically, ASVs were considered part of the core if they were detected at a minimum relative abundance of 0.1% in at least 95% of the samples.",
+          "_matched": null
+        },
+        {
+          "order": 7,
+          "role": "profile_functional",
+          "tool_raw": "FAPROTAX",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "The functional analysis was performed using the FAPROTAX software",
+          "_matched": null
+        },
+        {
+          "order": 8,
+          "role": "phylogeny",
+          "tool_raw": "ClustalW",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Alignment was performed using ClustalW, in MEGA11: Molecular Evolutionary Genetics Analysis version 11",
+          "_matched": null
+        },
+        {
+          "order": 9,
+          "role": "phylogeny",
+          "tool_raw": "IQ-Tree",
+          "version": "1.6.12",
+          "params": null,
+          "database": null,
+          "evidence": "The robustness of the ML tree was estimated by bootstrap percentages, using 1,000 replications using IQ-Tree online version v1.6.12",
+          "_matched": "iqtree"
+        },
+        {
+          "order": 10,
+          "role": "visualize",
+          "tool_raw": "ITOL",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "The tree was edited using ITOL.",
+          "_matched": "itol"
+        },
+        {
+          "order": 11,
+          "role": "normalize",
+          "tool_raw": "Microeco",
+          "version": "1.9.0",
+          "params": null,
+          "database": null,
+          "evidence": "Before conducting diversity analyses, samples were rarefied to the same sequencing depth using the R package Microeco (version 1.9.0)",
+          "_matched": null
+        },
+        {
+          "order": 12,
+          "role": "diversity",
+          "tool_raw": "vegan",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Taxonomic diversity of the microbiome across both lagoon groups was estimated using the Chao1 and Shannon indices, with analyses performed using the R package vegan",
+          "_matched": "vegan"
+        }
+      ],
+      "source": "methods_text"
+    },
+    "provenance": {
+      "model": "local:google/gemma-4-26b-a4b",
+      "prompt_version": "claimed_v1"
+    },
+    "stats": {
+      "completion_tokens": 1227,
+      "reasoning_tokens": 0,
+      "elapsed_s": 17.58
+    },
+    "tools_known": [
+      "QIIME2",
+      "QIIME2",
+      "QIIME2",
+      "dada2",
+      "LEfSe",
+      "IQ-Tree",
+      "ITOL",
+      "vegan"
+    ],
+    "tools_unknown": [
+      "Na\u00efve Bayes classifier",
+      "FAPROTAX",
+      "ClustalW",
+      "Microeco"
+    ]
+  },
+  {
+    "paper": {
+      "id": "41657987",
+      "doi": "10.3389/fmicb.2025.1731623",
+      "title": "Associations between volatile fatty acid profiles, methane emissions, and rumen microbiota in sheep fed Ethiopian forage.",
+      "authors": "Bekele W, Mahawar L, Ramin M, Simachew A, Albrectsen BR, Zegeye A.",
+      "date": "2026-01-22",
+      "journal": "preprint",
+      "is_open_access": true,
+      "pmcid": "PMC12874088",
+      "source": "MED"
+    },
+    "methods_chars": 5639,
+    "chain": {
+      "completeness": "complete",
+      "steps": [
+        {
+          "order": 0,
+          "role": "qc_raw",
+          "tool_raw": "FastQC",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "The sequence quality was assessed using FastQC",
+          "_matched": "fastqc"
+        },
+        {
+          "order": 1,
+          "role": "report",
+          "tool_raw": "MultiQC",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "the results were summarized with the FastQC module of MultiQC",
+          "_matched": "multiqc"
+        },
+        {
+          "order": 2,
+          "role": "remove_primers",
+          "tool_raw": "Cutadapt",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Primers were trimmed using Cutadapt",
+          "_matched": "cutadapt"
+        },
+        {
+          "order": 3,
+          "role": "denoise",
+          "tool_raw": "DADA2",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Adapter- and primer-free sequences were processed independently for each sample using DADA2",
+          "_matched": "dada2"
+        },
+        {
+          "order": 4,
+          "role": "chimera_removal",
+          "tool_raw": "DADA2",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "to remove low-quality reads (\u2212-trunc_qmin 25) and PCR chimeras",
+          "_matched": "dada2"
+        },
+        {
+          "order": 5,
+          "role": "filter_features",
+          "tool_raw": "Barrnap",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "The resulting amplicon sequencing variants (ASVs) were filtered using the Barrnap tool",
+          "_matched": "barrnap"
+        },
+        {
+          "order": 6,
+          "role": "taxonomy_assign",
+          "tool_raw": "DADA2",
+          "version": null,
+          "params": null,
+          "database": "Silva 138.1",
+          "evidence": "Taxonomic classification of bacterial and archaeal ASVs was performed using DADA2",
+          "_matched": "dada2"
+        },
+        {
+          "order": 7,
+          "role": "taxonomy_assign",
+          "tool_raw": "QIIME2",
+          "version": null,
+          "params": null,
+          "database": "Silva 138.1",
+          "evidence": "Taxonomic classification of bacterial and archaeal ASVs was performed using ... QIIME2",
+          "_matched": "qiime2"
+        },
+        {
+          "order": 8,
+          "role": "diversity",
+          "tool_raw": "phyloseq",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "The alpha and beta diversities of the microbial communities were assessed using the phyloseq",
+          "_matched": "phyloseq"
+        },
+        {
+          "order": 9,
+          "role": "diversity",
+          "tool_raw": "vegan",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "The alpha and beta diversities of the microbial communities were assessed using the ... vegan packages",
+          "_matched": "vegan"
+        },
+        {
+          "order": 10,
+          "role": "ordination",
+          "tool_raw": "vegan",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "beta diversity was assessed using principal coordinates analysis (PCoA) with the Bray\u2013Curtis dissimilarity metric.",
+          "_matched": "vegan"
+        },
+        {
+          "order": 11,
+          "role": "normalize",
+          "tool_raw": "null",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Rarefaction curves were plotted using the rarecurve function.",
+          "_matched": null
+        },
+        {
+          "order": 12,
+          "role": "visualize",
+          "tool_raw": "ggplot2",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Microbial profile data were visualized using the ggplot2 package.",
+          "_matched": "ggplot2"
+        },
+        {
+          "order": 13,
+          "role": "correlate",
+          "tool_raw": "Hmisc",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "The correlation between microbiome taxa, CH4 intensity, and VFAs was analyzed using a Spearman Correlation Matrix with the Hmisc package.",
+          "_matched": null
+        }
+      ],
+      "source": "methods_text"
+    },
+    "provenance": {
+      "model": "local:google/gemma-4-26b-a4b",
+      "prompt_version": "claimed_v1"
+    },
+    "stats": {
+      "completion_tokens": 1163,
+      "reasoning_tokens": 0,
+      "elapsed_s": 16.84
+    },
+    "tools_known": [
+      "FastQC",
+      "MultiQC",
+      "Cutadapt",
+      "DADA2",
+      "DADA2",
+      "Barrnap",
+      "DADA2",
+      "QIIME2",
+      "phyloseq",
+      "vegan",
+      "vegan",
+      "ggplot2"
+    ],
+    "tools_unknown": [
+      "null",
+      "Hmisc"
+    ]
+  },
+  {
+    "paper": {
+      "id": "41674906",
+      "doi": "10.3389/fmicb.2025.1723082",
+      "title": "Microbiome changes in the sponge &lt;i&gt;Halichondria panicea&lt;/i&gt; along the Baltic Sea salinity gradient.",
+      "authors": "Hoy P, Hassenr\u00fcck C, Mittermayer-Schmittmann F, Schmittmann L, J\u00fcrgens K.",
+      "date": "2026-01-27",
+      "journal": "preprint",
+      "is_open_access": true,
+      "pmcid": "PMC12890254",
+      "source": "MED"
+    },
+    "methods_chars": 11119,
+    "chain": {
+      "completeness": "sketch",
+      "steps": [
+        {
+          "order": 0,
+          "role": "demultiplex",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "After demultiplexing (performed by LGC Genomics)",
+          "_matched": null
+        },
+        {
+          "order": 1,
+          "role": "remove_primers",
+          "tool_raw": "cutadapt",
+          "version": "4.2",
+          "params": null,
+          "database": null,
+          "evidence": "primers were removed using cutadapt version 4.2 (), allowing for a mismatch rate of 0.16 and requiring an overlap of at least 16 and 19\u202fbp for forward and reverse primers, respectively, without indels.",
+          "_matched": "cutadapt"
+        },
+        {
+          "order": 2,
+          "role": "trim",
+          "tool_raw": "dada2",
+          "version": "1.26.0",
+          "params": null,
+          "database": null,
+          "evidence": "Primer-clipped reads were then further processed in dada2 version 1.26.0 ()",
+          "_matched": "dada2"
+        },
+        {
+          "order": 3,
+          "role": "subsample",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Prior to denoising, R1 and R2 reads were truncated to 260 and 200\u202fbp, respectively, and filtered to a maximum expected error rate of 2.",
+          "_matched": null
+        },
+        {
+          "order": 4,
+          "role": "denoise",
+          "tool_raw": "dada2",
+          "version": "1.26.0",
+          "params": null,
+          "database": null,
+          "evidence": "Error learning, denoising, and merging of denoised paired-end reads were conducted with default settings, except that the pseudo-pooling mode was selected for the denoising step.",
+          "_matched": "dada2"
+        },
+        {
+          "order": 5,
+          "role": "merge_reads",
+          "tool_raw": "dada2",
+          "version": "1.26.0",
+          "params": null,
+          "database": null,
+          "evidence": "Error learning, denoising, and merging of denoised paired-end reads were conducted with default settings",
+          "_matched": "dada2"
+        },
+        {
+          "order": 6,
+          "role": "dereplicate",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "After merging, the two sequence tables generated from the different orientations were combined after reverse-complementing the amplicon sequence variants (ASVs) detected in the reverse-forward oriented part of the data set.",
+          "_matched": null
+        },
+        {
+          "order": 7,
+          "role": "taxonomy_assign",
+          "tool_raw": "dada2",
+          "version": null,
+          "params": null,
+          "database": "SILVA ribosomal reference database release 138.1",
+          "evidence": "ASVs were taxonomically classified with the R function assign Taxonomy of the dada2 package against the SILVA ribosomal reference database release 138.1 ().",
+          "_matched": "dada2"
+        },
+        {
+          "order": 8,
+          "role": "filter_features",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "ASVs shorter and longer than 380\u202fbp and 433\u202fbp, respectively, as well as those affiliated with eukaryotes, were removed from the data set.",
+          "_matched": null
+        },
+        {
+          "order": 9,
+          "role": "custom",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": "NCBI nt database",
+          "evidence": "The ASVs, which were classified as Amylibacter (altogether 19 ASVs), were aligned against the NCBI nt database (accessed July 2023) to identify those most closely related to Ca. H.s. (MH734183.1 Candidatus Halichondribacter symbioticus clone Hp1 16S ribosomal RNA gene, partial sequence) from Genbank, applying a threshold of at least 99.75% sequence similarity.",
+          "_matched": null
+        },
+        {
+          "order": 10,
+          "role": "diversity",
+          "tool_raw": "iNEXT",
+          "version": "3.0.0",
+          "params": null,
+          "database": null,
+          "evidence": "Asymptotic estimates of alpha diversity indices (richness, exponential Shannon index) were calculated using the R package \u201ciNEXT\u201d version 3.0.0 ().",
+          "_matched": null
+        },
+        {
+          "order": 11,
+          "role": "ordination",
+          "tool_raw": "vegan",
+          "version": "2.6\u20132",
+          "params": null,
+          "database": null,
+          "evidence": "Beta diversity was assessed as Bray-Curtis dissimilarities based on relative 16S rRNA gene sequence proportions and calculated in R version 4.2.1 () using the package\u201d vegan\u201d version 2.6\u20132 ().",
+          "_matched": "vegan"
+        },
+        {
+          "order": 12,
+          "role": "ordination",
+          "tool_raw": "vegan",
+          "version": "2.6\u20132",
+          "params": null,
+          "database": null,
+          "evidence": "Differences in sponge microbiome composition between locations were tested by PERMANOVA (999 permutations) and pairwise ANOSIM tests.",
+          "_matched": "vegan"
+        },
+        {
+          "order": 13,
+          "role": "ordination",
+          "tool_raw": "vegan",
+          "version": "2.6\u20132",
+          "params": null,
+          "database": null,
+          "evidence": "Differences within-location microbiome heterogeneity (beta dispersion) were assessed via the function \u201cbetadisper\u201d of the \u201cvegan\u201d package",
+          "_matched": "vegan"
+        },
+        {
+          "order": 14,
+          "role": "custom",
+          "tool_raw": "usedist",
+          "version": "0.4.0",
+          "params": null,
+          "database": null,
+          "evidence": "Bray\u2013Curtis dissimilarity between each sponge sample and the centroid of corresponding seawater samples was calculated using the package\u201d usedist\u201d version 0.4.0 ()",
+          "_matched": null
+        },
+        {
+          "order": 15,
+          "role": "visualize",
+          "tool_raw": "ggplot2",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "All figures were generated in R () using base R and the package\u201d ggplot2\u201d ().",
+          "_matched": "ggplot2"
+        }
+      ],
+      "source": "methods_text"
+    },
+    "provenance": {
+      "model": "local:google/gemma-4-26b-a4b",
+      "prompt_version": "claimed_v1"
+    },
+    "stats": {
+      "completion_tokens": 1656,
+      "reasoning_tokens": 0,
+      "elapsed_s": 23.41
+    },
+    "tools_known": [
+      "cutadapt",
+      "dada2",
+      "dada2",
+      "dada2",
+      "dada2",
+      "vegan",
+      "vegan",
+      "vegan",
+      "ggplot2"
+    ],
+    "tools_unknown": [
+      "iNEXT",
+      "usedist"
+    ]
+  },
+  {
+    "paper": {
+      "id": "41026164",
+      "doi": "10.1007/s00248-025-02604-2",
+      "title": "Vertical Structure and Functional Diversity of Microbial Communities in the Ross Sea, Antarctica.",
+      "authors": "Yeo IC, Shim KY, Min JO, Kim JH, Ha SY, Jeong CB.",
+      "date": "2025-09-30",
+      "journal": "preprint",
+      "is_open_access": true,
+      "pmcid": "PMC12484260",
+      "source": "MED"
+    },
+    "methods_chars": 7480,
+    "chain": {
+      "completeness": "complete",
+      "steps": [
+        {
+          "order": 0,
+          "role": "demultiplex",
+          "tool_raw": "QIIME2",
+          "version": "2024.5",
+          "params": null,
+          "database": null,
+          "evidence": "Demultiplexed raw sequences were imported into QIIME2 (version 2024.5)",
+          "_matched": "qiime2"
+        },
+        {
+          "order": 1,
+          "role": "remove_primers",
+          "tool_raw": "Cutadapt",
+          "version": "3.5",
+          "params": null,
+          "database": null,
+          "evidence": "Primer sequences were removed using Cutadapt (version 3.5).",
+          "_matched": "cutadapt"
+        },
+        {
+          "order": 2,
+          "role": "trim",
+          "tool_raw": "DADA2",
+          "version": "1.18.0",
+          "params": null,
+          "database": null,
+          "evidence": "Processed reads were then quality-filtered, truncated (quality score < 20), dereplicated, chimera-removed, and merged into amplicon sequence variants (ASVs) using DADA2 (version 1.18.0)",
+          "_matched": "dada2"
+        },
+        {
+          "order": 3,
+          "role": "denoise",
+          "tool_raw": "DADA2",
+          "version": "1.18.0",
+          "params": null,
+          "database": null,
+          "evidence": "Processed reads were then quality-filtered, truncated (quality score < 20), dereplicated, chimera-removed, and merged into amplicon sequence variants (ASVs) using DADA2 (version 1.18.0)",
+          "_matched": "dada2"
+        },
+        {
+          "order": 4,
+          "role": "chimera_removal",
+          "tool_raw": "DADA2",
+          "version": "1.18.0",
+          "params": null,
+          "database": null,
+          "evidence": "Processed reads were then quality-filtered, truncated (quality score < 20), dereplicated, chimera-removed, and merged into amplicon sequence variants (ASVs) using DADA2 (version 1.18.0)",
+          "_matched": "dada2"
+        },
+        {
+          "order": 5,
+          "role": "dereplicate",
+          "tool_raw": "DADA2",
+          "version": "1.18.0",
+          "params": null,
+          "database": null,
+          "evidence": "Processed reads were then quality-filtered, truncated (quality score < 20), dereplicated, chimera-removed, and merged into amplicon sequence variants (ASVs) using DADA2 (version 1.18.0)",
+          "_matched": "dada2"
+        },
+        {
+          "order": 6,
+          "role": "filter_features",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "archaeal sequences were removed, and only bacterial sequences were retained for subsequent analyses.",
+          "_matched": null
+        },
+        {
+          "order": 7,
+          "role": "decontaminate",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "ASVs were decontaminated by subtracting the maximum proportional representation observed in negative controls from their proportion in field samples",
+          "_matched": null
+        },
+        {
+          "order": 8,
+          "role": "normalize",
+          "tool_raw": "phyloseq",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "ASVs were rarefied based on minimum sequence depth determined from rarefaction curves using the phyloseq R package",
+          "_matched": "phyloseq"
+        },
+        {
+          "order": 9,
+          "role": "taxonomy_assign",
+          "tool_raw": "VSEARCH",
+          "version": "2.7.0",
+          "params": null,
+          "database": "Silva 138",
+          "evidence": "Taxonomic annotation of ASVs was conducted using VSEARCH (version 2.7.0) against the Silva 138 database with a 97% identity threshold",
+          "_matched": "vsearch"
+        },
+        {
+          "order": 10,
+          "role": "profile_functional",
+          "tool_raw": "PICRUSt2",
+          "version": "2.3.0-b",
+          "params": null,
+          "database": "KEGG",
+          "evidence": "Functional predictions based on the 16S rRNA sequences were performed with PICRUSt2 (version 2.3.0-b). Predicted functions were annotated using the Kyoto Encyclopedia of Genes and Genomes (KEGG) database",
+          "_matched": "picrust2"
+        },
+        {
+          "order": 11,
+          "role": "diversity",
+          "tool_raw": "vegan",
+          "version": "2.6.2",
+          "params": null,
+          "database": null,
+          "evidence": "alpha diversity was assessed using multiple indices, including observed ASVs, Shannon, Chao1, and Simpson, calculated with the vegan package (version 2.6.2) in R",
+          "_matched": "vegan"
+        },
+        {
+          "order": 12,
+          "role": "ordination",
+          "tool_raw": "vegan",
+          "version": "4.2.2",
+          "params": null,
+          "database": null,
+          "evidence": "Permutational multivariate analysis of variance (PERMANOVA) with the \u201cadonis\u201d function in the vegan package (version 4.2.2), was conducted to evaluate statistical differences between groups of relative depths identified by non-metric multidimensional scaling (NMDS).",
+          "_matched": "vegan"
+        },
+        {
+          "order": 13,
+          "role": "correlate",
+          "tool_raw": "linkET",
+          "version": "0.0.7.4",
+          "params": null,
+          "database": null,
+          "evidence": "Mantel\u2019s tests were carried out using the linkET package (version 0.0.7.4) to examine Spearman\u2019s correlations between microbial metabolic functions predicted by PICRUSt2 and individual environmental variables.",
+          "_matched": null
+        }
+      ],
+      "source": "methods_text"
+    },
+    "provenance": {
+      "model": "local:google/gemma-4-26b-a4b",
+      "prompt_version": "claimed_v1"
+    },
+    "stats": {
+      "completion_tokens": 1486,
+      "reasoning_tokens": 0,
+      "elapsed_s": 21.19
+    },
+    "tools_known": [
+      "QIIME2",
+      "Cutadapt",
+      "DADA2",
+      "DADA2",
+      "DADA2",
+      "DADA2",
+      "phyloseq",
+      "VSEARCH",
+      "PICRUSt2",
+      "vegan",
+      "vegan"
+    ],
+    "tools_unknown": [
+      "linkET"
+    ]
+  },
+  {
+    "paper": {
+      "id": "41276871",
+      "doi": "10.1186/s40793-025-00823-1",
+      "title": "Alternative carbon and energy metabolisms linked to hydrocarbon degradation are widely distributed across the different microbial communities from deep-sea sediments of the Gulf of Mexico.",
+      "authors": "Torres-Beltr\u00e1n M, Hern\u00e1ndez-Guzman M, Barcelos C, Chong-Robles J, Sid\u00f3n-Cese\u00f1a K, Garc\u00eda-Maldonado JQ, Aguirre-Macedo ML, Lago-Lest\u00f3n A.",
+      "date": "2025-11-23",
+      "journal": "preprint",
+      "is_open_access": true,
+      "pmcid": "PMC12752423",
+      "source": "MED"
+    },
+    "methods_chars": 8643,
+    "chain": {
+      "completeness": "sketch",
+      "steps": [
+        {
+          "order": 0,
+          "role": "demultiplex",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Demultiplexed raw sequences from the V4-hypervariable region of 16S rRNA gene were analyzed using the QIIME2",
+          "_matched": null
+        },
+        {
+          "order": 1,
+          "role": "denoise",
+          "tool_raw": "DADA2",
+          "version": null,
+          "params": "--p-chimera-method pooling, --p-pooling-method pseudo",
+          "database": null,
+          "evidence": "Quality filtering, denoising, merging, and the inference of amplicon sequence variants (ASVs) were done with DADA2 algorithm [] using the following settings: --p-chimera-method pooling, --p-pooling-method pseudo.",
+          "_matched": "dada2"
+        },
+        {
+          "order": 2,
+          "role": "taxonomy_assign",
+          "tool_raw": "classify-sklearn",
+          "version": null,
+          "params": null,
+          "database": "SILVA 138 SSURef NR99 5/806R",
+          "evidence": "Taxonomic annotation of ASVs was done through the classify-sklearn command using a pre-trained Naive-Bayes classifier. Classifier training was done using a pre-formated SILVA 138 reference database",
+          "_matched": "qiime2"
+        },
+        {
+          "order": 3,
+          "role": "filter_features",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Chloroplast and mitochondria annotated ASVs were discarded before downstream analyses.",
+          "_matched": null
+        },
+        {
+          "order": 4,
+          "role": "diversity",
+          "tool_raw": "phyloseq",
+          "version": "1.4",
+          "params": null,
+          "database": null,
+          "evidence": "Prokaryotic alpha diversity was determined using traditional diversity indexes (richness, Shannon, Chao1 and Simpson) using the estimate_richness function within the phyloseq package v1.4",
+          "_matched": "phyloseq"
+        },
+        {
+          "order": 5,
+          "role": "ordination",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "To determine differences in prokaryotic beta diversity both Bray Curtis and weighted unifrac [] distances were determined using QIIME2 pipeline and imported into R environment for principal coordinate analysis (PCoA) determination",
+          "_matched": null
+        },
+        {
+          "order": 6,
+          "role": "differential_abundance",
+          "tool_raw": "adonis2",
+          "version": null,
+          "params": "9999 permutations",
+          "database": null,
+          "evidence": "Statistical analysis of beta diversity was done using the permutational multivariate analysis of variance, i.e. PERMANOVA, with the adonis2 function using 9999 permutations (vegan package v2.6-2 [])",
+          "_matched": "vegan"
+        },
+        {
+          "order": 7,
+          "role": "normalize",
+          "tool_raw": null,
+          "version": null,
+          "params": "rarefied down to the sample with the lowest sequencing depth (i.e., 7970 seqs/sample)",
+          "database": null,
+          "evidence": "Datasets were rarefied down to the sample with the lowest sequencing depth (i.e., 7970 seqs/sample) before alpha and beta diversity analyses.",
+          "_matched": null
+        },
+        {
+          "order": 8,
+          "role": "qc_raw",
+          "tool_raw": "FastQC",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Metagenomes raw paired-end sequences were quality control checked using FastQC []",
+          "_matched": "fastqc"
+        },
+        {
+          "order": 9,
+          "role": "trim",
+          "tool_raw": "Trimmomatic",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "and adapters were removed using Trimmomatic []",
+          "_matched": "trimmomatic"
+        },
+        {
+          "order": 10,
+          "role": "assemble",
+          "tool_raw": "MEGAHIT",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "High quality filtered and trimmed sequences were assembled using MEGAHIT []",
+          "_matched": "megahit"
+        },
+        {
+          "order": 11,
+          "role": "predict_genes",
+          "tool_raw": "MetaPathways",
+          "version": "2.5.1",
+          "params": null,
+          "database": null,
+          "evidence": "Further, metagenomes contigs were analyzed and annotated using MetaPathways V2.5.1, an open source pipeline for prediction and annotation of open reading frames (ORFs)",
+          "_matched": null
+        },
+        {
+          "order": 12,
+          "role": "annotate_function",
+          "tool_raw": "BLAST",
+          "version": null,
+          "params": "higher than 70% identity",
+          "database": "COG and RefSeq",
+          "evidence": "Conceptually translated amino acid sequences of predicted ORFs were BLAST compared to COG and RefSeq reference databases [,]. Sequence matches with higher than 70% identity were retrieved",
+          "_matched": "blast"
+        },
+        {
+          "order": 13,
+          "role": "custom",
+          "tool_raw": "GraftM",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "We used the functional annotation tool GraftM ([]; github.com/geronimp/graftM) and the mmf1 gene package file [] (github.com/garciafertson/mmf1_gpkgs.git) to search for marker genes involved in hydrocarbons metabolism.",
+          "_matched": null
+        }
+      ],
+      "source": "methods_text"
+    },
+    "provenance": {
+      "model": "local:google/gemma-4-26b-a4b",
+      "prompt_version": "claimed_v1"
+    },
+    "stats": {
+      "completion_tokens": 1446,
+      "reasoning_tokens": 0,
+      "elapsed_s": 20.69
+    },
+    "tools_known": [
+      "DADA2",
+      "classify-sklearn",
+      "phyloseq",
+      "adonis2",
+      "FastQC",
+      "Trimmomatic",
+      "MEGAHIT",
+      "BLAST"
+    ],
+    "tools_unknown": [
+      "MetaPathways",
+      "GraftM"
+    ]
+  },
+  {
+    "paper": {
+      "id": "40594086",
+      "doi": "10.1038/s41598-025-03535-1",
+      "title": "Biofilm detachment significantly affects biological stability of drinking water during intermittent water supply in a pilot scale water distribution system.",
+      "authors": "Leifels M, Cheng D, Cai J, Nadhirah N, Mohidin AF, Santillan E, Woo Y, Hill E, Wu SW, Boon N, Favere J, Whittle AJ, Wuertz S.",
+      "date": "2025-07-01",
+      "journal": "preprint",
+      "is_open_access": true,
+      "pmcid": "PMC12215843",
+      "source": "MED"
+    },
+    "methods_chars": 20303,
+    "chain": {
+      "completeness": "sketch",
+      "steps": [
+        {
+          "order": 0,
+          "role": "qc_raw",
+          "tool_raw": "Agilent 2200 TapeStation",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "the quality of the purified PCR products was checked using an Agilent 2200 TapeStation (Agilent, USA) for amplicon size",
+          "_matched": null
+        },
+        {
+          "order": 1,
+          "role": "denoise",
+          "tool_raw": "DADA2",
+          "version": "1.20",
+          "params": null,
+          "database": null,
+          "evidence": "The divisive amplicon denoising algorithm 2 (DADA2) workflow (v1.20 in R4.1.0) was used",
+          "_matched": "dada2"
+        },
+        {
+          "order": 2,
+          "role": "chimera_removal",
+          "tool_raw": "DADA2",
+          "version": "1.20",
+          "params": null,
+          "database": null,
+          "evidence": "resulting in amplicon sequence variant (ASV) tables after removal of chimeras.",
+          "_matched": "dada2"
+        },
+        {
+          "order": 3,
+          "role": "taxonomy_assign",
+          "tool_raw": "blast",
+          "version": null,
+          "params": null,
+          "database": "SILVA SSU r138",
+          "evidence": "The taxonomic assignments of the final ASV were blasted against the SILVA SSU r138 database.",
+          "_matched": "blast"
+        },
+        {
+          "order": 4,
+          "role": "diversity",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Differences in community structure between samples (beta diversity) were assessed via the Bray-Curtis dissimilarity index",
+          "_matched": null
+        },
+        {
+          "order": 5,
+          "role": "diversity",
+          "tool_raw": null,
+          "version": null,
+          "params": "second order Hill number (2D), also known as inverse Simpson index",
+          "database": null,
+          "evidence": "The second order Hill number (2D), also known as inverse Simpson index, is used to describe alpha diversity.",
+          "_matched": null
+        },
+        {
+          "order": 6,
+          "role": "ordination",
+          "tool_raw": null,
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "and visualized by principal coordinate analysis (PCoA) at the ASV level.",
+          "_matched": null
+        },
+        {
+          "order": 7,
+          "role": "ordination",
+          "tool_raw": "adonis",
+          "version": null,
+          "params": "9999 permutations",
+          "database": null,
+          "evidence": "Permutational multivariate analysis of variance (PERMANOVA) was applied to assess the significance of differences in dissimilarity indices for bacterial community structure among samples using the Adonis function of the vegan package in R with further validation for the analysis of multivariate homogeneity of group dispersions (variations) using the PERMDISP package in R with 9999 permutations.",
+          "_matched": "vegan"
+        }
+      ],
+      "source": "methods_text"
+    },
+    "provenance": {
+      "model": "local:google/gemma-4-26b-a4b",
+      "prompt_version": "claimed_v1"
+    },
+    "stats": {
+      "completion_tokens": 788,
+      "reasoning_tokens": 0,
+      "elapsed_s": 12.44
+    },
+    "tools_known": [
+      "DADA2",
+      "DADA2",
+      "blast",
+      "adonis"
+    ],
+    "tools_unknown": [
+      "Agilent 2200 TapeStation"
+    ]
+  },
+  {
+    "paper": {
+      "id": "41233919",
+      "doi": "10.1186/s40168-025-02254-z",
+      "title": "Deep-sea corals near cold seeps associate with sulfur-oxidizing chemoautotrophs in the family Ca. Thioglobaceae.",
+      "authors": "Vohsen SA, Gruber-Vodicka HR, Osman EO, Saxton MA, Joye SB, Dubilier N, Fisher CR, Baums IB.",
+      "date": "2025-11-13",
+      "journal": "preprint",
+      "is_open_access": true,
+      "pmcid": "PMC12613352",
+      "source": "MED"
+    },
+    "methods_chars": 14277,
+    "chain": {
+      "completeness": "sketch",
+      "steps": [
+        {
+          "order": 0,
+          "role": "demultiplex",
+          "tool_raw": "QIIME2",
+          "version": "2017.11",
+          "params": null,
+          "database": null,
+          "evidence": "Amplicon sequence data were analyzed using QIIME2 (ver2017.11)",
+          "_matched": "qiime2"
+        },
+        {
+          "order": 1,
+          "role": "merge_reads",
+          "tool_raw": "vsearch",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Reads were joined using vsearch []",
+          "_matched": "vsearch"
+        },
+        {
+          "order": 2,
+          "role": "trim",
+          "tool_raw": "Deblur",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Deblur-denoise [] was used to [...] trim assembled reads to 300 bp",
+          "_matched": "deblur"
+        },
+        {
+          "order": 3,
+          "role": "denoise",
+          "tool_raw": "Deblur",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Deblur-denoise [] was used to [...] differentiate amplicon sequence variants (ASVs).",
+          "_matched": "deblur"
+        },
+        {
+          "order": 4,
+          "role": "chimera_removal",
+          "tool_raw": "Deblur",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "Deblur-denoise [] was used to detect chimeras",
+          "_matched": "deblur"
+        },
+        {
+          "order": 5,
+          "role": "taxonomy_assign",
+          "tool_raw": "scikit-learn",
+          "version": null,
+          "params": null,
+          "database": "SILVA v128 SSU 99% consensus sequence database",
+          "evidence": "Classifications of ASVs was achieved by building a classifier with the SILVA v128 SSU 99% consensus sequence database using a na\u00efve Bayes fit through scikit-learn []",
+          "_matched": null
+        },
+        {
+          "order": 6,
+          "role": "predict_genes",
+          "tool_raw": "barrnap",
+          "version": "0.9",
+          "params": null,
+          "database": null,
+          "evidence": "Additional 16S sequences were extracted from publicly available genomes used in the phylogenomic analysis described below using barrnap ver0.9 []",
+          "_matched": "barrnap"
+        },
+        {
+          "order": 7,
+          "role": "phylogeny",
+          "tool_raw": "Clustal Omega",
+          "version": "1.2.4",
+          "params": null,
+          "database": null,
+          "evidence": "Sequences over 1000 bp were aligned using Clustal Omega ver1.2.4 []",
+          "_matched": null
+        },
+        {
+          "order": 8,
+          "role": "phylogeny",
+          "tool_raw": "IQ-TREE",
+          "version": "2.3.0",
+          "params": null,
+          "database": null,
+          "evidence": "a maximum likelihood tree was constructed using IQ-TREE ver2.3.0 []",
+          "_matched": "iqtree"
+        },
+        {
+          "order": 9,
+          "role": "custom",
+          "tool_raw": "ModelFinder",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "ModelFinder [] was used to choose the Tamura and Nei 3 model and rate heterogeneity with four gamma categories (TPM3 + R4) based on the highest BIC score.",
+          "_matched": null
+        },
+        {
+          "order": 10,
+          "role": "phylogeny",
+          "tool_raw": "UFBoot2",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "UFBoot2 [] was used to obtain ultrafast bootstrap support values (UFBoot) using 1000 replicates.",
+          "_matched": null
+        },
+        {
+          "order": 11,
+          "role": "phylogeny",
+          "tool_raw": "pplacer",
+          "version": "1.1.alpha19",
+          "params": null,
+          "database": null,
+          "evidence": "Thioglobaceae ASVs (280 bp) were placed within this tree using pplacer v1.1.alpha19 []",
+          "_matched": "epa-ng"
+        },
+        {
+          "order": 12,
+          "role": "profile_taxonomic",
+          "tool_raw": "phyloFlash",
+          "version": "3.3",
+          "params": null,
+          "database": null,
+          "evidence": "All DNA sequence libraries were screened for Thioglobaceae SSU rRNA using phyloFlash ver3.3 []",
+          "_matched": null
+        },
+        {
+          "order": 13,
+          "role": "assemble",
+          "tool_raw": "megahit",
+          "version": "1.1.2",
+          "params": null,
+          "database": null,
+          "evidence": "The library with the highest coverage of Thioglobaceae SSU rRNA was assembled using megahit ver1.1.2 []",
+          "_matched": "megahit"
+        },
+        {
+          "order": 14,
+          "role": "map_reads",
+          "tool_raw": "bbmap",
+          "version": null,
+          "params": null,
+          "database": null,
+          "evidence": "The reads from each of the four libraries were individually mapped to this assembly using bbmap with default parameters",
+          "_matched": "bbtools"
+        },
+        {
+          "order": 15,
+          "role": "bin",
+          "tool_raw": "metabat",
+          "version": "2.12.1",
+          "params": null,
+          "database": null,
+          "evidence": "these coverages were used to bin the assembly using metabat (ver2.12.1)",
+          "_matched": "metabat2"
+        },
+        {
+          "order": 16,
+          "role": "annotate_function",
+          "tool_raw": "RASTtk",
+          "version": "2.0",
+          "params": null,
+          "database": null,
+          "evidence": "and was annotated using RASTtk ver2.0 []",
+          "_matched": null
+        },
+        {
+          "order": 17,
+          "role": "quantify",
+          "tool_raw": "kallisto",
+          "version": "0.44.0",
+          "params": null,
+          "database": null,
+          "evidence": "The two RNA sequence libraries were mapped to these gene annotations using kallisto ver0.4\u00a04.0 []",
+          "_matched": "kallisto"
+        },
+        {
+          "order": 18,
+          "role": "classify_genomes",
+          "tool_raw": "GTDB-Tk",
+          "version": "2.4.0",
+          "params": null,
+          "database": null,
+          "evidence": "The amino acid sequences of 120 phylogenetically informative genes (bac120 gene set) [] from each genome were extracted and aligned using the identify and align commands in the Genome Taxonomy Database and associated taxonomic toolkit (GTDB-Tk ver2.4.0) []",
+          "_matched": "gtdbtk"
+        }
+      ],
+      "source": "methods_text"
+    },
+    "provenance": {
+      "model": "local:google/gemma-4-26b-a4b",
+      "prompt_version": "claimed_v1"
+    },
+    "stats": {
+      "completion_tokens": 1761,
+      "reasoning_tokens": 0,
+      "elapsed_s": 25.19
+    },
+    "tools_known": [
+      "QIIME2",
+      "vsearch",
+      "Deblur",
+      "Deblur",
+      "Deblur",
+      "barrnap",
+      "IQ-TREE",
+      "pplacer",
+      "megahit",
+      "bbmap",
+      "metabat",
+      "kallisto",
+      "GTDB-Tk"
+    ],
+    "tools_unknown": [
+      "scikit-learn",
+      "Clustal Omega",
+      "ModelFinder",
+      "UFBoot2",
+      "phyloFlash",
+      "RASTtk"
+    ]
+  }
+]

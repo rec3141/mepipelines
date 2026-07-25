@@ -23,6 +23,7 @@ re-hitting the API, and extraction gets re-run far more often than ingest does.
 
 from __future__ import annotations
 
+import hashlib
 import json
 import re
 import sys
@@ -82,14 +83,24 @@ class Preprint:
     date: str
     journal: str
     is_open_access: bool
+    pmcid: str = ""
+    source: str = ""
 
     def as_dict(self) -> dict:
         return asdict(self)
 
 
 def _cache_path(kind: str, key: str) -> Path:
-    safe = re.sub(r"[^A-Za-z0-9._-]", "_", key)[:120]
-    return CACHE / kind / f"{safe}.cache"
+    """Cache filename for a request key.
+
+    The readable prefix is truncated for legibility, so a HASH of the FULL key is appended — two
+    long queries that differ only near the end (e.g. the same search with different PUB_YEAR
+    ranges) would otherwise truncate to the same filename and silently serve each other's cached
+    results. That bug returned identical hits for 2016-2019, 2020-2022 and 2023-2026.
+    """
+    digest = hashlib.sha1(key.encode()).hexdigest()[:12]
+    safe = re.sub(r"[^A-Za-z0-9._-]", "_", key)[:80]
+    return CACHE / kind / f"{safe}.{digest}.cache"
 
 
 def _get(url: str, params: dict | None, cache_kind: str, cache_key: str, is_json: bool):
@@ -109,11 +120,37 @@ def _get(url: str, params: dict | None, cache_kind: str, cache_key: str, is_json
     return json.loads(raw) if is_json else raw
 
 
-def search(query: str, limit: int = 25, preprints_only: bool = True) -> list[Preprint]:
-    """Search Europe PMC, restricted to records whose full text we can actually retrieve."""
+def search(
+    query: str,
+    limit: int = 25,
+    preprints_only: bool = True,
+    sources: tuple[str, ...] | None = None,
+    year_from: int | None = None,
+    year_to: int | None = None,
+) -> list[Preprint]:
+    """Search Europe PMC, restricted to records whose full text we can actually retrieve.
+
+    `sources` overrides `preprints_only`: pass ("MED",) for the published open-access literature,
+    ("PPR",) for preprints, or None for both. The distinction matters enormously — measured
+    full-text availability is ~100% for MED against 28-40% for PPR, and the published pool is two
+    orders of magnitude larger (97k vs 826 on a representative microbiome query).
+
+    Dates use PUB_YEAR ranges. Europe PMC also accepts FIRST_PDATE:[YYYY-MM-DD TO YYYY-MM-DD] if
+    finer granularity is ever needed.
+    """
     clauses = [f"({query})", "OPEN_ACCESS:Y", "IN_EPMC:Y"]
-    if preprints_only:
+
+    if sources:
+        src = " OR ".join(f'SRC:"{s}"' for s in sources)
+        clauses.insert(1, f"({src})")
+    elif preprints_only:
         clauses.insert(1, 'SRC:"PPR"')
+
+    if year_from and year_to:
+        clauses.append(f"(PUB_YEAR:[{year_from} TO {year_to}])")
+    elif year_from:
+        clauses.append(f"PUB_YEAR:{year_from}")
+
     full_query = " AND ".join(clauses)
 
     data = _get(
@@ -140,12 +177,15 @@ def search(query: str, limit: int = 25, preprints_only: bool = True) -> list[Pre
                 date=r.get("firstPublicationDate", "") or r.get("pubYear", ""),
                 journal=r.get("journalTitle", "") or r.get("bookOrReportDetails", {}).get("publisher", "preprint"),
                 is_open_access=r.get("isOpenAccess") == "Y",
+                # Published records resolve their full text by PMCID; preprints by their own id.
+                pmcid=r.get("pmcid") or "",
+                source=r.get("source", ""),
             )
         )
     return out
 
 
-def fetch_fulltext(paper_id: str) -> str | None:
+def fetch_fulltext(paper_id: str, pmcid: str = "") -> str | None:
     """JATS XML for one record, or None when Europe PMC has no XML for it.
 
     Note the endpoint takes NO source prefix: `/{id}/fullTextXML`, not `/PPR/{id}/fullTextXML`.
@@ -156,12 +196,15 @@ def fetch_fulltext(paper_id: str) -> str | None:
     `fullTextIdList` can differ on whether the XML exists. The only reliable test is the fetch, so
     callers must over-request and expect roughly two thirds to yield nothing.
     """
-    try:
-        return _get(f"{BASE}/{paper_id}/fullTextXML", None, "fulltext", paper_id, is_json=False)
-    except httpx.HTTPStatusError as exc:
-        if exc.response.status_code == 404:
-            return None
-        raise
+    # Published records are addressed by PMCID, preprints by their own id. Try the PMCID first
+    # when present, since that is the one that resolves for MED records.
+    for ident in [i for i in (pmcid, paper_id) if i]:
+        try:
+            return _get(f"{BASE}/{ident}/fullTextXML", None, "fulltext", ident, is_json=False)
+        except httpx.HTTPStatusError as exc:
+            if exc.response.status_code != 404:
+                raise
+    return None
 
 
 def _strip_tags(xml_fragment: str) -> str:

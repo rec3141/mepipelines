@@ -174,7 +174,22 @@ What the catalog is actually for. Outputs land in `catalog/analysis/` as committ
 - **Consensus chains** per archetype — modal role sequence and its variance
 - **Substitution classes** — which tools actually swap at a role, empirically, versus the
   `substitutable` guesses currently hard-coded in `step_roles.yaml`
-- **Step drift** — CheckM→CheckM2, OTU→ASV, SILVA→GTDB timelines. The machinery exists now
+- **Step drift** — **now measured, not just planned.** At 111 papers stratified across 2016–2026,
+  the canonical transitions the roadmap predicted are visible in the data:
+
+  | | 2016-18 | 2019-21 | 2022-24 | 2025-27 |
+  |---|---|---|---|---|
+  | ASV share (denoise vs cluster_otu) | 27% | 71% | 60% | **92%** |
+  | DADA2 share of denoise | 33% | 60% | 83% | **86%** |
+  | RDP classifier share of taxonomy_assign | 50% | 14% | 9% | **0%** |
+  | steps stating a version | 21% | 27% | 26% | **38%** |
+
+  The OTU→ASV transition and RDP's disappearance are exactly the drift this phase was written to
+  find. Version reporting rising over the decade is a reproducibility signal worth watching in its
+  own right — and unlike the earlier 57%→24% "decline", it strengthens rather than collapses as n
+  grows, which is what distinguishes a trend from a composition artifact.
+
+  The original machinery note: CheckM→CheckM2, SILVA→GTDB timelines
   (`build_site.py` emits a `timeline` block; the explorer has a "Drift over time" section), and it
   is gated: a role must clear `MIN_PER_BUCKET` observations in two or more periods or it is listed
   as not-yet-plottable instead of drawn. At 22 papers only `trim`, `visualize`,
