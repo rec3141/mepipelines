@@ -26,15 +26,23 @@ reading, no human check, and no `observed` side to diff against. Records earn th
 | `11-pub-2019-2021.json` | 12 | 12 |
 | `12-pub-2022-2023.json` | 20 | 20 |
 | `13-pub-2024-2025.json` | 20 | 20 |
+| `14-soil-2016-2020.json` | 29 | 28 |
+| `15-aqua-2016-2020.json` | 35 | 35 |
+| `16-host-2018-2022.json` | 17 | 17 |
+| `17-eng-2018-2022.json` | 29 | 29 |
+| `18-soil-2021-2024.json` | 38 | 37 |
+| `19-aqua-2021-2024.json` | 33 | 33 |
 
 Queries are recorded in each batch's commit message; the ecology-focused set (04-09) was
 written to avoid the eukaryotic-genome papers that earlier broad queries pulled in.
 
 Batches 01-09 are **preprints** (`SRC:"PPR"`), where only 28-40% of hits have retrievable full
-text. Batches 10-13 are the **published open-access literature** (`SRC:"MED"`, via `--published`),
+text. Batches 10-19 are the **published open-access literature** (`SRC:"MED"`, via `--published`),
 where availability measured **100%** on a 25-record sample and the pool is ~100x larger
-(97k vs 826 hits on a representative query). Batches 10-13 are also stratified by publication
-period, which is what makes the drift analysis possible.
+(97k vs 826 hits on a representative query). Batches 10-19 are stratified by publication period and, from 14 onward, by habitat
+(soil / aquatic / host / engineered) — the period stratification is what makes the drift
+analysis possible, and the habitat slices keep result sets distinct, since Europe PMC ranks by
+relevance and re-running one query returns the same top-N.
 
 One caveat inherent to mixing the two: a preprint and its published version are separate Europe PMC
 records, so the same study can in principle appear twice. Dedupe is by record ID, not by work.

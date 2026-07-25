@@ -177,12 +177,18 @@ What the catalog is actually for. Outputs land in `catalog/analysis/` as committ
 - **Step drift** — **now measured, not just planned.** At 111 papers stratified across 2016–2026,
   the canonical transitions the roadmap predicted are visible in the data:
 
+  At **289 papers / 4,174 steps**, all three trends are monotonic — they were not at 111, where
+  the middle buckets held only a handful of observations:
+
   | | 2016-18 | 2019-21 | 2022-24 | 2025-27 |
   |---|---|---|---|---|
-  | ASV share (denoise vs cluster_otu) | 27% | 71% | 60% | **92%** |
-  | DADA2 share of denoise | 33% | 60% | 83% | **86%** |
-  | RDP classifier share of taxonomy_assign | 50% | 14% | 9% | **0%** |
-  | steps stating a version | 21% | 27% | 26% | **38%** |
+  | ASV share (denoise vs cluster_otu) | 27% | 52% | 68% | **93%** |
+  | DADA2 share of denoise | 33% | 64% | 75% | **83%** |
+  | steps stating a version | 21% | 22% | 29% | **38%** |
+
+  Monotonicity is the point: at 111 papers ASV share read 27/71/60/92, non-monotonic because the
+  2019-21 bucket rested on 7 observations. It now rests on 63. A trend that becomes *cleaner* as n
+  grows is behaving like signal; one that flattens or reverses was composition.
 
   The OTU→ASV transition and RDP's disappearance are exactly the drift this phase was written to
   find. Version reporting rising over the decade is a reproducibility signal worth watching in its

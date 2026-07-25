@@ -22,7 +22,7 @@ schema_version: 0.1.0
 tools:
 
   # --- suites ---------------------------------------------------------------
-  - {id: qiime2, name: QIIME 2, kind: suite, roles: [demultiplex, remove_primers, denoise, cluster_otu, chimera_removal, filter_features, taxonomy_assign, phylogeny, diversity, ordination, differential_abundance, visualize], aliases: [qiime2, qiime 2, qiime, q2, qiime1, classify-sklearn, classify-consensus-vsearch, classify-consensus-blast, q2-feature-classifier, feature-classifier, dada2 denoise-single, dada2 denoise-paired]}
+  - {id: qiime2, name: QIIME 2, kind: suite, roles: [demultiplex, remove_primers, denoise, cluster_otu, chimera_removal, filter_features, taxonomy_assign, phylogeny, diversity, ordination, differential_abundance, visualize], aliases: [qiime2, qiime 2, qiime, q2, qiime1, classify-sklearn, classify-consensus-vsearch, classify-consensus-blast, q2-feature-classifier, feature-classifier, dada2 denoise-single, dada2 denoise-paired, split_libraries_fastq py, filter_otus_from_otu_table py, pick_open_reference_otus py, pick_otus py, core_diversity_analyses py, summarize_taxa py, assign_taxonomy py, qiime2r]}
   - {id: mothur, name: mothur, kind: suite, roles: [merge_reads, dereplicate, cluster_otu, chimera_removal, taxonomy_assign, diversity, ordination], aliases: [mothur]}
   # Third suite to show the same pattern (after VEBA and BBTools): papers cite the SUBCOMMAND,
   # never the suite. anvi-refine and anvi-pan-genome both went unmatched on real preprints.
@@ -32,10 +32,12 @@ tools:
   # "assembly.py", "binning.py" rather than the tools underneath. Aliasing the modules to the suite
   # is what lets a chain like that resolve at all; the opacity itself is a finding, not a defect.
   - {id: veba, name: VEBA, kind: suite, roles: [trim, filter_host, assemble, bin, bin_refine, bin_qc, classify_genomes, annotate_function, quantify], aliases: [veba, preprocess py, assembly py, binning py, classify py, annotate py, coverage py, phylogeny py, cluster py]}
-  - {id: usearch, name: USEARCH, kind: suite, roles: [dereplicate, cluster_otu, denoise, chimera_removal, taxonomy_assign], aliases: [usearch, uparse, unoise, unoise3, uchime, sintax, utax]}
+  - {id: usearch, name: USEARCH, kind: suite, roles: [dereplicate, cluster_otu, denoise, chimera_removal, taxonomy_assign], aliases: [usearch, uparse, unoise, unoise3, uchime, sintax, utax, uclust, uchime2]}
+  - {id: chimeraslayer, name: ChimeraSlayer, kind: tool, roles: [chimera_removal], aliases: [chimeraslayer, perseus]}
   - {id: vsearch, name: VSEARCH, kind: suite, roles: [merge_reads, dereplicate, cluster_otu, chimera_removal, taxonomy_assign], aliases: [vsearch]}
   # BBTools ships as individual .sh scripts and papers cite the script, not the suite — so the
   # script names ARE the aliases users will hit. repair.sh turned up in the first real preprint.
+  - {id: bayeshammer, name: BayesHammer, kind: tool, roles: [error_correct], aliases: [bayeshammer]}
   - {id: bbtools, name: BBTools, kind: suite, roles: [trim, filter_host, merge_reads, subsample, error_correct], aliases: [bbtools, bbmap, bbduk, bbsplit, bbmerge, bbnorm, tadpole, reformat sh, repair sh, clumpify, dedupe sh]}
   - {id: seqkit, name: SeqKit, kind: tool, roles: [qc_raw, dereplicate, subsample], aliases: [seqkit]}
 
@@ -89,11 +91,14 @@ tools:
   - {id: deblur, name: Deblur, kind: tool, roles: [denoise], aliases: [deblur]}
   - {id: swarm, name: Swarm, kind: tool, roles: [cluster_otu], aliases: [swarm]}
   - {id: cd-hit, name: CD-HIT, kind: tool, roles: [cluster_otu, build_gene_catalog], aliases: [cd-hit, cdhit, cd-hit-est]}
+  - {id: pandaseq, name: PANDAseq, kind: tool, roles: [merge_reads], aliases: [pandaseq]}
   - {id: pear, name: PEAR, kind: tool, roles: [merge_reads], aliases: [pear]}
   - {id: flash, name: FLASH, kind: tool, roles: [merge_reads], aliases: [flash, flash2]}
+  - {id: itsx, name: ITSx, kind: tool, roles: [filter_features], aliases: [itsx]}
   - {id: decontam, name: decontam, kind: library, roles: [decontaminate], aliases: [decontam]}
   - {id: sourcetracker, name: SourceTracker, kind: tool, roles: [decontaminate, model], aliases: [sourcetracker, sourcetracker2]}
   - {id: feast, name: FEAST, kind: tool, roles: [model], aliases: [feast]}
+  - {id: sina, name: SINA, kind: tool, roles: [taxonomy_assign, phylogeny], aliases: [sina, sina aligner]}
   - {id: idtaxa, name: IDTAXA, kind: library, roles: [taxonomy_assign], aliases: [idtaxa, decipher]}
   - {id: rescript, name: RESCRIPt, kind: tool, roles: [taxonomy_assign], aliases: [rescript]}
   - {id: epa-ng, name: EPA-ng, kind: tool, roles: [phylogeny], aliases: [epa-ng, epang, papara, pplacer]}
@@ -156,6 +161,9 @@ tools:
   - {id: bracken, name: Bracken, kind: tool, roles: [profile_taxonomic], aliases: [bracken]}
   - {id: motus, name: mOTUs, kind: tool, roles: [profile_taxonomic], aliases: [motus, motus2, motus3, motu]}
   - {id: centrifuge, name: Centrifuge, kind: tool, roles: [profile_taxonomic], aliases: [centrifuge]}
+  - {id: megan, name: MEGAN, kind: tool, roles: [taxonomy_assign, profile_taxonomic], aliases: [megan, megan6]}
+  - {id: phyloflash, name: phyloFlash, kind: tool, roles: [profile_taxonomic, taxonomy_assign], aliases: [phyloflash]}
+  - {id: emu, name: Emu, kind: tool, roles: [taxonomy_assign, profile_taxonomic], aliases: [emu]}
   - {id: kaiju, name: Kaiju, kind: tool, roles: [profile_taxonomic], aliases: [kaiju]}
   - {id: sourmash, name: sourmash, kind: tool, roles: [profile_taxonomic, dereplicate_genomes], aliases: [sourmash]}
   - {id: singlem, name: SingleM, kind: tool, roles: [profile_taxonomic], aliases: [singlem]}
@@ -164,6 +172,8 @@ tools:
   - {id: taxonkit, name: TaxonKit, kind: tool, roles: [taxonomy_assign], aliases: [taxonkit]}
   - {id: sylph, name: sylph, kind: tool, roles: [profile_taxonomic], aliases: [sylph]}
   - {id: ganon, name: ganon, kind: tool, roles: [profile_taxonomic], aliases: [ganon]}
+  - {id: faprotax, name: FAPROTAX, kind: tool, roles: [profile_functional], aliases: [faprotax, picrust-like]}
+  - {id: meteor, name: METEOR, kind: tool, roles: [quantify, profile_functional], aliases: [meteor]}
   - {id: humann, name: HUMAnN, kind: tool, roles: [profile_functional], aliases: [humann, humann2, humann3, humann-n]}
   # Added from real bioRxiv extraction, not from prior knowledge — see scripts/try_biorxiv.py.
   - {id: picrust2, name: PICRUSt2, kind: tool, roles: [profile_functional], aliases: [picrust2, picrust, picrust 2]}
@@ -199,6 +209,8 @@ tools:
   - {id: rsem, name: RSEM, kind: tool, roles: [quantify], aliases: [rsem]}
 
   # --- phylogenetics --------------------------------------------------------
+  - {id: pynast, name: PyNAST, kind: tool, roles: [phylogeny], aliases: [pynast, nast]}
+  - {id: clustal, name: Clustal, kind: tool, roles: [phylogeny], aliases: [clustalw, clustal omega, clustalo, clustal]}
   - {id: mafft, name: MAFFT, kind: tool, roles: [phylogeny], aliases: [mafft]}
   - {id: muscle, name: MUSCLE, kind: tool, roles: [phylogeny], aliases: [muscle]}
   - {id: trimal, name: trimAl, kind: tool, roles: [phylogeny], aliases: [trimal, gblocks, bmge]}
@@ -211,6 +223,11 @@ tools:
   - {id: phyloseq, name: phyloseq, kind: library, roles: [filter_features, normalize, diversity, ordination, visualize], aliases: [phyloseq]}
   - {id: pairwiseadonis, name: pairwiseAdonis, kind: library, roles: [ordination], aliases: [pairwiseadonis]}
   - {id: vegan, name: vegan, kind: library, roles: [normalize, diversity, ordination], aliases: [vegan, adonis, adonis2, metamds]}
+  - {id: microeco, name: microeco, kind: library, roles: [diversity, ordination, normalize], aliases: [microeco]}
+  - {id: microbiotaprocess, name: MicrobiotaProcess, kind: library, roles: [diversity, differential_abundance], aliases: [microbiotaprocess, mp_diff_analysis]}
+  - {id: microbiomestat, name: MicrobiomeStat, kind: library, roles: [differential_abundance], aliases: [microbiomestat]}
+  - {id: microbiome-r, name: microbiome (R), kind: library, roles: [diversity, normalize], aliases: [microbiome]}
+  - {id: past, name: PAST, kind: tool, roles: [diversity, ordination], aliases: [past, past4, past3]}
   - {id: ampvis2, name: ampvis2, kind: library, roles: [diversity, ordination, visualize], aliases: [ampvis2, ampvis]}
   - {id: microviz, name: microViz, kind: library, roles: [diversity, ordination, visualize], aliases: [microviz]}
   - {id: scikit-bio, name: scikit-bio, kind: library, roles: [diversity, ordination], aliases: [scikit-bio, skbio]}
@@ -276,6 +293,7 @@ tools:
   - {id: ggplot2, name: ggplot2, kind: library, roles: [visualize], aliases: [ggplot2, ggplot, tidyverse]}
   - {id: matplotlib, name: matplotlib, kind: library, roles: [visualize], aliases: [matplotlib, seaborn, pyplot]}
   - {id: plotly, name: Plotly, kind: library, roles: [visualize], aliases: [plotly]}
+  - {id: pathview, name: Pathview, kind: library, roles: [annotate_function, visualize], aliases: [pathview]}
   - {id: krona, name: Krona, kind: tool, roles: [visualize], aliases: [krona, ktimporttext]}
   - {id: itol, name: iTOL, kind: tool, roles: [visualize], aliases: [itol, ggtree]}
   - {id: pheatmap, name: pheatmap, kind: library, roles: [visualize], aliases: [pheatmap, complexheatmap]}

@@ -481,13 +481,34 @@ const pct = x => Math.round(x * 100) + "%";
 /* ---- provenance ------------------------------------------------------- */
 const s = DATA.summary;
 document.getElementById("prov").innerHTML = [
-  ["source", "Europe PMC · preprint servers"],
+  ["source", "Europe PMC · published OA + preprints"],
   ["extractor", "claimed_v1 · gemma-4-26b-a4b (local)"],
   ["verified", "no — single pass, no human check"]
 ].map(([k, v]) => `<span>${esc(k)} <b>${esc(v)}</b></span>`).join("");
 
 /* ---- tiles ------------------------------------------------------------ */
-const settled = DATA.roles.filter(r => r.concentration === 1);
+// The ASV-vs-OTU transition across periods — the clearest drift the corpus shows, and the one
+// docs/roadmap.md named a priori. Falls back to a concentration figure if either role is absent.
+function asvTrend() {
+  const TLd = Object.fromEntries((DATA.timeline?.drift || []).map(d => [d.role, d]));
+  const den = TLd.denoise, otu = TLd.cluster_otu;
+  const buckets = DATA.timeline?.buckets || [];
+  if (!den || !otu || buckets.length < 2) {
+    const top = DATA.roles[0];
+    return top ? { n: pct(top.concentration), k: `${top.role} concentration`,
+                   note: `most common tool: ${top.top}` } : null;
+  }
+  const share = b => {
+    const a = (den.buckets[b] || []).reduce((x, i) => x + i.n, 0);
+    const o = (otu.buckets[b] || []).reduce((x, i) => x + i.n, 0);
+    return a + o ? a / (a + o) : null;
+  };
+  const first = buckets.find(b => share(b) !== null);
+  const last = [...buckets].reverse().find(b => share(b) !== null);
+  if (first === last) return null;
+  return { n: `${pct(share(first))} → ${pct(share(last))}`, k: "ASV share of amplicon features",
+           note: `denoising displacing OTU clustering, ${first} to ${last}` };
+}
 document.getElementById("tiles").innerHTML = [
   { n: s.papersPlotted, k: "chains charted",
     note: [
@@ -497,8 +518,7 @@ document.getElementById("tiles").innerHTML = [
   { n: s.steps, k: "steps extracted", note: `across ${s.distinctRoles} distinct roles` },
   { n: pct(s.matchRate), k: "tools recognised",
     note: `${s.namedTools} named tools; reference databases counted separately` },
-  settled.length ? { n: settled.length, k: "roles fully settled",
-    note: `${settled.map(r => r.role).join(", ")} — one tool, every paper` } : null
+  asvTrend()
 ].filter(Boolean).map(t =>
   `<div class="tile"><div class="n">${esc(t.n)}</div><div class="k">${esc(t.k)}</div><div class="note">${esc(t.note)}</div></div>`
 ).join("");
