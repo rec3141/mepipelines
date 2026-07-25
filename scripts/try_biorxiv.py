@@ -41,15 +41,24 @@ DEFAULT_QUERY = (
 )
 
 
-def load_alias_index() -> dict[str, str]:
-    """Map every known alias (normalized) -> canonical tool id."""
+def load_alias_index() -> tuple[dict[str, str], dict[str, str]]:
+    """Return (tool_index, database_index), kept SEPARATE on purpose.
+
+    Merging them lets a database name satisfy a tool lookup — "GTDB" scored as a tool for
+    `taxonomy_assign`, "CARD" as a tool for `detect_amr`. Both are resources a step consumes, not
+    software it runs, and counting them as recognised tools inflates the coverage number.
+    """
     doc = yaml.safe_load((ONTOLOGY / "tools.yaml").read_text())
-    index: dict[str, str] = {}
-    for entry in doc["tools"] + doc.get("databases", []):
-        for alias in [entry["id"], entry.get("name", "")] + (entry.get("aliases") or []):
-            if alias:
-                index[normalize(alias)] = entry["id"]
-    return index
+
+    def index(entries):
+        out: dict[str, str] = {}
+        for entry in entries:
+            for alias in [entry["id"], entry.get("name", "")] + (entry.get("aliases") or []):
+                if alias:
+                    out[normalize(alias)] = entry["id"]
+        return out
+
+    return index(doc["tools"]), index(doc.get("databases", []))
 
 
 def normalize(name: str) -> str:
@@ -57,17 +66,40 @@ def normalize(name: str) -> str:
     return re.sub(r"[^a-z0-9]", "", name.lower())
 
 
+def _candidates(tool_raw: str) -> list[str]:
+    """Normalized forms to try, longest first.
+
+    Token-aligned rather than free substring. A raw `alias in name` test produced real
+    false positives on actual papers: "Picard" matched `card`, "wfmash" matched `mash`, and
+    "Naive Bayes classifier" matched `veba` — the letters hide inside "nai(veBa)yes". Anchoring to
+    token boundaries removes that whole class.
+    """
+    tokens = [t for t in re.split(r"[^A-Za-z0-9]+", tool_raw) if t]
+    out: list[str] = []
+    # Contiguous runs, longest first, so "bwa mem" beats "bwa".
+    for size in range(min(4, len(tokens)), 0, -1):
+        for i in range(len(tokens) - size + 1):
+            out.append(normalize("".join(tokens[i:i + size])))
+    return out
+
+
 def match_tool(tool_raw: str | None, index: dict[str, str]) -> str | None:
+    """Map a raw tool name onto a canonical id, or None."""
     if not tool_raw:
         return None
     key = normalize(tool_raw)
     if key in index:
         return index[key]
-    # Real papers write "SPAdes-based assemblers", "GTDB-TK", "DAS Tool for consensus binning".
-    # Try the longest known alias contained in the string before giving up.
-    candidates = [a for a in index if len(a) >= 4 and a in key]
-    if candidates:
-        return index[max(candidates, key=len)]
+
+    for cand in _candidates(tool_raw):
+        if cand in index:
+            return index[cand]
+        # A trailing version digit glued to the name: "PhyloPhlan3" -> phylophlan. Only when the
+        # unstripped form is unknown, so genuinely digit-bearing names (DADA2, MetaBAT2, CheckM2,
+        # bwa-mem2) are never truncated.
+        stripped = re.sub(r"\d+$", "", cand)
+        if stripped != cand and len(stripped) >= 4 and stripped in index:
+            return index[stripped]
     return None
 
 
@@ -139,10 +171,10 @@ def main() -> int:
     ap.add_argument("--model", default=None)
     args = ap.parse_args()
 
-    alias_index = load_alias_index()
+    tool_index, db_index = load_alias_index()
     client = LLMClient(**({"model": args.model} if args.model else {}))
     print(f"model: {client.provider}:{client.model}")
-    print(f"ontology: {len(alias_index)} aliases")
+    print(f"ontology: {len(tool_index)} tool aliases, {len(db_index)} database aliases")
 
     if args.ids:
         papers = []
@@ -157,7 +189,7 @@ def main() -> int:
         papers = europepmc.search(args.query, args.limit)
     print(f"{len(papers)} paper(s)")
 
-    results = [r for p in papers if (r := run_one(p, client, alias_index, args.show_methods))]
+    results = [r for p in papers if (r := run_one(p, client, tool_index, args.show_methods))]
 
     print(f"\n{'=' * 78}\nSUMMARY")
     print(f"  {len(results)}/{len(papers)} papers yielded a chain")

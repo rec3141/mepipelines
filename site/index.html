@@ -490,11 +490,13 @@ document.getElementById("prov").innerHTML = [
 const settled = DATA.roles.filter(r => r.concentration === 1);
 document.getElementById("tiles").innerHTML = [
   { n: s.papersPlotted, k: "chains charted",
-    note: s.papersEmpty ? `${s.papersEmpty} record(s) yielded no steps and are excluded`
-                        : "every ingested record yielded a chain" },
+    note: [
+      s.papersTooShort ? `${s.papersTooShort} excluded — methods too short to be real` : null,
+      s.papersEmpty ? `${s.papersEmpty} yielded no steps` : null
+    ].filter(Boolean).join("; ") || "every ingested record yielded a chain" },
   { n: s.steps, k: "steps extracted", note: `across ${s.distinctRoles} distinct roles` },
   { n: pct(s.matchRate), k: "tools recognised",
-    note: `${s.namedTools} named tools checked against the ontology` },
+    note: `${s.namedTools} named tools; reference databases counted separately` },
   settled.length ? { n: settled.length, k: "roles fully settled",
     note: `${settled.map(r => r.role).join(", ")} — one tool, every paper` } : null
 ].filter(Boolean).map(t =>

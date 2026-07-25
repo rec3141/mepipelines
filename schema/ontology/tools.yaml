@@ -22,7 +22,7 @@ schema_version: 0.1.0
 tools:
 
   # --- suites ---------------------------------------------------------------
-  - {id: qiime2, name: QIIME 2, kind: suite, roles: [demultiplex, remove_primers, denoise, cluster_otu, chimera_removal, filter_features, taxonomy_assign, phylogeny, diversity, ordination, differential_abundance, visualize], aliases: [qiime2, qiime 2, qiime, q2, qiime1]}
+  - {id: qiime2, name: QIIME 2, kind: suite, roles: [demultiplex, remove_primers, denoise, cluster_otu, chimera_removal, filter_features, taxonomy_assign, phylogeny, diversity, ordination, differential_abundance, visualize], aliases: [qiime2, qiime 2, qiime, q2, qiime1, classify-sklearn, classify-consensus-vsearch, classify-consensus-blast, q2-feature-classifier, feature-classifier, dada2 denoise-single, dada2 denoise-paired]}
   - {id: mothur, name: mothur, kind: suite, roles: [merge_reads, dereplicate, cluster_otu, chimera_removal, taxonomy_assign, diversity, ordination], aliases: [mothur]}
   # Third suite to show the same pattern (after VEBA and BBTools): papers cite the SUBCOMMAND,
   # never the suite. anvi-refine and anvi-pan-genome both went unmatched on real preprints.
@@ -213,7 +213,7 @@ tools:
   - {id: flashweave, name: FlashWeave, kind: tool, roles: [correlate], aliases: [flashweave]}
   - {id: netcomi, name: NetCoMi, kind: library, roles: [correlate], aliases: [netcomi]}
   - {id: wgcna, name: WGCNA, kind: library, roles: [correlate], aliases: [wgcna]}
-  - {id: randomforest, name: Random forest, kind: library, roles: [model], aliases: [randomforest, random forest, ranger, scikit-learn, sklearn]}
+  - {id: randomforest, name: Random forest, kind: library, roles: [model], aliases: [randomforest, random forest, ranger]}
   - {id: mikropml, name: mikropml, kind: library, roles: [model], aliases: [mikropml]}
   - {id: caret, name: caret, kind: library, roles: [model], aliases: [caret]}
   - {id: micom, name: MICOM, kind: tool, roles: [model], aliases: [micom]}

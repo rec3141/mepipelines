@@ -33,6 +33,9 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
 from try_biorxiv import load_alias_index, match_tool  # noqa: E402
 
+sys.path.insert(0, str(ROOT / "ingest"))
+from europepmc import MIN_METHODS_CHARS  # noqa: E402
+
 ONTOLOGY = ROOT / "schema" / "ontology"
 SITE = ROOT / "site"
 
@@ -66,14 +69,19 @@ def load_ontology() -> tuple[dict, dict]:
 
 def build(records: list[dict]) -> dict:
     stage_of, substitutable = load_ontology()
-    alias_index = load_alias_index()
+    tool_index, db_index = load_alias_index()
 
     def stage(role: str) -> str:
         s = stage_of.get(role, "specialty")
         return STAGE_MERGE.get(s, s)
 
-    papers, empty = [], 0
+    papers, empty, tooshort = [], 0, 0
     for rec in records:
+        # Records extracted from a structured abstract rather than a real Methods section. Older
+        # run files predate the floor in ingest/europepmc.py, so it is enforced here too.
+        if rec.get("methods_chars", MIN_METHODS_CHARS) < MIN_METHODS_CHARS:
+            tooshort += 1
+            continue
         steps = rec.get("chain", {}).get("steps", [])
         if not steps:
             empty += 1          # counted and surfaced, not silently dropped
@@ -91,7 +99,10 @@ def build(records: list[dict]) -> dict:
                 "tool": clean(s.get("tool_raw")) or None,
                 # Recomputed here, never trusted from the input file: the ontology grows between
                 # runs and a stale match would understate coverage.
-                "matched": match_tool(s.get("tool_raw"), alias_index),
+                "matched": match_tool(s.get("tool_raw"), tool_index),
+                # A named resource that is a reference DATABASE, not software. Tracked apart so it
+                # never inflates the "tools recognised" figure.
+                "matchedDb": match_tool(s.get("tool_raw"), db_index),
                 "version": s.get("version"),
                 "params": clean(s.get("params"))[:200] or None,
             } for s in steps],
@@ -161,7 +172,7 @@ def build(records: list[dict]) -> dict:
     drift.sort(key=lambda d: (not d["powered"], -d["total"]))
 
     named = [s for p in papers for s in p["steps"] if s["tool"]]
-    unmatched = sorted({s["tool"] for s in named if not s["matched"]}, key=str.lower)
+    unmatched = sorted({s["tool"] for s in named if not s["matched"] and not s["matchedDb"]}, key=str.lower)
 
     return {
         "papers": papers,
@@ -178,9 +189,11 @@ def build(records: list[dict]) -> dict:
         "summary": {
             "papersPlotted": len(papers),
             "papersEmpty": empty,
+            "papersTooShort": tooshort,
             "steps": sum(len(p["steps"]) for p in papers),
             "namedTools": len(named),
             "matchRate": round(sum(1 for s in named if s["matched"]) / len(named), 3) if named else 0,
+            "namedDatabases": sum(1 for s in named if s["matchedDb"] and not s["matched"]),
             "distinctRoles": len({s["role"] for p in papers for s in p["steps"]}),
         },
     }
@@ -232,6 +245,9 @@ def main() -> int:
           f"{len(payload['unmatched'])} unmatched")
     if s["papersEmpty"]:
         print(f"  {s['papersEmpty']} record(s) had no steps and were excluded")
+    if s["papersTooShort"]:
+        print(f"  {s['papersTooShort']} record(s) excluded: methods under {MIN_METHODS_CHARS} chars "
+              f"(structured abstract, not a real methods section)")
     return 0
 
 

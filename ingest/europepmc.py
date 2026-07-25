@@ -56,6 +56,13 @@ METHODS_TITLE = re.compile(
     re.IGNORECASE,
 )
 
+# Europe PMC sometimes exposes a structured ABSTRACT's "Methods" heading as if it were a methods
+# section. Measured on real records: 229 and 645 characters, against 6,000+ for a genuine one.
+# Extracting a chain from a structured abstract yields a confident-looking 1-step record, which is
+# worse than no record — it enters the corpus and skews every per-role count. Anything under this
+# is a summary, not a method.
+MIN_METHODS_CHARS = 800
+
 # Within a methods section, these subsections carry the bioinformatics chain. Used to trim wet-lab
 # and ethics prose when a full methods section is too long to hand to the model whole.
 COMPUTATIONAL_HINT = re.compile(
@@ -208,7 +215,7 @@ def extract_methods(xml: str) -> str | None:
             i = len(xml)
 
         body = _strip_tags(xml[start:i])
-        if len(body) > 200:
+        if len(body) >= MIN_METHODS_CHARS:
             return body
     return None
 
